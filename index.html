@@ -867,6 +867,11 @@ body.touring #tele{opacity:0;pointer-events:none}
 .fmk{position:relative;width:0;height:0}
 .fmk b{position:absolute;left:12px;top:-14px;white-space:nowrap;font:800 11.5px "Plus Jakarta Sans",sans-serif;color:#fff;background:linear-gradient(90deg,#1c7ed6,#7048e8);border-radius:999px;padding:4px 9px;box-shadow:0 4px 14px rgba(28,126,214,.55)}
 .fmk i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:5px;transform:rotate(45deg);background:#fff;border:3px solid #1c7ed6;box-shadow:0 0 10px rgba(28,126,214,.8)}
+.fmr.est .fi{background:rgba(240,140,0,.2)}.fmr.est .fv{color:#ffd8a8}
+.fmr.tot{border-top:1px dashed rgba(255,255,255,.15);border-radius:0 0 10px 10px;padding-top:7px}.fmr.tot .fi{background:rgba(99,230,190,.2);font-weight:800;color:#63e6be}.fmr.tot .fv{color:#63e6be}
+.nbar{display:flex;height:7px;border-radius:5px;overflow:hidden;gap:2px;margin-top:2px}.nbar i{display:block}
+.nlg{display:flex;justify-content:space-between;font-size:10.5px;color:#9fb3c8}.nlg b{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.fmk.est b{background:linear-gradient(90deg,#f08c00,#e8590c)}.fmk.est i{border-color:#f08c00;border-style:dashed}
 /* ---- Fable polish: reveal, grain, glass, dark mode */
 #intro:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -1834,6 +1839,14 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
     dn900:    {nama:"Flowmeter DN900 ke IPA Pinus", short:"DN900 · masuk IPA Pinus", ll:[-3.43160, 114.84170], ket:"Debit air baku yang masuk ke pengolahan IPA Pinus (cabang tapping Ø900 mm)."},
     pematang: {nama:"Flowmeter Offtake Pematang", short:"Pematang · PTAM Bandarmasih", ll:[-3.36123, 114.692993], ket:"Debit air baku yang diserahkan ke PTAM Bandarmasih di Offtake Pematang."}
   };
+  const PRASED = 60, LL_PR = [-3.42991664987564, 114.83971614353095], LL_IN = [-3.456623, 114.961861];
+  const est = () => { const a = D && D.stations.dn900 && D.stations.dn900.last, b = D && D.stations.pematang && D.stations.pematang.last;
+    return (a && b) ? {t: Math.min(a.t, b.t), dn: a.flow, pm: b.flow, pr: PRASED, tot: a.flow + b.flow + PRASED} : null; };
+  const mkPr = L.marker(LL_PR, {icon: L.divIcon({className:"", iconSize:[0,0], html:'<div class="fmk est"><i></i><b id="fmk_prased">Prased ±60 L/dtk</b></div>'}), zIndexOffset:870}).addTo(map);
+  mkPr.bindPopup(() => { const e = est();
+    const rows = [["Debit (estimasi)", `<b>±${PRASED} L/dtk</b>`], ["Dasar", "Rata-rata operasional prasedimentasi PTAM Intan Banjar"], ["Status alat", "Belum ada logger flowmeter"]];
+    if (e) rows.push(["Porsi dari total", `±${nf(PRASED/e.tot*100,1)}% (total estimasi ${nf(e.tot,0)} L/dtk)`]);
+    return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PR</span><div><h3>Offtake Pinus · Prased</h3><div class="sub">PTAM Intan Banjar · estimasi neraca air</div></div></div><div class="pbd"><div class="chips"><span class="chip">ESTIMASI</span><span class="chip">Tanpa logger</span></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note">Nilai belum terukur alat. Dipakai untuk neraca air: Q intake ≈ DN900 + Pematang + Prased. Akan diganti data live bila logger dipasang.</div><div class="src">Sumber: data operasional BPAM Banjarbakula (rata-rata ±60 L/dtk)</div></div></div>`; }, {maxWidth:340, autoPanPaddingTopLeft:[20,90]});
   const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
   let D = null;
   const mk = {};
@@ -1865,8 +1878,16 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
       rows.push(`<div class="fmr${old ? " old" : ""}" data-id="${id}"><span class="fi">💧</span><span class="fn">${s.short}<small>${fmtT(l.t)}</small></span><span class="fv">${nf(l.flow,0)}<span>L/dtk</span></span></div>`);
       const b = document.getElementById("fmk_" + id); if (b) b.textContent = (id === "dn900" ? "DN900 " : "Pematang ") + nf(l.flow,0) + " L/dtk";
     });
+    const e = est();
+    if (e){
+      rows.push(`<div class="fmr est" data-id="prased"><span class="fi">≈</span><span class="fn">Prased · PTAM Intan Banjar<small>estimasi rata-rata</small></span><span class="fv">±${PRASED}<span>L/dtk</span></span></div>`);
+      rows.push(`<div class="fmr tot" data-id="intake"><span class="fi">Σ</span><span class="fn">Total keluar Intake<small>estimasi neraca · ${fmtT(e.t)}</small></span><span class="fv">${nf(e.tot,0)}<span>L/dtk</span></span></div>`);
+      rows.push(`<div class="nbar" title="Pembagian debit air baku"><i style="flex:${e.dn};background:#1c7ed6"></i><i style="flex:${e.pr};background:#f08c00"></i><i style="flex:${e.pm};background:#7048e8"></i></div><div class="nlg"><span><b style="background:#1c7ed6"></b>IPA Pinus ${nf(e.dn/e.tot*100,0)}%</span><span><b style="background:#f08c00"></b>Prased ${nf(e.pr/e.tot*100,0)}%</span><span><b style="background:#7048e8"></b>Pematang ${nf(e.pm/e.tot*100,0)}%</span></div>`);
+    }
     $("#tlFm").innerHTML = rows.join("");
-    document.querySelectorAll(".fmr").forEach(r => r.onclick = () => { const id = r.dataset.id; map.flyTo(ST[id].ll, 16, {duration:1.4}); map.once("moveend", () => mk[id].openPopup()); });
+    document.querySelectorAll(".fmr").forEach(r => r.onclick = () => { const id = r.dataset.id;
+      const ll = id === "prased" ? LL_PR : id === "intake" ? LL_IN : ST[id].ll, m = id === "prased" ? mkPr : id === "intake" ? null : mk[id];
+      map.flyTo(ll, 16, {duration:1.4}); if (m) map.once("moveend", () => m.openPopup()); });
   }
   async function load(){ try{ const r = await fetch(URLF + "?t=" + Math.floor(Date.now()/3e5), {cache:"no-store"}); if (r.ok){ D = await r.json(); render(); } }catch(e){} }
   load(); setInterval(load, 10*60e3);
