@@ -828,6 +828,36 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
 .pleg{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);padding:0 0 4px}
 .pleg i{display:inline-block;width:16px;height:0;border-top:3px solid;vertical-align:middle;margin-right:4px}
 @media (max-width:820px){#prof{left:0;height:68vh}.pb{grid-template-columns:minmax(0,1fr);grid-template-rows:200px auto;overflow:auto}}
+/* ---- wah: tur, glow, glass */
+.leaflet-flow-pane svg{filter:drop-shadow(0 0 3px rgba(165,216,255,.95)) drop-shadow(0 0 8px rgba(77,171,247,.55))}
+.leaflet-casing-pane svg{filter:drop-shadow(0 0 6px rgba(21,170,191,.35))}
+.btn-tour{font:inherit;font-weight:700;font-size:15px;color:#e7f5ff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:12px 22px;cursor:pointer;backdrop-filter:blur(6px);transition:all .2s}
+.btn-tour:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+.icta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hbtn.tourb{background:linear-gradient(135deg,#15aabf,#7048e8)!important;border-color:transparent!important}
+#tour{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);z-index:1200;width:min(560px,calc(100vw - 24px));
+  background:rgba(7,22,40,.82);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px);color:#fff;border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;opacity:0;visibility:hidden;transition:all .35s cubic-bezier(.2,.8,.2,1)}
+#tour.on{opacity:1;visibility:visible;transform:translate(-50%,0)}
+#tour .tbar{height:3px;background:rgba(255,255,255,.12)}
+#tour .tbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#74c0fc,#3bc9db,#b197fc);transition:width .4s}
+#tour .tin{display:flex;gap:14px;padding:14px 18px 6px;align-items:flex-start}
+#tour .tnum{flex:none;font-size:12px;font-weight:800;color:#0b2540;background:linear-gradient(135deg,#a5d8ff,#99e9f2);border-radius:999px;padding:5px 10px;margin-top:2px;font-variant-numeric:tabular-nums}
+#tour .tk{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#66d9e8;font-weight:700}
+#tour h3{margin:2px 0 4px;font-size:18px;font-weight:800;letter-spacing:-.01em}
+#tour p{margin:0;font-size:13.5px;line-height:1.55;color:#cfe2f3}
+#tour .ttx{animation:tin .45s ease}
+@keyframes tin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#tour .tctl{display:flex;gap:6px;padding:8px 14px 12px;justify-content:flex-end}
+#tour .tctl button{font:inherit;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;min-width:38px;height:34px;cursor:pointer;font-size:16px}
+#tour .tctl button:hover{background:rgba(255,255,255,.22)}
+#tour .tctl .tx{font-size:13px;padding:0 14px;margin-left:6px}
+body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
+.ripple{position:relative;width:0;height:0;pointer-events:none}
+.ripple i{position:absolute;left:-40px;top:-40px;width:80px;height:80px;border-radius:50%;border:3px solid #66d9e8;box-shadow:0 0 18px rgba(102,217,232,.8),inset 0 0 12px rgba(102,217,232,.5);animation:rp 2.4s ease-out infinite;opacity:0}
+.ripple i:nth-child(2){animation-delay:.8s}.ripple i:nth-child(3){animation-delay:1.6s}
+@keyframes rp{0%{transform:scale(.25);opacity:1}100%{transform:scale(1.5);opacity:0}}
+@media (max-width:820px){#tour{bottom:10px}#tour h3{font-size:16px}#tour p{font-size:12.5px}.hbtn.tourb span{display:none}}
 /* ---- penyempurnaan UI */
 .bm button{font-family:inherit;min-height:38px;display:grid;place-items:center;line-height:1.25}
 .bm button:hover{border-color:#9cc3ee}
@@ -906,8 +936,16 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
     <h2 id="iTitle">GeoSPAM <em>Bakula</em></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Jalur air baku dari Bendung Karang Intan menuju IPA Pinus, serta distribusi air curah ke titik serah PTAM Bandarmasih, PTAM Intan Banjar, dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
     <div class="istats" id="istats"></div>
-    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG</span></div>
+    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG</span></div>
   </div>
+</div>
+<div id="tour" aria-live="polite">
+  <div class="tbar"><i id="tprog"></i></div>
+  <div class="tin">
+    <div class="tnum" id="tnum">1/12</div>
+    <div class="ttx"><div class="tk" id="tkat"></div><h3 id="tttl"></h3><p id="tdesc"></p></div>
+  </div>
+  <div class="tctl"><button id="tPrev" aria-label="Sebelumnya">‹</button><button id="tPlay" aria-label="Jeda">❚❚</button><button id="tNext" aria-label="Berikutnya">›</button><button id="tX" class="tx">Selesai</button></div>
 </div>
 <div id="app">
 <header>
@@ -918,6 +956,7 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
     <p>WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula · BPAM Banjarbakula</p>
   </div>
   <div class="hdr-btns">
+    <button class="hbtn tourb" id="btnTour" title="Tur jaringan otomatis"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Tur</span></button>
     <button class="hbtn" id="btnProf" aria-pressed="false" title="Profil elevasi & analisis gravitasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18"/><path d="m3 16 5-6 4 3 4-7 5 6"/></svg><span>Profil</span></button>
     <button class="hbtn" id="btnMeasure" aria-pressed="false" title="Ukur jarak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/></svg><span>Ukur</span></button>
     <button class="hbtn" id="btnPanel" aria-expanded="false" title="Layer &amp; info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg><span>Layer</span></button>
@@ -1070,6 +1109,7 @@ const BASEMAPS = {
   "Satelit": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:17,attribution:"Esri World Imagery"}),
   "Topografi": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:18,attribution:"Esri World Topo"}),
   "Topo kontur (OpenTopoMap)": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"© OpenTopoMap (CC-BY-SA), © OpenStreetMap"}),
+  "Malam (gelap)": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:16,attribution:"Esri World Dark Gray"}),
   "Tanpa peta dasar": null
 };
 let currentBase = null, tileErrShown = false;
@@ -1209,10 +1249,10 @@ LAYERS[0].lyr.bringToFront && LAYERS[0].lyr.bringToFront();
 const allBounds = L.featureGroup([LAYERS[0].lyr, LAYERS[2].lyr]).getBounds();
 let introOn = true; try{ introOn = sessionStorage.getItem("bpam_intro") !== "0"; }catch(e){}
 if (introOn) map.setView(allBounds.getCenter(), 10, {animate:false}); else map.fitBounds(allBounds, {padding:[20,20]});
-function closeIntro(){
+function closeIntro(noFly){
   if ($("#intro").classList.contains("hide")) return;
   $("#intro").classList.add("hide"); try{ sessionStorage.setItem("bpam_intro","0"); }catch(e){}
-  setTimeout(() => map.flyToBounds(allBounds, {padding:[30,30], duration:2.2}), 250);
+  if (noFly !== true) setTimeout(() => map.flyToBounds(allBounds, {padding:[30,30], duration:2.2}), 250);
 }
 if (!introOn) $("#intro").classList.add("hide");
 $("#btnGo").onclick = closeIntro;
@@ -1319,6 +1359,56 @@ document.querySelectorAll("#istats b").forEach(b => {
   requestAnimationFrame(step);
 });
 $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Transmisi air baku</span></div><div><b>${nf(JDU_M/1000,1)} km</b><span>Distribusi air curah</span></div><div class="hx"><b>${AV_AB + AV_D}</b><span>Air valve (${AV_AB} baku · ${AV_D} curah)</span></div><div><b>${(R.jumlah_air_baku.offtake||0) + (R.jumlah_distribusi.offtake||0)}</b><span>Offtake · 3 PTAM</span></div>`;
+// ---------- tur jaringan
+(function(){
+  const pt = n => { const it = searchIndex.find(i => !i.bounds && i.name === n); return it && it.latlng; };
+  const segB = pred => { const fs = DATA.jaringan_distribusi.features.filter(pred); return fs.length ? L.geoJSON({type:"FeatureCollection",features:fs}).getBounds() : null; };
+  const km = m => nf(m/1000,1) + " km";
+  const S = [
+    ["Intake Karang Intan","Sumber air baku","Intake Karang Intan","Perjalanan air dimulai di Bendung Karang Intan. Dari sini air baku dialirkan lewat pipa GRP DN 1.200 mm.",15],
+    ["Titik Pergantian Pipa GRP → HDPE","Transmisi air baku","Pergantian pipa GRP → HDPE","Sekitar "+km(R.transmisi_per_material["GRP DN 1.200 mm"]||0)+" dari intake, pipa GRP berganti menjadi HDPE DN 1.200 mm.",16],
+    ["IPA Pinus & Kantor BPAM Banjarbakula","Produksi air curah","IPA Pinus","Sebagian air baku diolah di IPA Pinus (kapasitas 750 L/dtk) menjadi air curah untuk PTAM.",16],
+    ["Offtake Pinus – PTAM Intan Banjar","Titik serah air baku","Offtake Pinus","Air baku diserahkan ke PTAM Intan Banjar untuk diolah di instalasinya sendiri.",17],
+    ["BGT 1 (Booster Ground Transfer)","Stasiun pompa","BGT 1","Booster pertama menjaga tekanan aliran air baku menuju Banjarmasin.",16],
+    ["BGT 2 (Booster Ground Transfer)","Stasiun pompa","BGT 2","Booster kedua mendorong air baku menempuh sisa jalur transmisi.",16],
+    ["Offtake Pematang – PTAM Bandarmasih","Ujung transmisi","Offtake Pematang","Setelah "+km(R.transmisi_total_m)+" pipa transmisi, air baku diserahkan ke PTAM Bandarmasih.",15],
+    ["Offtake Pinus II – PTAM Intan Banjar","Titik serah air curah","Offtake Pinus II","Air curah dari IPA Pinus dialirkan ke IPA Pinus II PTAM Intan Banjar.",17],
+    ["Offtake Muslimin – PTAM Intan Banjar","Titik serah air curah","Offtake Muslimin","Cabang JDU membawa air curah ke titik serah Muslimin untuk PTAM Intan Banjar.",16],
+    ["Offtake Guntung Manggis – PTAM Intan Banjar","Titik serah air curah","Offtake Guntung Manggis","JDU Ø400 mm sepanjang ±7,2 km melayani titik serah Guntung Manggis.",15],
+    ["Offtake Bati-Bati – PTAM Berkah Banua","Titik serah air curah","Offtake Bati-Bati","JDU terpanjang (±28 km) berakhir di Bati-Bati, titik serah untuk PTAM Berkah Banua.",14],
+    [null,"Jaringan lanjutan PTAM","Kurau – Tabanio","Dari Bati-Bati, jaringan lanjutan PTAM Berkah Banua (±"+km(R.lanjutan_m)+") menjangkau Reservoir Kurau dan Tabanio.",segB(f => f.properties.lanjutan)],
+    [null,"GeoSPAM Bakula","Satu jaringan, tiga PTAM",km(R.transmisi_total_m)+" transmisi air baku dan "+km(R.jdu_m)+" distribusi air curah melayani 3 PTAM di 6 titik serah. Selamat menjelajah!",allBounds]
+  ].filter(s => !s[0] || pt(s[0]));
+  let i = 0, timer = null, playing = true, ring = null;
+  const DUR = 7000;
+  function show(k){
+    i = (k + S.length) % S.length; const [n,kat,t,d,z] = S[i];
+    map.closePopup(); if (ring) { map.removeLayer(ring); ring = null; }
+    $("#tnum").textContent = (i+1) + "/" + S.length; $("#tkat").textContent = kat; $("#tttl").textContent = t; $("#tdesc").textContent = d;
+    const tx = document.querySelector("#tour .ttx"); tx.style.animation = "none"; tx.offsetHeight; tx.style.animation = "";
+    $("#tprog").style.width = ((i+1)/S.length*100) + "%";
+    if (n){ const ll = pt(n);
+      map.flyTo(ll, Math.min(z, map.getMaxZoom()), {duration:2.2});
+      map.once("moveend", () => { if (!document.body.classList.contains("touring")) return;
+        ring = L.marker(ll,{icon:L.divIcon({className:"", html:'<div class="ripple"><i></i><i></i><i></i></div>', iconSize:[0,0]}), interactive:false, keyboard:false, zIndexOffset:-1000}).addTo(map); });
+    } else map.flyToBounds(z, {padding:[60,60], duration:2.4});
+    clearTimeout(timer); if (playing) timer = setTimeout(() => { if (i < S.length - 1) show(i+1); else setPlay(false); }, DUR);
+  }
+  function setPlay(p){ playing = p; $("#tPlay").textContent = p ? "❚❚" : "▶"; $("#tPlay").setAttribute("aria-label", p ? "Jeda" : "Putar");
+    clearTimeout(timer); if (p) timer = setTimeout(() => show(i+1), DUR); }
+  function start(){ const wasIntro = !$("#intro").classList.contains("hide"); closeIntro(true); if (window.innerWidth <= 820) togglePanel(false);
+    document.body.classList.add("touring"); $("#tour").classList.add("on"); playing = true; $("#tPlay").textContent = "❚❚";
+    setTimeout(() => show(0), wasIntro ? 450 : 0); }
+  function stop(){ clearTimeout(timer); document.body.classList.remove("touring"); $("#tour").classList.remove("on"); if (ring) { map.removeLayer(ring); ring = null; } }
+  $("#btnTour").onclick = () => document.body.classList.contains("touring") ? stop() : start();
+  $("#btnTourI").onclick = e => { e.stopPropagation(); start(); };
+  $("#tNext").onclick = () => show(i+1); $("#tPrev").onclick = () => show(i-1);
+  $("#tPlay").onclick = () => setPlay(!playing); $("#tX").onclick = stop;
+  document.addEventListener("keydown", e => { if (!document.body.classList.contains("touring")) return;
+    if (e.key === "ArrowRight") show(i+1); else if (e.key === "ArrowLeft") show(i-1); else if (e.key === "Escape") stop(); });
+  map.on("mousedown touchstart", () => { if (document.body.classList.contains("touring") && playing) setPlay(false); });
+})();
+
 // tabel titik serah per PTAM
 (function(){
   const rows = [];
