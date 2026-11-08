@@ -26,6 +26,7 @@ jobs:
           TG_API_HASH: ${{ secrets.TG_API_HASH }}
           TG_SESSION: ${{ secrets.TG_SESSION }}
           TG_GROUP: ${{ secrets.TG_GROUP }}
+          TG_ALERT_CHAT: ${{ secrets.TG_ALERT_CHAT }}
         run: python main/tools/telegram_flow.py data/flow.json
       - name: Simpan ke cabang telemetri
         run: |

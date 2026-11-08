@@ -73,6 +73,34 @@ async def main(out):
             if not last or r["t"] >= last["t"]: last = {k: v for k, v in r.items() if k != "id"}
         series = sorted((p for p in pts.values() if p["t"] >= cutoff), key=lambda p: p["t"])
         data["stations"][sid] = {"last": last, "series": series}
+    # ---- peringatan (dikirim hanya bila TG_ALERT_CHAT diisi; hanya saat status berubah)
+    names = {"dn900": "DN900 (IPA Pinus)", "pematang": "Offtake Pematang"}
+    alerts = []
+    for sid, st in data["stations"].items():
+        l = st["last"]
+        if not l: continue
+        age = (data["updated"] - l["t"]) / 36e5
+        if age > 3: alerts.append(f"Logger {names[sid]} tidak mengirim data {age:.0f} jam"); continue
+        ref = [p["flow"] for p in st["series"] if l["t"] - 864e5 < p["t"] < l["t"]]
+        if len(ref) >= 6:
+            avg = sum(ref) / len(ref); d = (l["flow"] - avg) / avg
+            if d <= -0.2: alerts.append(f"Debit {names[sid]} {l['flow']:.0f} L/dtk, turun {-d*100:.0f}% dari rata-rata 24 jam ({avg:.0f} L/dtk)")
+    key = " | ".join(alerts)
+    data["alerts"] = alerts
+    prev = old.get("alert_key", "")
+    data["alert_key"] = key
+    chat = (os.environ.get("TG_ALERT_CHAT") or "").strip()
+    if chat and key != prev and (alerts or prev):
+        from telethon import TelegramClient
+        from telethon.sessions import StringSession
+        txt = ("⚠️ GeoSPAM Bakula – peringatan\n" + "\n".join("• " + a for a in alerts)) if alerts else "✅ GeoSPAM Bakula – kondisi debit kembali normal"
+        txt += "\nhttps://skematik.netlify.app"
+        async with TelegramClient(StringSession(sess), api_id, api_hash) as cl:
+            target = chat
+            async for dlg in cl.iter_dialogs():
+                if (dlg.title or "").strip().lower() == chat.lower(): target = dlg.entity; break
+            await cl.send_message(target, txt)
+        print("peringatan terkirim:", txt)
     json.dump(data, open(out, "w"), separators=(",", ":"))
     print({k: (v["last"] or {}).get("flow") for k, v in data["stations"].items()})
 
