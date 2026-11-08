@@ -856,6 +856,17 @@ body.touring #tele{opacity:0;pointer-events:none}
 .awlr i{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#15aabf;border:2px solid #fff;box-shadow:0 0 12px #3bc9db}
 .awlr i:after{content:"";position:absolute;left:5px;top:-30px;width:2px;height:30px;background:linear-gradient(#74c0fc,#15aabf)}
 @media (max-width:820px){#tele{left:8px;right:auto;bottom:34px;top:auto;width:min(250px,calc(100vw - 70px))}#tele .tlval b{font-size:24px}#tlSpark{height:44px}}
+.tlfm{margin-top:10px;border-top:1px solid rgba(255,255,255,.12);padding-top:8px;display:grid;gap:6px}
+.tlfm:empty{display:none}
+.fmr{display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;border-radius:10px;padding:5px 6px;margin:0 -6px}
+.fmr:hover{background:rgba(255,255,255,.07)}
+.fmr .fi{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;background:rgba(116,192,252,.18)}
+.fmr .fn{flex:1;color:#cfe2f3;line-height:1.2}.fmr .fn small{display:block;color:#7f97ae;font-size:10.5px}
+.fmr .fv{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;color:#fff}.fmr .fv span{font-size:10.5px;font-weight:600;color:#a5d8ff;margin-left:2px}
+.fmr.old .fv{color:#adb5bd}
+.fmk{position:relative;width:0;height:0}
+.fmk b{position:absolute;left:12px;top:-14px;white-space:nowrap;font:800 11.5px "Plus Jakarta Sans",sans-serif;color:#fff;background:linear-gradient(90deg,#1c7ed6,#7048e8);border-radius:999px;padding:4px 9px;box-shadow:0 4px 14px rgba(28,126,214,.55)}
+.fmk i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:5px;transform:rotate(45deg);background:#fff;border:3px solid #1c7ed6;box-shadow:0 0 10px rgba(28,126,214,.8)}
 /* ---- Fable polish: reveal, grain, glass, dark mode */
 #intro:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -1195,13 +1206,14 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
 <div id="tele" aria-live="polite">
   <button class="tlhd" id="tlToggle" aria-expanded="true">
     <span class="tlive"><i></i>LIVE</span>
-    <span class="tlttl">Muka air Bendung Karang Intan</span>
+    <span class="tlttl">Telemetri live · Intake & debit</span>
     <span class="tlcar">▾</span>
   </button>
   <div class="tlbd">
     <div class="tlrow"><div class="tlval"><b id="tlV">–</b><span>m</span></div><div class="tlst" id="tlS">memuat…</div></div>
     <svg id="tlSpark" viewBox="0 0 260 64" preserveAspectRatio="none"></svg>
     <div class="tlmeta"><span id="tlT">–</span><span id="tlB"></span></div>
+    <div class="tlfm" id="tlFm"></div>
     <div class="tlbtns"><button id="tlGo">📍 Lihat di peta</button><a href="https://opsdabwskal3.higertech.com/Station/Detail/awlr-cctv-karang-intan-debit-limpas-bendung" target="_blank" rel="noopener">Sumber BWS ↗</a></div>
   </div>
 </div>
@@ -1813,6 +1825,51 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
   $("#tlToggle").onclick = () => { const m = $("#tele").classList.toggle("min"); $("#tlToggle").setAttribute("aria-expanded", !m); try{ localStorage.setItem("bpam_tele_min", m ? "1" : "0"); }catch(e){} };
   try{ if (localStorage.getItem("bpam_tele_min") === "1" || window.innerWidth <= 820) $("#tele").classList.add("min"); }catch(e){}
   $("#tlGo").onclick = () => { map.flyTo(LL, 16, {duration:1.4}); map.once("moveend", () => mk.openPopup()); };
+})();
+
+// ---------- flowmeter Onpoint (dibaca dari grup Telegram oleh GitHub Actions tiap jam)
+(function(){
+  const URLF = "https://raw.githubusercontent.com/BPAMBanjarbakula/SkematikSPAM/telemetri/flow.json";
+  const ST = {
+    dn900:    {nama:"Flowmeter DN900 ke IPA Pinus", short:"DN900 · masuk IPA Pinus", ll:[-3.43160, 114.84170], ket:"Debit air baku yang masuk ke pengolahan IPA Pinus (cabang tapping Ø900 mm)."},
+    pematang: {nama:"Flowmeter Offtake Pematang", short:"Pematang · PTAM Bandarmasih", ll:[-3.36123, 114.692993], ket:"Debit air baku yang diserahkan ke PTAM Bandarmasih di Offtake Pematang."}
+  };
+  const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
+  let D = null;
+  const mk = {};
+  Object.entries(ST).forEach(([id, s]) => {
+    mk[id] = L.marker(s.ll, {icon: L.divIcon({className:"", iconSize:[0,0], html:`<div class="fmk"><i></i><b id="fmk_${id}">${id === "dn900" ? "DN900" : "FM Pematang"} …</b></div>`}), zIndexOffset:880}).addTo(map);
+    mk[id].bindPopup(() => popup(id), {maxWidth:340, autoPanPaddingTopLeft:[20,90]});
+  });
+  function sparkSVG(series){
+    if (!series || series.length < 2) return "";
+    const xs = series.map(p => p.t), ys = series.map(p => p.flow);
+    let lo = Math.min(...ys), hi = Math.max(...ys); const pad = Math.max(2,(hi-lo)*.12); lo -= pad; hi += pad;
+    const X = t => (t-xs[0])/(xs[xs.length-1]-xs[0])*300, Y = v => 76-(v-lo)/(hi-lo)*70;
+    const d = series.map((p,i) => (i?"L":"M") + X(p.t).toFixed(1) + "," + Y(p.flow).toFixed(1)).join("");
+    return `<svg viewBox="0 0 300 80" preserveAspectRatio="none" style="width:100%;height:80px;display:block;margin:6px 0"><defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dabf7" stop-opacity=".4"/><stop offset="1" stop-color="#4dabf7" stop-opacity="0"/></linearGradient></defs><path d="${d}L300,80L0,80Z" fill="url(#fg)"/><path d="${d}" fill="none" stroke="#1c7ed6" stroke-width="2" vector-effect="non-scaling-stroke"/></svg><div style="display:flex;justify-content:space-between;font-size:10.5px;color:#868e96"><span>${fmtT(xs[0])}</span><span>min ${nf(Math.min(...ys),0)} · maks ${nf(Math.max(...ys),0)} L/dtk</span></div>`;
+  }
+  function popup(id){
+    const s = ST[id], st = D && D.stations[id], l = st && st.last;
+    if (!l) return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Logger Onpoint</div></div></div><div class="pbd"><div class="note">Data belum tersedia. Sambungan Telegram sedang disiapkan.</div></div></div>`;
+    const age = (Date.now() - l.t)/36e5;
+    const sinyal = l.rssi == null ? "–" : `${nf(l.rssi,0)} dBm (${l.rssi >= -75 ? "baik" : l.rssi >= -85 ? "cukup" : "lemah"})`;
+    const rows = [["Debit", `<b>${nf(l.flow,1)} L/dtk</b>`], ["Total volume", l.cons != null ? nf(l.cons,0) + " m³" : "–"], ["Pembacaan", fmtT(l.t) + (age > 3 ? " ⚠️" : "")], ["Baterai logger", l.batt != null ? nf(l.batt,2) + " V" : "–"], ["Sinyal", sinyal], ["Suhu logger", l.temp != null ? nf(l.temp,1) + " °C" : "–"]];
+    return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Telemetri debit · per jam</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Onpoint</span></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${sparkSVG(st.series)}<p style="font-size:12px;color:#5c6b7a;margin:8px 0 0">${s.ket}</p><div class="src">Sumber: logger Onpoint (laporan otomatis grup Telegram BPAM Banjarbakula), diperbarui tiap jam</div></div></div>`;
+  }
+  function render(){
+    const rows = [];
+    Object.entries(ST).forEach(([id, s]) => {
+      const l = D && D.stations[id] && D.stations[id].last; if (!l) return;
+      const old = (Date.now() - l.t) / 36e5 > 3;
+      rows.push(`<div class="fmr${old ? " old" : ""}" data-id="${id}"><span class="fi">💧</span><span class="fn">${s.short}<small>${fmtT(l.t)}</small></span><span class="fv">${nf(l.flow,0)}<span>L/dtk</span></span></div>`);
+      const b = document.getElementById("fmk_" + id); if (b) b.textContent = (id === "dn900" ? "DN900 " : "Pematang ") + nf(l.flow,0) + " L/dtk";
+    });
+    $("#tlFm").innerHTML = rows.join("");
+    document.querySelectorAll(".fmr").forEach(r => r.onclick = () => { const id = r.dataset.id; map.flyTo(ST[id].ll, 16, {duration:1.4}); map.once("moveend", () => mk[id].openPopup()); });
+  }
+  async function load(){ try{ const r = await fetch(URLF + "?t=" + Math.floor(Date.now()/3e5), {cache:"no-store"}); if (r.ok){ D = await r.json(); render(); } }catch(e){} }
+  load(); setInterval(load, 10*60e3);
 })();
 
 // ---------- bagikan, mode gelap, layar penuh
