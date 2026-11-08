@@ -828,6 +828,39 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
 .pleg{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);padding:0 0 4px}
 .pleg i{display:inline-block;width:16px;height:0;border-top:3px solid;vertical-align:middle;margin-right:4px}
 @media (max-width:820px){#prof{left:0;height:68vh}.pb{grid-template-columns:minmax(0,1fr);grid-template-rows:200px auto;overflow:auto}}
+/* ---- penyempurnaan UI */
+.bm button{font-family:inherit;min-height:38px;display:grid;place-items:center;line-height:1.25}
+.bm button:hover{border-color:#9cc3ee}
+.lgrp{font-size:11px;font-weight:700;color:#0b3a63;background:#eef4fb;border-radius:6px;padding:4px 8px;margin:10px 0 4px;letter-spacing:.02em}
+.lgrp:first-child{margin-top:0}
+.quick{display:flex;flex-wrap:wrap;gap:6px}
+.qb{font:inherit;font-size:12.5px;font-weight:600;border:1px solid #d6e4f2;background:linear-gradient(180deg,#fff,#f2f7fc);color:#0b3a63;border-radius:999px;padding:5px 11px;cursor:pointer;transition:all .15s}
+.qb:hover{background:#0b3a63;color:#fff;border-color:#0b3a63}
+.legbox summary{cursor:pointer;list-style:none;margin:16px 0 8px}
+.legbox summary::-webkit-details-marker{display:none}
+.legbox summary:after{content:" ▾";color:var(--muted);font-size:12px}
+.legbox:not([open]) summary:after{content:" ▸"}
+#hud{transition:opacity .2s}
+#hud.hid{opacity:0;visibility:hidden}
+.leaflet-bar{border:0!important;box-shadow:0 4px 14px rgba(7,26,46,.22)!important;border-radius:12px!important;overflow:hidden}
+.leaflet-bar a{width:34px!important;height:34px!important;line-height:34px!important;color:#0b3a63!important}
+.lbl{line-height:1.2;padding:4px 10px!important}
+.lbl b{display:block;font-weight:700;font-size:11.5px}
+.lbl small{display:block;font-size:10px;font-weight:500;color:#a5d8ff}
+.leaflet-popup-content{margin:0!important;min-width:260px;max-width:310px}
+.leaflet-popup-content-wrapper{padding:0;overflow:hidden}
+.pp .phd{display:flex;gap:10px;align-items:center;padding:12px 14px 10px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,#fff),#fff);border-bottom:1px solid #eef1f4;border-top:4px solid var(--c)}
+.pp .phd h3{margin:0;font-size:15px;font-weight:800;color:#0b2540;line-height:1.25}
+.pp .phd .sub{margin:2px 0 0;color:#5c6b7a;font-size:12px}
+.pic{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:10.5px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.pic.sm{width:18px;height:18px}
+.pic.ln{width:28px;height:8px;border-radius:4px;border:0;box-shadow:none}
+.pp .pbd{padding:10px 14px 12px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.chip{font-size:11px;font-weight:600;background:#eef4fb;color:#0b3a63;border-radius:999px;padding:3px 9px}
+.pp .src{margin-top:8px;font-size:11px;color:#8a96a3;line-height:1.4}
+.pp .pbtns{margin-top:10px}
+.gbtn{font-size:12.5px;font-weight:700;color:#0b3a63!important;text-decoration:none;border:1px solid #d6e4f2;border-radius:999px;padding:6px 12px}
 /* ---- rute */
 .pbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
 .rbtn{font:inherit;font-size:12.5px;font-weight:700;border:0;border-radius:999px;padding:7px 12px;cursor:pointer;color:#fff;background:linear-gradient(90deg,#e8590c,#f08c00);box-shadow:0 4px 12px rgba(232,89,12,.3)}
@@ -852,9 +885,9 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
   .closebtn{display:block;position:absolute;right:8px;top:6px;border:0;background:none;font-size:20px;color:var(--muted);cursor:pointer}
   .tabs{padding-right:36px}
   #coord{left:6px}
-  #hud{right:8px;top:8px;left:58px;flex-wrap:wrap;justify-content:flex-end}
+  #hud{right:8px;top:8px;left:58px;flex-wrap:nowrap;justify-content:flex-end;gap:5px}
+  #hud div{padding:4px 8px;border-radius:10px}#hud b{font-size:12.5px}#hud span{font-size:10px}
   #hud .hx{display:none}
-  #hud div{padding:5px 9px}#hud b{font-size:13px}
   .istats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ttl h1{font-size:13.5px}
   .hbtn span{display:none}
@@ -905,13 +938,15 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
         <input id="q" type="search" placeholder="mis. Air Valve 5, BGT 2, Offtake Kurau…" autocomplete="off" aria-label="Cari aset">
       </div>
       <ul id="results" role="listbox"></ul>
+      <h2>Akses cepat</h2>
+      <div class="quick" id="quick"></div>
       <h2>Layer</h2>
       <div id="layers"></div>
       <label class="lyr"><input type="checkbox" id="chkLabel" checked> Tampilkan label aset utama</label>
       <h2>Peta dasar</h2>
       <div class="bm" id="basemaps"></div>
-      <h2>Legenda</h2>
-      <div class="leg" id="legend"></div>
+      <details class="legbox" open><summary><h2 style="display:inline">Legenda</h2></summary>
+      <div class="leg" id="legend"></div></details>
     </div>
     <div class="pane" id="pSum">
       <h2>Panjang jaringan</h2>
@@ -1030,8 +1065,8 @@ L.control.scale({imperial:false,position:"bottomright"}).addTo(map);
 // ---------- basemaps
 const BASEMAPS = {
   "Jalan (OSM)": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}),
-  "Satelit": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Esri World Imagery"}),
-  "Topografi": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Esri World Topo"}),
+  "Satelit": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:17,attribution:"Esri World Imagery"}),
+  "Topografi": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:18,attribution:"Esri World Topo"}),
   "Topo kontur (OpenTopoMap)": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"© OpenTopoMap (CC-BY-SA), © OpenStreetMap"}),
   "Tanpa peta dasar": null
 };
@@ -1069,19 +1104,34 @@ function pointPopup(f, latlng){
   if (p.sta_m !== undefined) base["STA dari intake"] = fmtN(p.sta_m) + " m";
   if (p.waktu_survei) base["Waktu survei GPS"] = p.waktu_survei.replace(".000","");
   const rows = rowsFrom(base) + rowsFrom(p.detail || {}) + rowsFrom({"Koordinat": latlng.lat.toFixed(6) + ", " + latlng.lng.toFixed(6)});
-  return `<div class="pp"><h3>${esc(p.nama)}</h3><div class="sub">${esc(c.label)}</div><table>${rows}</table>` +
+  const ptam = (p.nama.match(/ – (PTAM .*)$/) || [])[1];
+  const chips = [p.jaringan, p.sta_m !== undefined ? "STA " + fmtN(p.sta_m) + " m" : null, ptam].filter(Boolean).map(t => `<span class="chip">${esc(t)}</span>`).join("");
+  const badge = c.size ? `<span class="pic" style="background:${c.color}">${c.txt}</span>` : `<span class="pic sm" style="background:${c.color}"></span>`;
+  return `<div class="pp"><div class="phd" style="--c:${c.color}">${badge}<div><h3>${esc(shortName(p.nama))}</h3><div class="sub">${esc(c.label)}</div></div></div>` +
+    `<div class="pbd"><div class="chips">${chips}</div><table>${rows}</table>` +
     (p.verifikasi ? `<div class="note">Perlu verifikasi: ${esc(p.verifikasi)}</div>` : "") +
-    `<div class="muted" style="margin-top:6px">Sumber: ${esc(p.sumber)}</div>` +
-    `<div class="pbtns"><button class="rbtn" data-route="${esc(p.nama)}" data-lat="${latlng.lat}" data-lon="${latlng.lng}">🧭 Rute dari lokasi saya</button><a href="${gdir(latlng.lat, latlng.lng)}" target="_blank" rel="noopener">Navigasi Google Maps</a></div></div>`;
+    `<div class="pbtns"><button class="rbtn" data-route="${esc(p.nama)}" data-lat="${latlng.lat}" data-lon="${latlng.lng}">🧭 Rute ke sini</button><a class="gbtn" href="${gdir(latlng.lat, latlng.lng)}" target="_blank" rel="noopener">Google Maps ↗</a></div>` +
+    `<div class="src">Sumber: ${esc(p.sumber)}</div></div></div>`;
 }
 function linePopup(f){
   const p = f.properties;
   const rows = rowsFrom({"Kode": p.kode, "Jenis": p.jenis, "Material": p.material, "Diameter": p.diameter,
     "Panjang": fmtM(p.panjang_m), "STA": (p.sta_awal_m !== undefined && p.sta_akhir_m !== null && p.sta_akhir_m !== undefined) ? fmtN(p.sta_awal_m) + " – " + fmtN(p.sta_akhir_m) + " m" : null,
     "Tahun / dana": p.tahun_dana, "Status aset": p.status_aset, "Catatan": p.catatan});
-  return `<div class="pp"><h3>${esc(p.nama)}</h3><div class="sub">${esc(p.jenis)}</div><table>${rows}</table><div class="muted" style="margin-top:6px">Sumber: ${esc(p.sumber)}</div></div>`;
+  const st = LINE_STYLE(f);
+  const chips = [fmtM(p.panjang_m), p.diameter && !/Belum/.test(p.diameter) ? p.diameter : null, p.material].filter(Boolean).map(t => `<span class="chip">${esc(t)}</span>`).join("");
+  return `<div class="pp"><div class="phd" style="--c:${st.color}"><span class="pic ln" style="background:${st.color}"></span><div><h3>${esc(p.nama)}</h3><div class="sub">${esc(p.jenis)} · ${esc(p.kode)}</div></div></div>` +
+    `<div class="pbd"><div class="chips">${chips}</div><table>${rows}</table><div class="src">Sumber: ${esc(p.sumber)}</div></div></div>`;
 }
 
+// label pendek: nama lokasi tebal + PTAM kecil di bawahnya
+function shortName(n){
+  return n.replace(/ \(Booster Ground Transfer\)/,"").replace(" & Kantor BPAM Banjarbakula","").replace(/ – PTAM.*$/,"");
+}
+function lblHTML(p){
+  const m = p.nama.match(/ – (PTAM .*)$/);
+  return `<b>${esc(shortName(p.nama))}</b>` + (m ? `<small>${esc(m[1])}</small>` : "");
+}
 // ---------- layers
 const searchIndex = [];
 const labelLayers = [];
@@ -1097,9 +1147,9 @@ function markerFor(f, latlng){
 function pointLayer(gj){
   return L.geoJSON(gj,{pointToLayer:(f,ll) => {
       const m = markerFor(f, ll);
-      m.bindPopup(() => pointPopup(f, ll), {maxWidth:320});
+      m.bindPopup(() => pointPopup(f, ll), {maxWidth:330, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[20,20]});
       const c = CAT[f.properties.kategori] || CAT.lainnya;
-      if (c.key){ m.bindTooltip(f.properties.nama,{permanent:true,direction:"right",offset:[c.size/2,0],className:"lbl"}); m._lblMin = /BGT 1|Offtake Pinus|Offtake Muslimin|Pergantian|Reducer|tapping/.test(f.properties.nama) ? 14 : 10; labelLayers.push(m); }
+      if (c.key){ m.bindTooltip(lblHTML(f.properties),{permanent:true,direction:"right",offset:[c.size/2,0],className:"lbl"}); m._lblMin = /BGT 1|Offtake Pinus|Offtake Muslimin|Pergantian|Reducer|tapping/.test(f.properties.nama) ? 14 : 10; labelLayers.push(m); }
       else m.bindTooltip(f.properties.nama,{direction:"top",offset:[0,-6]});
       searchIndex.push({name:f.properties.nama, cat:c.label, layer:m, latlng:ll});
       return m;
@@ -1107,7 +1157,7 @@ function pointLayer(gj){
 }
 function lineLayer(gj){
   return L.geoJSON(gj,{style:LINE_STYLE, onEachFeature:(f,l) => {
-    l.bindPopup(linePopup(f),{maxWidth:320});
+    l.bindPopup(linePopup(f),{maxWidth:330, autoPanPaddingTopLeft:[20,90]});
     l.bindTooltip(f.properties.nama + " · " + fmtM(f.properties.panjang_m),{sticky:true});
     l.on("mouseover", () => l.setStyle({weight:LINE_STYLE(f).weight+3}));
     l.on("mouseout", () => l.setStyle(LINE_STYLE(f)));
@@ -1148,6 +1198,8 @@ LAYERS.forEach(L0 => {
   row.innerHTML = `<input type="checkbox" ${on?"checked":""}> ${L0.sw} <span>${esc(L0.name)}</span><span class="cnt">${esc(L0.n)}</span>`;
   const cb = row.querySelector("input");
   cb.onchange = () => { cb.checked ? L0.lyr.addTo(map) : map.removeLayer(L0.lyr); saved[L0.id] = cb.checked; try{ localStorage.setItem("bpam_layers", JSON.stringify(saved)); }catch(e){} };
+  const grpName = {transmisi:"Jaringan pipa", relief:"Elevasi", rencana:"Rencana"}[L0.id];
+  if (grpName) $("#layers").insertAdjacentHTML("beforeend", `<div class="lgrp">${grpName}</div>`);
   $("#layers").appendChild(row);
   if (on) L0.lyr.addTo(map);
 });
@@ -1180,8 +1232,9 @@ LAYERS.forEach(l => l.lyr.on && l.lyr.on("add", () => setTimeout(updLabels, 0)))
 const leg = $("#legend");
 [["#d9480f",7,"","GRP DN 1.200 mm"],["#1864ab",7,"","HDPE DN 1.200 mm"],["#0c8599",5,"","HDPE Ø 710 mm"],["#e67700",4,"dash","Cabang tapping IPA Pinus"],["#7048e8",3,"","Distribusi air curah (JDU)"],["#b197fc",3,"dash","Jaringan lanjutan PTAM (di luar titik serah)"],["#868e96",3,"dash","Rencana (Batola)"],["#f46d43",2,"","Kontur elevasi (garis tebal tiap " + DATA.relief.mayor + " m)"]]
  .forEach(([c,w,d,t]) => leg.insertAdjacentHTML("beforeend", `<span class="sw ${d}" style="border-color:${c};border-top-width:${w}px"></span><span>${t}</span>`));
-Object.values(CAT).forEach(c => {
-  if (c.label === "Lainnya") return;
+const usedCat = new Set([DATA.titik_air_baku, DATA.titik_distribusi, DATA.titik_rencana_batola].flatMap(g => g.features.map(f => f.properties.kategori)));
+Object.entries(CAT).forEach(([k,c]) => {
+  if (c.label === "Lainnya" || !usedCat.has(k)) return;
   const sym = c.size ? `<span class="ico" style="width:20px;height:20px;background:${c.color};font-size:8px">${c.txt}</span>` : `<span class="dot" style="background:${c.color}"></span>`;
   leg.insertAdjacentHTML("beforeend", `${sym}<span>${c.label}</span>`);
 });
@@ -1193,7 +1246,8 @@ const q = $("#q"), res = $("#results");
 function doSearch(){
   const s = q.value.trim().toLowerCase(); res.innerHTML = "";
   if (s.length < 2) return;
-  searchIndex.filter(i => i.name.toLowerCase().includes(s)).slice(0,40).forEach(i => {
+  const score = i => { const n = i.name.toLowerCase(); return (n === s ? 0 : n.startsWith(s) ? 1 : 2) + (i.bounds ? 3 : 0); };
+  searchIndex.filter(i => i.name.toLowerCase().includes(s)).sort((a,b) => score(a) - score(b)).slice(0,40).forEach(i => {
     const li = document.createElement("li"); li.tabIndex = 0; li.setAttribute("role","option");
     li.innerHTML = `<span>${esc(i.name)}</span><small>${esc(i.cat)}</small>`;
     const go = () => {
@@ -1209,6 +1263,20 @@ function doSearch(){
   if (!res.children.length) res.innerHTML = '<li class="muted" style="cursor:default">Tidak ditemukan</li>';
 }
 q.addEventListener("input", doSearch);
+
+map.on("popupopen", () => $("#hud").classList.add("hid"));
+map.on("popupclose", () => $("#hud").classList.remove("hid"));
+// ---------- akses cepat
+(function(){
+  const want = [["Intake","Intake Karang Intan"],["IPA Pinus","IPA Pinus & Kantor BPAM Banjarbakula"],["BGT 1","BGT 1 (Booster Ground Transfer)"],["BGT 2","BGT 2 (Booster Ground Transfer)"]];
+  searchIndex.filter(i => !i.bounds && /^Offtake /.test(i.name)).forEach(i => want.push([shortName(i.name).replace("Offtake ","OT "), i.name]));
+  want.forEach(([t,n]) => {
+    const it = searchIndex.find(i => i.name === n); if (!it) return;
+    const b = document.createElement("button"); b.className = "qb"; b.textContent = t; b.title = n;
+    b.onclick = () => { map.flyTo(it.latlng, 16, {duration:.9}); setTimeout(() => it.layer.openPopup(), 950); if (window.innerWidth <= 820) togglePanel(false); };
+    $("#quick").appendChild(b);
+  });
+})();
 
 // ---------- summary
 const R = DATA.ringkasan;
