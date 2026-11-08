@@ -1,0 +1,27 @@
+{
+ "transmisi_total_m": 37444.8,
+ "transmisi_per_material": {
+  "GRP DN 1.200 mm": 4926.2,
+  "HDPE DN 1.200 mm": 11706.1,
+  "HDPE Ø 710 mm": 20812.5
+ },
+ "distribusi_total_m": 57701.1,
+ "rencana_m": 18464.3,
+ "jumlah_air_baku": {
+  "intake": 1,
+  "air_valve": 10,
+  "pergantian": 2,
+  "wash_out": 2,
+  "offtake": 2,
+  "bgt": 2,
+  "ipa": 1
+ },
+ "jumlah_distribusi": {
+  "air_valve": 42,
+  "booster": 1,
+  "valve": 2,
+  "reservoir": 3,
+  "patokan": 1,
+  "meter": 1
+ }
+}
