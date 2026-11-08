@@ -836,7 +836,8 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
   .closebtn{display:block;position:absolute;right:8px;top:6px;border:0;background:none;font-size:20px;color:var(--muted);cursor:pointer}
   .tabs{padding-right:36px}
   #coord{left:6px}
-  #hud{right:8px;top:8px}
+  #hud{right:8px;top:8px;left:58px;flex-wrap:wrap;justify-content:flex-end}
+  #hud .hx{display:none}
   #hud div{padding:5px 9px}#hud b{font-size:13px}
   .istats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ttl h1{font-size:13.5px}
@@ -1208,9 +1209,12 @@ $("#verifList").innerHTML = DATA.verifikasi.map(v => "• " + esc(v)).join("<br>
 
 // ---------- intro stats & hud
 const IPA_CAP = 750;
+const JDU_M = DATA.jaringan_distribusi.features.filter(f => !f.properties.lanjutan).reduce((a,f) => a + f.properties.panjang_m, 0);
+const LANJ_M = DATA.jaringan_distribusi.features.filter(f => f.properties.lanjutan).reduce((a,f) => a + f.properties.panjang_m, 0);
+const AV_AB = R.jumlah_air_baku.air_valve||0, AV_D = R.jumlah_distribusi.air_valve||0;
 const istats = [
-  [R.transmisi_total_m/1000, 1, " km", "pipa transmisi air baku"],
-  [1200, 0, " mm", "diameter pipa utama"],
+  [R.transmisi_total_m/1000, 1, " km", "pipa transmisi air baku · Ø1.200–710 mm"],
+  [JDU_M/1000, 1, " km", "pipa distribusi air curah (JDU)"],
   [IPA_CAP, 0, " L/dtk", "kapasitas IPA Pinus"],
   [3, 0, " PTAM", "dilayani di " + ((R.jumlah_air_baku.offtake||0) + (R.jumlah_distribusi.offtake||0)) + " titik serah"]
 ];
@@ -1222,7 +1226,7 @@ document.querySelectorAll("#istats b").forEach(b => {
   const step = t => { const k = dur ? Math.min(1,(t-t0)/dur) : 1, e = 1 - Math.pow(1-k,3); b.textContent = nf(v*e,d) + u; if (k < 1) requestAnimationFrame(step); };
   requestAnimationFrame(step);
 });
-$("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Transmisi air baku</span></div><div><b>${(R.jumlah_air_baku.air_valve||0)}</b><span>Air valve</span></div><div><b>${(R.jumlah_air_baku.offtake||0) + (R.jumlah_distribusi.offtake||0)}</b><span>Offtake · 3 PTAM</span></div>`;
+$("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Transmisi air baku</span></div><div><b>${nf(JDU_M/1000,1)} km</b><span>Distribusi air curah</span></div><div class="hx"><b>${AV_AB + AV_D}</b><span>Air valve (${AV_AB} baku · ${AV_D} curah)</span></div><div><b>${(R.jumlah_air_baku.offtake||0) + (R.jumlah_distribusi.offtake||0)}</b><span>Offtake · 3 PTAM</span></div>`;
 // tabel titik serah per PTAM
 (function(){
   const rows = [];
