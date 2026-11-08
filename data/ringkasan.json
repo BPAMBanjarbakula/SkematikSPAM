@@ -5,7 +5,7 @@
   "HDPE DN 1.200 mm": 11706.1,
   "HDPE Ø 710 mm": 20812.5
  },
- "distribusi_total_m": 57701.1,
+ "distribusi_total_m": 64234.7,
  "rencana_m": 18464.3,
  "jumlah_air_baku": {
   "intake": 1,
@@ -20,7 +20,9 @@
   "air_valve": 42,
   "offtake": 4,
   "valve": 2,
+  "reservoir": 2,
   "patokan": 1,
-  "meter": 1
+  "meter": 1,
+  "lainnya": 4
  }
 }
