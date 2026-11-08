@@ -18,9 +18,8 @@
  },
  "jumlah_distribusi": {
   "air_valve": 42,
-  "booster": 1,
+  "offtake": 4,
   "valve": 2,
-  "reservoir": 3,
   "patokan": 1,
   "meter": 1
  }
