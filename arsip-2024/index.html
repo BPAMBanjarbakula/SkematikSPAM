@@ -1,0 +1,2068 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/Control.OSMGeocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/Control.OSMGeocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/PipaWashOut_1.js"></script>
+        <script src="data/OfftakePinusPTAMIntanBanjar_2.js"></script>
+        <script src="data/AirValve9_3.js"></script>
+        <script src="data/BoosterGroundTransfer2_4.js"></script>
+        <script src="data/AirValve8_5.js"></script>
+        <script src="data/OfftakePematangPTAMBandarmasih_6.js"></script>
+        <script src="data/AirValve2_7.js"></script>
+        <script src="data/BoosterGroundTransfer1_8.js"></script>
+        <script src="data/AirValve3_9.js"></script>
+        <script src="data/AirValve4_10.js"></script>
+        <script src="data/AirValve5_11.js"></script>
+        <script src="data/AirValve10_12.js"></script>
+        <script src="data/AirValve7_13.js"></script>
+        <script src="data/IPAPinus_14.js"></script>
+        <script src="data/AirValve1_15.js"></script>
+        <script src="data/AirValve6_16.js"></script>
+        <script src="data/IntakeKarangIntan_17.js"></script>
+        <script src="data/PipaGRP_18.js"></script>
+        <script src="data/PipaHDPE_19.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:2
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        L.control.locate().addTo(map);
+        var measureControl = new L.Control.Measure({
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        basemap0.addTo(map);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        var overlay_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            opacity: 1.0
+        });
+        overlay_GoogleSatellite_0.addTo(map);
+        map.addLayer(overlay_GoogleSatellite_0);
+        function pop_PipaWashOut_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kapasitas_</th>\
+                        <td>' + (feature.properties['Kapasitas_'] !== null ? Autolinker.link(String(feature.properties['Kapasitas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Alir</th>\
+                        <td>' + (feature.properties['Jenis_Alir'] !== null ? Autolinker.link(String(feature.properties['Jenis_Alir'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PipaWashOut_1_0() {
+            return {
+                pane: 'pane_PipaWashOut_1',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,248,250,1.0)',
+            }
+        }
+        map.createPane('pane_PipaWashOut_1');
+        map.getPane('pane_PipaWashOut_1').style.zIndex = 401;
+        map.getPane('pane_PipaWashOut_1').style['mix-blend-mode'] = 'normal';
+        var layer_PipaWashOut_1 = new L.geoJson(json_PipaWashOut_1, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_PipaWashOut_1',
+            onEachFeature: pop_PipaWashOut_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_PipaWashOut_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PipaWashOut_1);
+        map.addLayer(layer_PipaWashOut_1);
+        function pop_OfftakePinusPTAMIntanBanjar_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FID_1</th>\
+                        <td>' + (feature.properties['FID_1'] !== null ? Autolinker.link(String(feature.properties['FID_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Offtaker</th>\
+                        <td>' + (feature.properties['Offtaker'] !== null ? Autolinker.link(String(feature.properties['Offtaker'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Alir</th>\
+                        <td>' + (feature.properties['Jenis_Alir'] !== null ? Autolinker.link(String(feature.properties['Jenis_Alir'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Data_Debit</th>\
+                        <td>' + (feature.properties['Data_Debit'] !== null ? Autolinker.link(String(feature.properties['Data_Debit'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_OfftakePinusPTAMIntanBanjar_2_0() {
+            return {
+                pane: 'pane_OfftakePinusPTAMIntanBanjar_2',
+                shape: 'square',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,206,227,1.0)',
+            }
+        }
+        map.createPane('pane_OfftakePinusPTAMIntanBanjar_2');
+        map.getPane('pane_OfftakePinusPTAMIntanBanjar_2').style.zIndex = 402;
+        map.getPane('pane_OfftakePinusPTAMIntanBanjar_2').style['mix-blend-mode'] = 'normal';
+        var layer_OfftakePinusPTAMIntanBanjar_2 = new L.geoJson(json_OfftakePinusPTAMIntanBanjar_2, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_OfftakePinusPTAMIntanBanjar_2',
+            onEachFeature: pop_OfftakePinusPTAMIntanBanjar_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_OfftakePinusPTAMIntanBanjar_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_OfftakePinusPTAMIntanBanjar_2);
+        map.addLayer(layer_OfftakePinusPTAMIntanBanjar_2);
+        function pop_AirValve9_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve9_3_0() {
+            return {
+                pane: 'pane_AirValve9_3',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve9_3_1() {
+            return {
+                pane: 'pane_AirValve9_3',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve9_3');
+        map.getPane('pane_AirValve9_3').style.zIndex = 403;
+        map.getPane('pane_AirValve9_3').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve9_3 = new L.geoJson.multiStyle(json_AirValve9_3, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve9_3',
+            onEachFeature: pop_AirValve9_3,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve9_3_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve9_3_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve9_3);
+        map.addLayer(layer_AirValve9_3);
+        function pop_BoosterGroundTransfer2_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kapasitas_</th>\
+                        <td>' + (feature.properties['Kapasitas_'] !== null ? Autolinker.link(String(feature.properties['Kapasitas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Head_Pompa</th>\
+                        <td>' + (feature.properties['Head_Pompa'] !== null ? Autolinker.link(String(feature.properties['Head_Pompa'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Pomp</th>\
+                        <td>' + (feature.properties['Jenis_Pomp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Pomp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Pom</th>\
+                        <td>' + (feature.properties['Jumlah_Pom'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Pom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tegangan_P</th>\
+                        <td>' + (feature.properties['Tegangan_P'] !== null ? Autolinker.link(String(feature.properties['Tegangan_P'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sumber_Ene</th>\
+                        <td>' + (feature.properties['Sumber_Ene'] !== null ? Autolinker.link(String(feature.properties['Sumber_Ene'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BoosterGroundTransfer2_4_0() {
+            return {
+                pane: 'pane_BoosterGroundTransfer2_4',
+                shape: 'triangle',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+            }
+        }
+        map.createPane('pane_BoosterGroundTransfer2_4');
+        map.getPane('pane_BoosterGroundTransfer2_4').style.zIndex = 404;
+        map.getPane('pane_BoosterGroundTransfer2_4').style['mix-blend-mode'] = 'normal';
+        var layer_BoosterGroundTransfer2_4 = new L.geoJson(json_BoosterGroundTransfer2_4, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_BoosterGroundTransfer2_4',
+            onEachFeature: pop_BoosterGroundTransfer2_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_BoosterGroundTransfer2_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BoosterGroundTransfer2_4);
+        map.addLayer(layer_BoosterGroundTransfer2_4);
+        function pop_AirValve8_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve8_5_0() {
+            return {
+                pane: 'pane_AirValve8_5',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve8_5_1() {
+            return {
+                pane: 'pane_AirValve8_5',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve8_5');
+        map.getPane('pane_AirValve8_5').style.zIndex = 405;
+        map.getPane('pane_AirValve8_5').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve8_5 = new L.geoJson.multiStyle(json_AirValve8_5, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve8_5',
+            onEachFeature: pop_AirValve8_5,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve8_5_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve8_5_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve8_5);
+        map.addLayer(layer_AirValve8_5);
+        function pop_OfftakePematangPTAMBandarmasih_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Offtaker</th>\
+                        <td>' + (feature.properties['Offtaker'] !== null ? Autolinker.link(String(feature.properties['Offtaker'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Alir</th>\
+                        <td>' + (feature.properties['Jenis_Alir'] !== null ? Autolinker.link(String(feature.properties['Jenis_Alir'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Data_Debit</th>\
+                        <td>' + (feature.properties['Data_Debit'] !== null ? Autolinker.link(String(feature.properties['Data_Debit'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_OfftakePematangPTAMBandarmasih_6_0() {
+            return {
+                pane: 'pane_OfftakePematangPTAMBandarmasih_6',
+                shape: 'square',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(161,212,246,1.0)',
+            }
+        }
+        map.createPane('pane_OfftakePematangPTAMBandarmasih_6');
+        map.getPane('pane_OfftakePematangPTAMBandarmasih_6').style.zIndex = 406;
+        map.getPane('pane_OfftakePematangPTAMBandarmasih_6').style['mix-blend-mode'] = 'normal';
+        var layer_OfftakePematangPTAMBandarmasih_6 = new L.geoJson(json_OfftakePematangPTAMBandarmasih_6, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_OfftakePematangPTAMBandarmasih_6',
+            onEachFeature: pop_OfftakePematangPTAMBandarmasih_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_OfftakePematangPTAMBandarmasih_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_OfftakePematangPTAMBandarmasih_6);
+        map.addLayer(layer_OfftakePematangPTAMBandarmasih_6);
+        function pop_AirValve2_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve2_7_0() {
+            return {
+                pane: 'pane_AirValve2_7',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve2_7_1() {
+            return {
+                pane: 'pane_AirValve2_7',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve2_7');
+        map.getPane('pane_AirValve2_7').style.zIndex = 407;
+        map.getPane('pane_AirValve2_7').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve2_7 = new L.geoJson.multiStyle(json_AirValve2_7, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve2_7',
+            onEachFeature: pop_AirValve2_7,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve2_7_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve2_7_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve2_7);
+        map.addLayer(layer_AirValve2_7);
+        function pop_BoosterGroundTransfer1_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">FID_1</th>\
+                        <td>' + (feature.properties['FID_1'] !== null ? Autolinker.link(String(feature.properties['FID_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kapasitas_</th>\
+                        <td>' + (feature.properties['Kapasitas_'] !== null ? Autolinker.link(String(feature.properties['Kapasitas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Head_Pompa</th>\
+                        <td>' + (feature.properties['Head_Pompa'] !== null ? Autolinker.link(String(feature.properties['Head_Pompa'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Pomp</th>\
+                        <td>' + (feature.properties['Jenis_Pomp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Pomp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Pom</th>\
+                        <td>' + (feature.properties['Jumlah_Pom'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Pom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tegangan_P</th>\
+                        <td>' + (feature.properties['Tegangan_P'] !== null ? Autolinker.link(String(feature.properties['Tegangan_P'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sumber_Ene</th>\
+                        <td>' + (feature.properties['Sumber_Ene'] !== null ? Autolinker.link(String(feature.properties['Sumber_Ene'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BoosterGroundTransfer1_8_0() {
+            return {
+                pane: 'pane_BoosterGroundTransfer1_8',
+                shape: 'triangle',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,154,153,1.0)',
+            }
+        }
+        map.createPane('pane_BoosterGroundTransfer1_8');
+        map.getPane('pane_BoosterGroundTransfer1_8').style.zIndex = 408;
+        map.getPane('pane_BoosterGroundTransfer1_8').style['mix-blend-mode'] = 'normal';
+        var layer_BoosterGroundTransfer1_8 = new L.geoJson(json_BoosterGroundTransfer1_8, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_BoosterGroundTransfer1_8',
+            onEachFeature: pop_BoosterGroundTransfer1_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_BoosterGroundTransfer1_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_BoosterGroundTransfer1_8);
+        map.addLayer(layer_BoosterGroundTransfer1_8);
+        function pop_AirValve3_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve3_9_0() {
+            return {
+                pane: 'pane_AirValve3_9',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve3_9_1() {
+            return {
+                pane: 'pane_AirValve3_9',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve3_9');
+        map.getPane('pane_AirValve3_9').style.zIndex = 409;
+        map.getPane('pane_AirValve3_9').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve3_9 = new L.geoJson.multiStyle(json_AirValve3_9, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve3_9',
+            onEachFeature: pop_AirValve3_9,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve3_9_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve3_9_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve3_9);
+        map.addLayer(layer_AirValve3_9);
+        function pop_AirValve4_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve4_10_0() {
+            return {
+                pane: 'pane_AirValve4_10',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve4_10_1() {
+            return {
+                pane: 'pane_AirValve4_10',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve4_10');
+        map.getPane('pane_AirValve4_10').style.zIndex = 410;
+        map.getPane('pane_AirValve4_10').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve4_10 = new L.geoJson.multiStyle(json_AirValve4_10, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve4_10',
+            onEachFeature: pop_AirValve4_10,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve4_10_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve4_10_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve4_10);
+        map.addLayer(layer_AirValve4_10);
+        function pop_AirValve5_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve5_11_0() {
+            return {
+                pane: 'pane_AirValve5_11',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve5_11_1() {
+            return {
+                pane: 'pane_AirValve5_11',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve5_11');
+        map.getPane('pane_AirValve5_11').style.zIndex = 411;
+        map.getPane('pane_AirValve5_11').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve5_11 = new L.geoJson.multiStyle(json_AirValve5_11, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve5_11',
+            onEachFeature: pop_AirValve5_11,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve5_11_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve5_11_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve5_11);
+        map.addLayer(layer_AirValve5_11);
+        function pop_AirValve10_12(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve10_12_0() {
+            return {
+                pane: 'pane_AirValve10_12',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,0.97)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.97)',
+            }
+        }
+        function style_AirValve10_12_1() {
+            return {
+                pane: 'pane_AirValve10_12',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,0.97)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,0.97)',
+            }
+        }
+        map.createPane('pane_AirValve10_12');
+        map.getPane('pane_AirValve10_12').style.zIndex = 412;
+        map.getPane('pane_AirValve10_12').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve10_12 = new L.geoJson.multiStyle(json_AirValve10_12, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve10_12',
+            onEachFeature: pop_AirValve10_12,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve10_12_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve10_12_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve10_12);
+        map.addLayer(layer_AirValve10_12);
+        function pop_AirValve7_13(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve7_13_0() {
+            return {
+                pane: 'pane_AirValve7_13',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve7_13_1() {
+            return {
+                pane: 'pane_AirValve7_13',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve7_13');
+        map.getPane('pane_AirValve7_13').style.zIndex = 413;
+        map.getPane('pane_AirValve7_13').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve7_13 = new L.geoJson.multiStyle(json_AirValve7_13, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve7_13',
+            onEachFeature: pop_AirValve7_13,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve7_13_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve7_13_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve7_13);
+        map.addLayer(layer_AirValve7_13);
+        function pop_IPAPinus_14(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Proses_Pen</th>\
+                        <td>' + (feature.properties['Proses_Pen'] !== null ? Autolinker.link(String(feature.properties['Proses_Pen'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kapasitas</th>\
+                        <td>' + (feature.properties['Kapasitas'] !== null ? Autolinker.link(String(feature.properties['Kapasitas'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Uni</th>\
+                        <td>' + (feature.properties['Jumlah_Uni'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Uni'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sumber_Ene</th>\
+                        <td>' + (feature.properties['Sumber_Ene'] !== null ? Autolinker.link(String(feature.properties['Sumber_Ene'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Data_Debit</th>\
+                        <td>' + (feature.properties['Data_Debit'] !== null ? Autolinker.link(String(feature.properties['Data_Debit'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_IPAPinus_14_0() {
+            return {
+                pane: 'pane_IPAPinus_14',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,194,195,1.0)',
+            }
+        }
+        map.createPane('pane_IPAPinus_14');
+        map.getPane('pane_IPAPinus_14').style.zIndex = 414;
+        map.getPane('pane_IPAPinus_14').style['mix-blend-mode'] = 'normal';
+        var layer_IPAPinus_14 = new L.geoJson(json_IPAPinus_14, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_IPAPinus_14',
+            onEachFeature: pop_IPAPinus_14,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_IPAPinus_14_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IPAPinus_14);
+        map.addLayer(layer_IPAPinus_14);
+        function pop_AirValve1_15(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve1_15_0() {
+            return {
+                pane: 'pane_AirValve1_15',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve1_15_1() {
+            return {
+                pane: 'pane_AirValve1_15',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve1_15');
+        map.getPane('pane_AirValve1_15').style.zIndex = 415;
+        map.getPane('pane_AirValve1_15').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve1_15 = new L.geoJson.multiStyle(json_AirValve1_15, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve1_15',
+            onEachFeature: pop_AirValve1_15,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve1_15_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve1_15_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve1_15);
+        map.addLayer(layer_AirValve1_15);
+        function pop_AirValve6_16(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Katu</th>\
+                        <td>' + (feature.properties['Jenis_Katu'] !== null ? Autolinker.link(String(feature.properties['Jenis_Katu'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Kat</th>\
+                        <td>' + (feature.properties['Jumlah_Kat'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Kat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sistem_Ken</th>\
+                        <td>' + (feature.properties['Sistem_Ken'] !== null ? Autolinker.link(String(feature.properties['Sistem_Ken'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AirValve6_16_0() {
+            return {
+                pane: 'pane_AirValve6_16',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+            }
+        }
+        function style_AirValve6_16_1() {
+            return {
+                pane: 'pane_AirValve6_16',
+                radius: 1.25,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,0,1.0)',
+            }
+        }
+        map.createPane('pane_AirValve6_16');
+        map.getPane('pane_AirValve6_16').style.zIndex = 416;
+        map.getPane('pane_AirValve6_16').style['mix-blend-mode'] = 'normal';
+        var layer_AirValve6_16 = new L.geoJson.multiStyle(json_AirValve6_16, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_AirValve6_16',
+            onEachFeature: pop_AirValve6_16,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve6_16_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_AirValve6_16_1(feature));
+            },
+        ]});
+        bounds_group.addLayer(layer_AirValve6_16);
+        map.addLayer(layer_AirValve6_16);
+        function pop_IntakeKarangIntan_17(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kapasitas_</th>\
+                        <td>' + (feature.properties['Kapasitas_'] !== null ? Autolinker.link(String(feature.properties['Kapasitas_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fungsi</th>\
+                        <td>' + (feature.properties['Fungsi'] !== null ? Autolinker.link(String(feature.properties['Fungsi'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Pomp</th>\
+                        <td>' + (feature.properties['Jenis_Pomp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Pomp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah_Pom</th>\
+                        <td>' + (feature.properties['Jumlah_Pom'] !== null ? Autolinker.link(String(feature.properties['Jumlah_Pom'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Ketinggian</th>\
+                        <td>' + (feature.properties['Ketinggian'] !== null ? Autolinker.link(String(feature.properties['Ketinggian'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tegangan_P</th>\
+                        <td>' + (feature.properties['Tegangan_P'] !== null ? Autolinker.link(String(feature.properties['Tegangan_P'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Sumber_Air</th>\
+                        <td>' + (feature.properties['Sumber_Air'] !== null ? Autolinker.link(String(feature.properties['Sumber_Air'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Koordinat</th>\
+                        <td>' + (feature.properties['Koordinat'] !== null ? Autolinker.link(String(feature.properties['Koordinat'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Lokasi</th>\
+                        <td>' + (feature.properties['Lokasi'] !== null ? Autolinker.link(String(feature.properties['Lokasi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_IntakeKarangIntan_17_0() {
+            return {
+                pane: 'pane_IntakeKarangIntan_17',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(74,133,252,1.0)',
+            }
+        }
+        map.createPane('pane_IntakeKarangIntan_17');
+        map.getPane('pane_IntakeKarangIntan_17').style.zIndex = 417;
+        map.getPane('pane_IntakeKarangIntan_17').style['mix-blend-mode'] = 'normal';
+        var layer_IntakeKarangIntan_17 = new L.geoJson(json_IntakeKarangIntan_17, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_IntakeKarangIntan_17',
+            onEachFeature: pop_IntakeKarangIntan_17,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_IntakeKarangIntan_17_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_IntakeKarangIntan_17);
+        map.addLayer(layer_IntakeKarangIntan_17);
+        function pop_PipaGRP_18(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">OID_</th>\
+                        <td>' + (feature.properties['OID_'] !== null ? Autolinker.link(String(feature.properties['OID_'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(String(feature.properties['Name'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama_Kompo</th>\
+                        <td>' + (feature.properties['Nama_Kompo'] !== null ? Autolinker.link(String(feature.properties['Nama_Kompo'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material_U</th>\
+                        <td>' + (feature.properties['Material_U'] !== null ? Autolinker.link(String(feature.properties['Material_U'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tekanan_Ke</th>\
+                        <td>' + (feature.properties['Tekanan_Ke'] !== null ? Autolinker.link(String(feature.properties['Tekanan_Ke'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Panjang_Pi</th>\
+                        <td>' + (feature.properties['Panjang_Pi'] !== null ? Autolinker.link(String(feature.properties['Panjang_Pi'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PipaGRP_18_0() {
+            return {
+                pane: 'pane_PipaGRP_18',
+                opacity: 1,
+                color: 'rgba(255,40,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+            }
+        }
+        map.createPane('pane_PipaGRP_18');
+        map.getPane('pane_PipaGRP_18').style.zIndex = 418;
+        map.getPane('pane_PipaGRP_18').style['mix-blend-mode'] = 'normal';
+        var layer_PipaGRP_18 = new L.geoJson(json_PipaGRP_18, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_PipaGRP_18',
+            onEachFeature: pop_PipaGRP_18,
+            style: style_PipaGRP_18_0,
+        });
+        bounds_group.addLayer(layer_PipaGRP_18);
+        map.addLayer(layer_PipaGRP_18);
+        function pop_PipaHDPE_19(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Keterangan</th>\
+                        <td>' + (feature.properties['Keterangan'] !== null ? Autolinker.link(String(feature.properties['Keterangan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Komponen</th>\
+                        <td>' + (feature.properties['Komponen'] !== null ? Autolinker.link(String(feature.properties['Komponen'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis_Komp</th>\
+                        <td>' + (feature.properties['Jenis_Komp'] !== null ? Autolinker.link(String(feature.properties['Jenis_Komp'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Material</th>\
+                        <td>' + (feature.properties['Material'] !== null ? Autolinker.link(String(feature.properties['Material'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Tekanan</th>\
+                        <td>' + (feature.properties['Tekanan'] !== null ? Autolinker.link(String(feature.properties['Tekanan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Perawatan</th>\
+                        <td>' + (feature.properties['Perawatan'] !== null ? Autolinker.link(String(feature.properties['Perawatan'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Panjang</th>\
+                        <td>' + (feature.properties['Panjang'] !== null ? Autolinker.link(String(feature.properties['Panjang'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PipaHDPE_19_0() {
+            return {
+                pane: 'pane_PipaHDPE_19',
+                opacity: 1,
+                color: 'rgba(230,254,12,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+            }
+        }
+        map.createPane('pane_PipaHDPE_19');
+        map.getPane('pane_PipaHDPE_19').style.zIndex = 419;
+        map.getPane('pane_PipaHDPE_19').style['mix-blend-mode'] = 'normal';
+        var layer_PipaHDPE_19 = new L.geoJson(json_PipaHDPE_19, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_PipaHDPE_19',
+            onEachFeature: pop_PipaHDPE_19,
+            style: style_PipaHDPE_19_0,
+        });
+        bounds_group.addLayer(layer_PipaHDPE_19);
+        map.addLayer(layer_PipaHDPE_19);
+        var osmGeocoder = new L.Control.OSMGeocoder({
+            collapsed: false,
+            position: 'topright',
+            text: 'Search',
+        });
+        osmGeocoder.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/PipaHDPE_19.png" /> Pipa HDPE': layer_PipaHDPE_19,'<img src="legend/PipaGRP_18.png" /> Pipa GRP': layer_PipaGRP_18,'<img src="legend/IntakeKarangIntan_17.png" /> Intake Karang Intan': layer_IntakeKarangIntan_17,'<img src="legend/AirValve6_16.png" /> Air Valve 6': layer_AirValve6_16,'<img src="legend/AirValve1_15.png" /> Air Valve 1': layer_AirValve1_15,'<img src="legend/IPAPinus_14.png" /> IPA Pinus': layer_IPAPinus_14,'<img src="legend/AirValve7_13.png" /> Air Valve 7': layer_AirValve7_13,'<img src="legend/AirValve10_12.png" /> Air Valve 10': layer_AirValve10_12,'<img src="legend/AirValve5_11.png" /> Air Valve 5': layer_AirValve5_11,'<img src="legend/AirValve4_10.png" /> Air Valve 4': layer_AirValve4_10,'<img src="legend/AirValve3_9.png" /> Air Valve 3': layer_AirValve3_9,'<img src="legend/BoosterGroundTransfer1_8.png" /> Booster Ground Transfer 1': layer_BoosterGroundTransfer1_8,'<img src="legend/AirValve2_7.png" /> Air Valve 2': layer_AirValve2_7,'<img src="legend/OfftakePematangPTAMBandarmasih_6.png" /> Offtake Pematang - PTAM Bandarmasih': layer_OfftakePematangPTAMBandarmasih_6,'<img src="legend/AirValve8_5.png" /> Air Valve 8': layer_AirValve8_5,'<img src="legend/BoosterGroundTransfer2_4.png" /> Booster Ground Transfer 2': layer_BoosterGroundTransfer2_4,'<img src="legend/AirValve9_3.png" /> Air Valve 9': layer_AirValve9_3,'<img src="legend/OfftakePinusPTAMIntanBanjar_2.png" /> Offtake Pinus - PTAM Intan Banjar': layer_OfftakePinusPTAMIntanBanjar_2,'<img src="legend/PipaWashOut_1.png" /> Pipa Wash Out': layer_PipaWashOut_1,"Google Satellite": overlay_GoogleSatellite_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
