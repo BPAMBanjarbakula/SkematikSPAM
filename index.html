@@ -828,6 +828,20 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
 .pleg{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);padding:0 0 4px}
 .pleg i{display:inline-block;width:16px;height:0;border-top:3px solid;vertical-align:middle;margin-right:4px}
 @media (max-width:820px){#prof{left:0;height:68vh}.pb{grid-template-columns:minmax(0,1fr);grid-template-rows:200px auto;overflow:auto}}
+/* ---- KTI */
+.ktib{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ktib a,.ktib button{font:inherit;font-size:13px;font-weight:700;text-decoration:none;border-radius:999px;padding:8px 14px;cursor:pointer;border:1px solid transparent}
+.rmsrc .kb1{color:#3d2c00;background:linear-gradient(90deg,#ffe066,#fab005);box-shadow:0 6px 18px rgba(250,176,5,.35)}
+.rmsrc .kb2{color:#ffe066;border-color:rgba(255,224,102,.5);background:transparent}
+.kticard{display:flex;gap:12px;padding:12px;border-radius:14px;background:linear-gradient(135deg,#fff9db,#fff);border:1px solid #ffe8a1;margin-bottom:6px}
+.kcov{flex:none;width:78px;align-self:flex-start;border-radius:6px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.18);transform:rotate(-2deg);transition:transform .2s}
+.kcov:hover{transform:rotate(0) scale(1.04)}.kcov img{display:block;width:100%}
+.kticard b{display:block;font-size:13px;line-height:1.35;color:#0b2540;margin:4px 0}
+.kbadge{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#a36b00}
+.kau{display:block;font-size:11.5px;color:#6b7785;line-height:1.4}
+.kticard .ktib{margin-top:8px}.kticard .ktib a,.kticard .ktib button{font-size:12px;padding:6px 11px}
+.kticard .kb1{color:#3d2c00;background:linear-gradient(90deg,#ffe066,#fab005)}
+.kticard .kb2{color:#8a5a00;border-color:#f3d37a;background:#fff}
 /* ---- peta jalan */
 #rmap{position:fixed;inset:0;z-index:5100;display:grid;place-items:start center;overflow:auto;padding:28px 16px;color:#fff;
   background:radial-gradient(1200px 600px at 15% -10%,rgba(59,201,219,.25),transparent 60%),radial-gradient(900px 600px at 110% 10%,rgba(151,117,250,.28),transparent 60%),rgba(4,14,28,.94);
@@ -984,7 +998,7 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
     <h2 id="iTitle">GeoSPAM <em>Bakula</em></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Jalur air baku dari Bendung Karang Intan menuju IPA Pinus, serta distribusi air curah ke titik serah PTAM Bandarmasih, PTAM Intan Banjar, dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
     <div class="istats" id="istats"></div>
-    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><button class="btn-tour" id="btnRmI">🚀 Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG</span></div>
+    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><button class="btn-tour" id="btnRmI">🚀 Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" target="_blank" rel="noopener" style="color:#99e9f2">📄 baca KTI</a></span></div>
   </div>
 </div>
 <div id="rmap" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
@@ -1014,7 +1028,8 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
     <div class="rmsrc">
       <div class="rmav">AN</div>
       <div><b>Sumber: Karya Tulis Ilmiah Ir. Ade Nafis Prawira, S.T.</b><br>
-      <i>Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis Sistem Informasi Geografis dan Pengembangannya Menjadi WebGIS</i>. Prawira, A. N. &amp; Kartadipura, R. H. (2026), Prosiding Seminar Pendidikan Profesi Insinyur 2026, Program Studi PPI Universitas Lambung Mangkurat. Diseminarkan 6 November 2026.</div>
+      <i>Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis Sistem Informasi Geografis dan Pengembangannya Menjadi WebGIS</i>. Prawira, A. N. &amp; Kartadipura, R. H. (2026), Prosiding Seminar Pendidikan Profesi Insinyur 2026, Program Studi PPI Universitas Lambung Mangkurat. Diseminarkan 6 November 2026.
+      <div class="ktib"><a class="kb1" href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" target="_blank" rel="noopener">📄 Baca KTI lengkap</a><a class="kb2" href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" download>⬇ Unduh PDF · 16 hlm</a></div></div>
     </div>
     <p class="rmfoot">Target dan waktu bersifat usulan dan perlu disepakati pimpinan BPAM Banjarbakula. Titik sensor pada peta adalah konsep, belum terpasang.</p>
   </div>
@@ -1084,6 +1099,15 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
       <table class="t" id="ptamtable"></table>
     </div>
     <div class="pane" id="pInfo">
+      <h2>Karya tulis ilmiah</h2>
+      <div class="kticard">
+        <a href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" target="_blank" rel="noopener" class="kcov"><img src="kti_cover.jpg" alt="Halaman judul KTI" loading="lazy"></a>
+        <div><span class="kbadge">Prosiding Seminar PPI 2026</span>
+          <b>Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis SIG dan Pengembangannya Menjadi WebGIS</b>
+          <span class="kau">Ir. Ade Nafis Prawira, S.T. &amp; Retna Hapsari Kartadipura · PPI Universitas Lambung Mangkurat · diseminarkan 6 Nov 2026</span>
+          <div class="ktib"><a class="kb1" href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" target="_blank" rel="noopener">Baca</a><a class="kb2" href="KTI_Ade_Nafis_Prawira_GeoSPAM_Bakula.pdf" download>Unduh PDF</a><button class="kb2" id="kRm" type="button">Peta jalan</button></div>
+        </div>
+      </div>
       <h2>Tentang peta ini</h2>
       <p class="muted">Peta jaringan perpipaan SPAM Regional Banjarbakula yang dikelola UPTD Balai Pengelolaan Air Minum (BPAM) Banjarbakula, Dinas PUPR Provinsi Kalimantan Selatan. Tahap 1 memuat jalur transmisi air baku Intake Karang Intan – IPA Pinus – Offtake Pematang dan jaringan distribusi air curah Pinus – Bati-Bati – Kurau – Guntung Manggis.</p>
       <h2>Sumber data</h2>
@@ -1527,7 +1551,7 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
   const open = () => { closeIntro(true); $("#rmap").classList.add("on"); document.querySelectorAll("#rmline .st").forEach(e => { e.style.animation = "none"; e.offsetHeight; e.style.animation = ""; }); };
   const close = () => $("#rmap").classList.remove("on");
   $("#btnRm").onclick = open; $("#btnRmI").onclick = e => { e.stopPropagation(); open(); };
-  $("#rmClose").onclick = close;
+  $("#rmClose").onclick = close; $("#kRm").onclick = open;
   $("#rmap").addEventListener("click", e => { if (e.target.id === "rmap") close(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#rmap").classList.contains("on")) close(); });
   $("#rmSensor").onclick = () => {
