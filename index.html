@@ -1746,11 +1746,11 @@ function declutter(){
   const hit = (a,b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t;
   const taken = [...document.querySelectorAll(".lv .pl, .lv .dt")].filter(e => e.offsetParent).map(R).filter(r => r.w > 0);
   const hud = document.getElementById("hud"); if (hud && hud.offsetParent) taken.push(R(hud));
+  const tl = document.getElementById("tele"); if (tl && tl.offsetParent) taken.push(R(tl));
   const tips = [...document.querySelectorAll(".leaflet-tooltip.lbl")];
   tips.forEach(t => t.classList.remove("lbl-off"));
   tips.map(t => ({t, p:LBL_PRI(t.textContent)})).sort((a,b) => a.p - b.p).forEach(({t}) => {
     const r = R(t), M = document.getElementById("map").getBoundingClientRect(); if (r.r > M.right || r.l < M.left || taken.some(x => hit(r, x))) t.classList.add("lbl-off"); else taken.push(r); });
-  const tl = document.getElementById("tele"); if (tl && tl.offsetParent) taken.push(R(tl));
 }
 map.on("moveend", () => requestAnimationFrame(declutter));
 window.addEventListener("resize", () => setTimeout(declutter, 200));
