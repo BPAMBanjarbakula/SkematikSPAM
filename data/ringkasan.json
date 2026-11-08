@@ -10,10 +10,10 @@
  "jumlah_air_baku": {
   "intake": 1,
   "air_valve": 10,
-  "pergantian": 2,
+  "pergantian": 3,
   "wash_out": 2,
-  "offtake": 2,
   "bgt": 2,
+  "offtake": 2,
   "ipa": 1
  },
  "jumlah_distribusi": {
