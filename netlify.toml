@@ -6,6 +6,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 # Proxy telemetri AWLR BWS Kalimantan III (hindari blokir CORS)
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "/api/awlr/*"
   to = "https://opsdabwskal3.higertech.com/Station/:splat"
