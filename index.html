@@ -872,6 +872,55 @@ body.touring #tele{opacity:0;pointer-events:none}
 .nbar{display:flex;height:7px;border-radius:5px;overflow:hidden;gap:2px;margin-top:2px}.nbar i{display:block}
 .nlg{display:flex;justify-content:space-between;font-size:10.5px;color:#9fb3c8}.nlg b{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 .fmk.est b{background:linear-gradient(90deg,#f08c00,#e8590c)}.fmk.est i{border-color:#f08c00;border-style:dashed}
+/* ---- penanda LIVE */
+.lv{position:relative;width:0;height:0;pointer-events:auto;cursor:pointer}
+.lv .dt{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--c);border:2.5px solid #fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 30%,transparent),0 0 16px var(--c)}
+.lv .stm{position:absolute;left:-1px;bottom:7px;width:2px;height:40px;background:linear-gradient(to top,var(--c),transparent 110%);opacity:.9}
+.lv .pl{position:absolute;bottom:46px;display:flex;align-items:center;gap:7px;white-space:nowrap;padding:5px 11px 6px 9px;border-radius:13px;background:rgba(6,18,34,.9);border:1.5px solid var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent),0 8px 22px rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .18s}
+.lv:hover .pl{transform:translateY(-3px) scale(1.04)}
+.lv-u .pl{left:0;transform:translateX(-50%)}.lv-u:hover .pl{transform:translateX(-50%) translateY(-3px) scale(1.04)}
+.lv-ur .pl{left:-14px}.lv-ul .pl{right:-14px}
+.lv-l .stm{bottom:-1px;left:auto;right:7px;width:34px;height:2px;background:linear-gradient(to left,var(--c),transparent 110%)}.lv-l .pl{bottom:auto;top:-22px;right:44px}.lv-l:hover .pl{transform:translateX(-3px) scale(1.04)}
+.lv-dl .stm{bottom:auto;top:7px;background:linear-gradient(to bottom,var(--c),transparent 110%)}.lv-dl .pl{bottom:auto;top:46px;right:-14px}
+.lv .lvd{flex:none;width:8px;height:8px;border-radius:50%;background:#ff6b6b;animation:lv 1.6s infinite}
+.lv.est .lvd{background:var(--c);animation:none;box-shadow:0 0 6px var(--c)}
+.lv .tx{display:flex;flex-direction:column;line-height:1.1}
+.lv .tx small{font:700 9.5px "Plus Jakarta Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 70%,#fff)}
+.lv .tx b{font:800 15px "Plus Jakarta Sans",sans-serif;color:#fff;font-variant-numeric:tabular-nums}
+.lv .tx b em{font-style:normal;font-weight:600;font-size:10.5px;color:#9fb3c8;margin-left:6px}
+.leaflet-zoom-anim .lv .pl{transition:none}
+@media (max-width:820px){.lv .tx b{font-size:12.5px}.lv .tx small{font-size:8.5px}.lv .tx b em{display:none}.lv .pl{padding:3px 8px 4px 6px;border-radius:10px;gap:5px}.lv .stm{height:26px}.lv .pl{bottom:32px}.lv-dl .pl{top:32px;bottom:auto}.lv-l .pl{bottom:auto;top:-18px;right:38px}.lv-l .stm{width:28px}
+  #map.zlow .lv.est{display:none}
+  .lv-id-awlr .stm{bottom:auto;top:7px;background:linear-gradient(to bottom,var(--c),transparent 110%)}.lv-id-awlr .pl{bottom:auto;top:32px;left:auto;right:-14px}}
+.tlbtns button.sec{background:rgba(255,255,255,.08);color:#e7f5ff;border:1px solid rgba(255,255,255,.2)}
+/* ---- neraca */
+#nrc{position:fixed;inset:0;z-index:5150;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;overflow:auto;padding:24px 14px;color:#fff;
+  background:radial-gradient(900px 500px at 10% -10%,rgba(99,230,190,.18),transparent 60%),radial-gradient(800px 500px at 110% 0,rgba(151,117,250,.22),transparent 60%),rgba(4,14,28,.94);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s}
+#nrc.on{opacity:1;visibility:visible}
+.nbox{position:relative;width:min(1080px,100%);min-width:0}
+.nk>div,.ng>div,.nc{min-width:0}
+#nrc h2{all:unset;display:block;font-size:clamp(24px,3.6vw,38px);font-weight:800;letter-spacing:-.02em;margin:6px 0 18px}
+#nrc h2 em{font-style:normal;background:linear-gradient(90deg,#63e6be,#4dabf7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lvdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff6b6b;margin-right:4px;animation:lv 1.6s infinite}
+.nk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.nk div{position:relative;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px}
+.nk div:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.nk span{font-size:11.5px;color:#9fb3c8;font-weight:600}
+.nk b{display:block;font-size:28px;font-weight:800;letter-spacing:-.02em;color:#fff;font-variant-numeric:tabular-nums;margin:2px 0}
+.nk b i{font-style:normal;font-size:13px;font-weight:600;color:var(--c);margin-left:4px}
+.nk small{font-size:11px;color:#7f97ae}
+.ng{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px;margin-bottom:12px}
+.nc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 16px}
+.nc h4{margin:0 0 8px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#99e9f2}
+.nlg2{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:#9fb3c8;margin-top:4px}.nlg2 b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.ntw{overflow:auto}
+.nt{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.nt th{font-size:11px;font-weight:700;color:#9fb3c8;text-align:right;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.15);white-space:nowrap}
+.nt td{text-align:right;padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.07);white-space:nowrap}
+.nt th:first-child,.nt td:first-child{text-align:left}.nt td small{color:#7f97ae}
+.nt tfoot td{font-weight:700;color:#63e6be;border-bottom:0}
+.nnote{font-size:11.5px;color:#8fa9c2;line-height:1.55;margin:10px 0 0}
+@media (max-width:900px){.nk{grid-template-columns:repeat(2,minmax(0,1fr))}.ng{grid-template-columns:minmax(0,1fr)}.nk small{display:none}.nk b{font-size:22px}}
 /* ---- Fable polish: reveal, grain, glass, dark mode */
 #intro:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -1219,7 +1268,15 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
     <svg id="tlSpark" viewBox="0 0 260 64" preserveAspectRatio="none"></svg>
     <div class="tlmeta"><span id="tlT">–</span><span id="tlB"></span></div>
     <div class="tlfm" id="tlFm"></div>
-    <div class="tlbtns"><button id="tlGo">📍 Lihat di peta</button><a href="https://opsdabwskal3.higertech.com/Station/Detail/awlr-cctv-karang-intan-debit-limpas-bendung" target="_blank" rel="noopener">Sumber BWS ↗</a></div>
+    <div class="tlbtns"><button id="tlNrc">📊 Neraca air</button><button id="tlGo" class="sec">📍 Bendung</button></div>
+  </div>
+</div>
+<div id="nrc" role="dialog" aria-modal="true" aria-labelledby="nrcT">
+  <div class="nbox">
+    <button class="rmx" id="nrcClose" aria-label="Tutup">✕</button>
+    <div class="rmkick"><span class="lvdot"></span> Live · diperbarui otomatis</div>
+    <h2 id="nrcT">Neraca debit &amp; kubikasi <em>Intake</em></h2>
+    <div id="nrcBody"></div>
   </div>
 </div>
 <div id="tour" aria-live="polite">
@@ -1766,13 +1823,21 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
   svg.innerHTML = html;
 })();
 
+// ---------- penanda LIVE seragam (pane di atas label aset)
+map.createPane("live"); map.getPane("live").style.zIndex = 690;
+function liveIcon(id, c, title, dir, est){
+  return L.divIcon({className:"", iconSize:[0,0], html:`<div class="lv lv-${dir||"u"} lv-id-${id}${est ? " est" : ""}" style="--c:${c}"><span class="dt"></span><span class="stm"></span><span class="pl"><span class="lvd"></span><span class="tx"><small>${title}</small><b id="lv_${id}">…</b></span></span></div>`});
+}
+map.on("zoomend", () => document.getElementById("map").classList.toggle("zlow", map.getZoom() < 13));
+document.getElementById("map").classList.toggle("zlow", true);
+function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); if (b) b.innerHTML = val + (sub ? `<em>${sub}</em>` : ""); }
 // ---------- telemetri muka air Bendung Karang Intan (AWLR BWS Kalimantan III, HGT1486)
 (function(){
   const DEV = "HGT1486", LL = [-3.456094, 114.961683];
   const SRC = "https://opsdabwskal3.higertech.com/Station/Detail/awlr-cctv-karang-intan-debit-limpas-bendung";
   const API = location.hostname.endsWith("netlify.app") || location.hostname === "localhost" ? "/api/awlr/" : null;
   let siaga = null, last = null, series = [];
-  const mk = L.marker(LL, {icon: L.divIcon({className:"", iconSize:[0,0], html:'<div class="awlr"><i></i><b id="awlrB">AWLR …</b></div>'}), zIndexOffset:900}).addTo(map);
+  const mk = L.marker(LL, {icon: liveIcon("awlr", "#22b8cf", "Muka air bendung", "ur"), pane:"live", zIndexOffset:900}).addTo(map);
   const post = (ep, data) => fetch(API + ep, {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:new URLSearchParams(data)}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
   const today = () => { const d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); };
   const yday = () => { const d = new Date(Date.now() + 8*3600e3 - 864e5); return d.toISOString().slice(0,10); };
@@ -1799,7 +1864,7 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
     $("#tlV").textContent = nf(last.v, 2); $("#tlS").textContent = stale ? "Data tertunda" : st; $("#tlS").className = "tlst " + (stale ? "s3" : cls);
     $("#tele").classList.toggle("stale", stale);
     $("#tlT").textContent = "Update " + fmtT(last.t); $("#tlB").textContent = last.b ? "🔋 " + nf(last.b,1) + " V" : "";
-    const b = document.getElementById("awlrB"); if (b) b.textContent = nf(last.v, 2) + " m · " + (stale ? "tertunda" : st);
+    setLive("awlr", nf(last.v, 2) + " m", stale ? "tertunda" : st);
     spark();
   }
   function popup(){
@@ -1842,7 +1907,8 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
   const PRASED = 60, LL_PR = [-3.42991664987564, 114.83971614353095], LL_IN = [-3.456623, 114.961861];
   const est = () => { const a = D && D.stations.dn900 && D.stations.dn900.last, b = D && D.stations.pematang && D.stations.pematang.last;
     return (a && b) ? {t: Math.min(a.t, b.t), dn: a.flow, pm: b.flow, pr: PRASED, tot: a.flow + b.flow + PRASED} : null; };
-  const mkPr = L.marker(LL_PR, {icon: L.divIcon({className:"", iconSize:[0,0], html:'<div class="fmk est"><i></i><b id="fmk_prased">Prased ±60 L/dtk</b></div>'}), zIndexOffset:870}).addTo(map);
+  const mkPr = L.marker(LL_PR, {icon: liveIcon("prased", "#ff922b", "Prased · estimasi", "l", true), pane:"live", zIndexOffset:870}).addTo(map);
+  const mkIn = L.marker(LL_IN, {icon: liveIcon("intake", "#63e6be", "Keluar Intake · neraca", "dl", true), pane:"live", zIndexOffset:860}).addTo(map);
   mkPr.bindPopup(() => { const e = est();
     const BUL = [["Jan",83.2],["Feb",80.6],["Mar",69.6],["Apr",71.9],["Mei",55.3],["Jun",61.7],["Jul",59.4]];
     const mx = Math.max(...BUL.map(b => b[1]));
@@ -1851,10 +1917,11 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
     if (e) rows.push(["Porsi dari total", `±${nf(PRASED/e.tot*100,1)}% (total estimasi ${nf(e.tot,0)} L/dtk)`]);
     return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PR</span><div><h3>Offtake Pinus · Prased</h3><div class="sub">PTAM Intan Banjar · estimasi neraca air</div></div></div><div class="pbd"><div class="chips"><span class="chip">ESTIMASI</span><span class="chip">Tanpa logger</span></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${bars}<div class="note" style="margin-top:8px">Nilai belum terukur alat. Dipakai untuk neraca air: Q intake ≈ DN900 + Pematang + Prased. Akan diganti data live bila logger dipasang.</div><div class="src">Sumber: data operasional BPAM Banjarbakula; Laporan Air Distribusi Triwulan 2026 (Seksi Distribusi)</div></div></div>`; }, {maxWidth:340, autoPanPaddingTopLeft:[20,90]});
   const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
+  const fmtJam = ms => new Date(ms).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"});
   let D = null;
   const mk = {};
   Object.entries(ST).forEach(([id, s]) => {
-    mk[id] = L.marker(s.ll, {icon: L.divIcon({className:"", iconSize:[0,0], html:`<div class="fmk"><i></i><b id="fmk_${id}">${id === "dn900" ? "DN900" : "FM Pematang"} …</b></div>`}), zIndexOffset:880}).addTo(map);
+    mk[id] = L.marker(s.ll, {icon: liveIcon(id, id === "dn900" ? "#4dabf7" : "#9775fa", id === "dn900" ? "Debit ke IPA Pinus" : "Debit Offtake Pematang", "u"), pane:"live", zIndexOffset:880}).addTo(map);
     mk[id].bindPopup(() => popup(id), {maxWidth:340, autoPanPaddingTopLeft:[20,90]});
   });
   function sparkSVG(series){
@@ -1879,19 +1946,104 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
       const l = D && D.stations[id] && D.stations[id].last; if (!l) return;
       const old = (Date.now() - l.t) / 36e5 > 3;
       rows.push(`<div class="fmr${old ? " old" : ""}" data-id="${id}"><span class="fi">💧</span><span class="fn">${s.short}<small>${fmtT(l.t)}</small></span><span class="fv">${nf(l.flow,0)}<span>L/dtk</span></span></div>`);
-      const b = document.getElementById("fmk_" + id); if (b) b.textContent = (id === "dn900" ? "DN900 " : "Pematang ") + nf(l.flow,0) + " L/dtk";
+      setLive(id, nf(l.flow,0) + " L/dtk", old ? "tertunda" : fmtJam(l.t));
     });
     const e = est();
+    setLive("prased", "±" + PRASED + " L/dtk", "rata-rata");
+    if (e) setLive("intake", nf(e.tot,0) + " L/dtk", "≈ " + nf(e.tot*86.4,0) + " m³/hari");
     if (e){
       rows.push(`<div class="fmr est" data-id="prased"><span class="fi">≈</span><span class="fn">Prased · PTAM Intan Banjar<small>estimasi rata-rata</small></span><span class="fv">±${PRASED}<span>L/dtk</span></span></div>`);
       rows.push(`<div class="fmr tot" data-id="intake"><span class="fi">Σ</span><span class="fn">Total keluar Intake<small>estimasi neraca · ${fmtT(e.t)}</small></span><span class="fv">${nf(e.tot,0)}<span>L/dtk</span></span></div>`);
       rows.push(`<div class="nbar" title="Pembagian debit air baku"><i style="flex:${e.dn};background:#1c7ed6"></i><i style="flex:${e.pr};background:#f08c00"></i><i style="flex:${e.pm};background:#7048e8"></i></div><div class="nlg"><span><b style="background:#1c7ed6"></b>IPA Pinus ${nf(e.dn/e.tot*100,0)}%</span><span><b style="background:#f08c00"></b>Prased ${nf(e.pr/e.tot*100,0)}%</span><span><b style="background:#7048e8"></b>Pematang ${nf(e.pm/e.tot*100,0)}%</span></div>`);
     }
     $("#tlFm").innerHTML = rows.join("");
+    if (window.__nrcOpen) window.nrcRender();
     document.querySelectorAll(".fmr").forEach(r => r.onclick = () => { const id = r.dataset.id;
-      const ll = id === "prased" ? LL_PR : id === "intake" ? LL_IN : ST[id].ll, m = id === "prased" ? mkPr : id === "intake" ? null : mk[id];
+      if (id === "intake"){ window.nrcOpen(); return; }
+      const ll = id === "prased" ? LL_PR : ST[id].ll, m = id === "prased" ? mkPr : mk[id];
       map.flyTo(ll, 16, {duration:1.4}); if (m) map.once("moveend", () => m.openPopup()); });
   }
+  mkIn.on("click", () => window.nrcOpen());
+  // ===== analisa neraca debit & kubikasi intake
+  const SIPA = 1500;
+  function volSeries(st){ // volume per interval: selisih totalizer bila wajar, else debit x waktu
+    const ser = (st && st.series || []).slice().sort((a,b) => a.t - b.t), out = [];
+    for (let i = 1; i < ser.length; i++){
+      const a = ser[i-1], b = ser[i], dt = (b.t - a.t)/1000; if (dt <= 0 || dt > 3*3600) continue;
+      let v = (a.cons != null && b.cons != null) ? b.cons - a.cons : NaN;
+      const vf = (a.flow + b.flow)/2 * dt / 1000;
+      if (!(v >= 0) || Math.abs(v - vf) > vf*0.6 + 50) v = vf;
+      out.push({t:b.t, v, dt});
+    }
+    return out;
+  }
+  const dayKey = t => new Date(t + 8*3600e3).toISOString().slice(0,10);
+  function analisa(){
+    if (!D) return null;
+    const dn = D.stations.dn900, pm = D.stations.pematang; if (!dn || !pm || !dn.last || !pm.last) return null;
+    const days = {};
+    [["dn",dn],["pm",pm]].forEach(([k,st]) => volSeries(st).forEach(x => { const d = days[dayKey(x.t)] ||= {dn:0,pm:0,hdn:0,hpm:0}; d[k] += x.v; d["h"+k] += x.dt/3600; }));
+    const lastT = Math.max(dn.last.t, pm.last.t), todayK = dayKey(lastT);
+    const keys = Object.keys(days).sort().filter(k => k <= todayK).slice(-7);
+    // volume harian = debit rata-rata tiap logger x durasi hari (24 jam; hari ini s.d. pembacaan terakhir)
+    const rows = keys.map(k => { const d = days[k];
+      const H = k === todayK ? (lastT - Date.parse(k + "T00:00:00+08:00"))/36e5 : 24;
+      const qdn = d.hdn ? d.dn/(d.hdn*3.6) : null, qpm = d.hpm ? d.pm/(d.hpm*3.6) : null;
+      if (qdn == null || qpm == null) return null;
+      const vdn = qdn*H*3.6, vpm = qpm*H*3.6, pr = PRASED*H*3.6, cov = Math.min(d.hdn, d.hpm)/Math.max(1, Math.min(H, 24));
+      return {k, dn:vdn, pm:vpm, pr, tot:vdn + vpm + pr, h:H, q:qdn + qpm + PRASED, cov, gap: cov < .8 ? (d.hpm < d.hdn ? "Pematang" : "DN900") + " " + nf(Math.min(d.hdn, d.hpm),0) + " jam" : ""}; }).filter(Boolean);
+    // seri jam gabungan
+    const m = new Map(); (dn.series||[]).forEach(p => m.set(p.t, {t:p.t, dn:p.flow}));
+    (pm.series||[]).forEach(p => { const o = m.get(p.t); if (o) o.pm = p.flow; });
+    const hs = [...m.values()].filter(o => o.pm != null).sort((a,b) => a.t - b.t).map(o => ({...o, pr:PRASED, tot:o.dn + o.pm + PRASED}));
+    const last24 = hs.filter(o => o.t > hs[hs.length-1].t - 864e5);
+    const avg = a => a.length ? a.reduce((s,o) => s + o.tot, 0)/a.length : 0;
+    return {rows, hs, e: est(), q24: avg(last24), q7: avg(hs), v24: avg(last24)*86.4, maxQ: Math.max(...hs.map(o => o.tot)), minQ: Math.min(...hs.map(o => o.tot))};
+  }
+  function sankey(e){
+    const W = 560, H = 250, x0 = 118, x1 = 330, tot = e.tot, sc = 150/tot;
+    const parts = [["IPA Pinus (DN900)", e.dn, "#4dabf7", "terukur"], ["Prased · PTAM Intan Banjar", e.pr, "#ff922b", "estimasi"], ["Offtake Pematang · PTAM Bandarmasih", e.pm, "#9775fa", "terukur"]];
+    let yL = 20, yR = 12, g = ""; const hT = tot*sc;
+    g += `<rect x="${x0-14}" y="20" width="14" height="${hT}" rx="4" fill="#63e6be"/><text x="${x0-22}" y="${20+hT/2-6}" text-anchor="end" fill="#e6fcf5" font-weight="800" font-size="15">${nf(tot,0)}</text><text x="${x0-22}" y="${20+hT/2+10}" text-anchor="end" fill="#9fb3c8" font-size="10.5">L/dtk keluar Intake</text>`;
+    parts.forEach(([n,v,c,k]) => { const h = Math.max(3, v*sc);
+      g += `<path d="M${x0},${yL} C${(x0+x1)/2},${yL} ${(x0+x1)/2},${yR} ${x1},${yR} L${x1},${yR+h} C${(x0+x1)/2},${yR+h} ${(x0+x1)/2},${yL+h} ${x0},${yL+h} Z" fill="${c}" opacity=".55"><animate attributeName="opacity" values=".4;.7;.4" dur="3s" repeatCount="indefinite"/></path><rect x="${x1}" y="${yR}" width="8" height="${h}" rx="3" fill="${c}"/>`;
+      g += `<text x="${x1+16}" y="${yR+h/2-2}" fill="#fff" font-size="12.5" font-weight="700">${nf(v,0)} L/dtk <tspan fill="#9fb3c8" font-weight="500">· ${nf(v/tot*100,0)}%</tspan></text><text x="${x1+16}" y="${yR+h/2+12}" fill="#9fb3c8" font-size="10.5">${n}</text>${k === "estimasi" ? `<text x="${x1+16}" y="${yR+h/2+25}" fill="#ffa94d" font-size="10">estimasi, belum ber-logger</text>` : ""}`;
+      yL += h; yR += h + 34; });
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${g}</svg>`;
+  }
+  function stacked(hs){
+    if (hs.length < 2) return "";
+    const W = 560, H = 170, t0 = hs[0].t, t1 = hs[hs.length-1].t, mx = Math.max(...hs.map(o => o.tot))*1.08;
+    const X = t => 34 + (t-t0)/(t1-t0)*(W-40), Y = v => H-18 - v/mx*(H-30);
+    const layer = (lo, hi, c) => { const top = hs.map(o => `${X(o.t).toFixed(1)},${Y(hi(o)).toFixed(1)}`), bot = hs.slice().reverse().map(o => `${X(o.t).toFixed(1)},${Y(lo(o)).toFixed(1)}`);
+      return `<polygon points="${top.concat(bot).join(" ")}" fill="${c}" opacity=".75"/>`; };
+    let g = layer(o => 0, o => o.dn, "#4dabf7") + layer(o => o.dn, o => o.dn + o.pr, "#ff922b") + layer(o => o.dn + o.pr, o => o.tot, "#9775fa");
+    for (let v = 0; v <= mx; v += 200) g += `<line x1="34" x2="${W-6}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.08)"/><text x="30" y="${Y(v)+3}" text-anchor="end" font-size="9.5" fill="#7f97ae">${v}</text>`;
+    const dset = new Set(); hs.forEach(o => { const k = dayKey(o.t); if (!dset.has(k)){ dset.add(k); const x = X(o.t); g += `<line x1="${x}" x2="${x}" y1="10" y2="${H-18}" stroke="rgba(255,255,255,.06)"/><text x="${x+3}" y="${H-5}" font-size="9.5" fill="#7f97ae">${new Date(o.t).toLocaleDateString("id-ID",{day:"numeric",month:"short",timeZone:"Asia/Makassar"})}</text>`; } });
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${g}</svg>`;
+  }
+  function nrcRender(){
+    const A = analisa(), box = $("#nrcBody");
+    if (!A || !A.e){ box.innerHTML = `<p style="color:#cfe2f3">Data flowmeter belum tersedia.</p>`; return; }
+    const e = A.e, today = A.rows[A.rows.length-1];
+    const kpi = [["Debit keluar Intake", nf(e.tot,0), "L/dtk", "estimasi neraca · " + fmtJam(e.t) + " WITA", "#63e6be"],
+      ["Volume per hari (laju kini)", nf(e.tot*86.4,0), "m³/hari", "≈ " + nf(e.tot*86.4*30/1e6,2) + " juta m³/bulan", "#4dabf7"],
+      ["Rata-rata 24 jam", nf(A.q24,0), "L/dtk", "≈ " + nf(A.v24,0) + " m³/hari", "#9775fa"],
+      ["Pemakaian kuota SIPA", nf(e.tot/SIPA*100,1), "%", "dari 1.500 L/dtk (Kepmen PUPR 1830/2022)", "#ffd43b"]];
+    const tbl = A.rows.map(r => `<tr><td>${new Date(r.k + "T00:00:00+08:00").toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short"})}${r.h < 23.5 ? ` <small>(s.d. ${nf(r.h,0)} jam)</small>` : ""}${r.gap ? ` <small title="Data logger tidak lengkap; volume dihitung dari debit rata-rata jam yang tersedia">· data ${r.gap}</small>` : ""}</td><td>${nf(r.dn,0)}</td><td>${nf(r.pr,0)}</td><td>${nf(r.pm,0)}</td><td><b>${nf(r.tot,0)}</b></td><td>${nf(r.q,0)}</td></tr>`).join("");
+    const sum = A.rows.reduce((a,r) => (a.dn += r.dn, a.pr += r.pr, a.pm += r.pm, a.tot += r.tot, a), {dn:0,pr:0,pm:0,tot:0});
+    box.innerHTML = `<div class="nk">${kpi.map(k => `<div style="--c:${k[4]}"><span>${k[0]}</span><b>${k[1]}<i>${k[2]}</i></b><small>${k[3]}</small></div>`).join("")}</div>
+      <div class="ng"><div class="nc"><h4>Pembagian debit saat ini</h4>${sankey(e)}</div>
+      <div class="nc"><h4>Debit per jam · 7 hari (L/dtk)</h4>${stacked(A.hs)}<div class="nlg2"><span><b style="background:#4dabf7"></b>IPA Pinus</span><span><b style="background:#ff922b"></b>Prased (est.)</span><span><b style="background:#9775fa"></b>Pematang</span><span>min ${nf(A.minQ,0)} · maks ${nf(A.maxQ,0)} L/dtk</span></div></div></div>
+      <div class="nc"><h4>Kubikasi harian (m³)</h4><div class="ntw"><table class="nt"><thead><tr><th>Tanggal</th><th>IPA Pinus</th><th>Prased*</th><th>Pematang</th><th>Total Intake</th><th>Rata L/dtk</th></tr></thead><tbody>${tbl}</tbody><tfoot><tr><td>Jumlah ${A.rows.length} hari</td><td>${nf(sum.dn,0)}</td><td>${nf(sum.pr,0)}</td><td>${nf(sum.pm,0)}</td><td><b>${nf(sum.tot,0)}</b></td><td></td></tr></tfoot></table></div>
+      <p class="nnote">IPA Pinus dan Pematang dihitung dari selisih totalizer logger Onpoint (cadangan: debit × waktu), lalu dirata-ratakan per hari; bila data logger tidak lengkap, volume harian diperkirakan dari debit rata-rata jam yang tersedia. *Prased belum ber-logger, memakai rata-rata ±${PRASED} L/dtk. Total Intake = IPA Pinus + Prased + Pematang, belum termasuk kehilangan air di jalur transmisi. Hari berjalan dihitung sampai pembacaan terakhir.</p></div>`;
+  }
+  window.nrcRender = nrcRender;
+  window.nrcOpen = () => { window.__nrcOpen = true; nrcRender(); $("#nrc").classList.add("on"); };
+  const nrcClose = () => { window.__nrcOpen = false; $("#nrc").classList.remove("on"); };
+  $("#nrcClose").onclick = nrcClose; $("#nrc").addEventListener("click", e => { if (e.target.id === "nrc") nrcClose(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && window.__nrcOpen) nrcClose(); });
+  $("#tlNrc").onclick = () => window.nrcOpen();
   async function load(){ try{ const r = await fetch(URLF + "?t=" + Math.floor(Date.now()/3e5), {cache:"no-store"}); if (r.ok){ D = await r.json(); render(); } }catch(e){} }
   load(); setInterval(load, 10*60e3);
 })();
