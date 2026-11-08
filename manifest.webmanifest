@@ -5,7 +5,7 @@
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
- "background_color": "#071a2e",
+ "background_color": "#05121f",
  "theme_color": "#0b3a63",
  "lang": "id",
  "icons": [
@@ -20,6 +20,12 @@
    "sizes": "512x512",
    "type": "image/png",
    "purpose": "any maskable"
+  },
+  {
+   "src": "geospam-logo.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
   }
  ]
 }

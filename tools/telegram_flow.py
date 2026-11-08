@@ -73,6 +73,38 @@ async def main(out):
             if not last or r["t"] >= last["t"]: last = {k: v for k, v in r.items() if k != "id"}
         series = sorted((p for p in pts.values() if p["t"] >= cutoff), key=lambda p: p["t"])
         data["stations"][sid] = {"last": last, "series": series}
+    # ---- riwayat harian permanen (untuk laporan triwulan BWS)
+    harian = old.get("harian", {})
+    def daykey(t): return datetime.fromtimestamp(t / 1000, WITA).strftime("%Y-%m-%d")
+    agg = {}
+    for sid in LOGGERS.values():
+        ser = data["stations"][sid]["series"]
+        for a_, b_ in zip(ser, ser[1:]):
+            dt = (b_["t"] - a_["t"]) / 1000
+            if dt <= 0 or dt > 3 * 3600: continue
+            vf = (a_["flow"] + b_["flow"]) / 2 * dt / 1000
+            v = (b_["cons"] - a_["cons"]) if (a_.get("cons") is not None and b_.get("cons") is not None) else None
+            if v is None or v < 0 or abs(v - vf) > vf * 0.6 + 50: v = vf
+            d = agg.setdefault(daykey(b_["t"]), {}).setdefault(sid, [0.0, 0.0])
+            d[0] += v; d[1] += dt / 3600
+    for k, d in agg.items():
+        cur = harian.get(k, {})
+        for sid, (v, h) in d.items():
+            if h >= cur.get(sid, {}).get("h", 0):
+                cur[sid] = {"q": round(v / (h * 3.6), 3), "h": round(h, 2)}
+        harian[k] = cur
+    # muka air bendung (AWLR BWS Kal III) rata-rata harian
+    try:
+        import urllib.request, urllib.parse
+        for k in sorted(agg)[-3:]:
+            body = urllib.parse.urlencode({"deviceId": "HGT1486", "startDate": k, "endDate": k}).encode()
+            req = urllib.request.Request("https://opsdabwskal3.higertech.com/Station/GetDataGrafikAwlr", data=body)
+            g = json.loads(urllib.request.urlopen(req, timeout=20).read())
+            vals = [p["value"] for p in (g.get("dataGrafik") or []) if p.get("value") is not None]
+            if vals: harian.setdefault(k, {})["lvl"] = round(sum(vals) / len(vals), 3)
+    except Exception as e:
+        print("AWLR gagal:", e)
+    data["harian"] = harian
     # ---- peringatan (dikirim hanya bila TG_ALERT_CHAT diisi; hanya saat status berubah)
     names = {"dn900": "DN900 (IPA Pinus)", "pematang": "Offtake Pematang"}
     alerts = []

@@ -1,5 +1,5 @@
 // Service worker GeoSPAM Bakula: jaringan dulu, cadangan cache untuk halaman & data statis
-const C = "geospam-v1";
+const C = "geospam-v2";
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", e => {
