@@ -1,7 +1,7 @@
 name: Telemetri flowmeter (Telegram Onpoint)
 on:
   schedule:
-    - cron: "*/15 * * * *"   # tiap 15 menit (GitHub kadang menunda jadwal; data Onpoint masuk tiap jam)
+    - cron: "7,22,37,52 * * * *"   # tiap 15 menit; data Onpoint masuk tiap jam
   workflow_dispatch: {}
 permissions:
   contents: write
