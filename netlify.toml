@@ -4,3 +4,10 @@
     X-Robots-Tag = "noindex, nofollow"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Proxy telemetri AWLR BWS Kalimantan III (hindari blokir CORS)
+[[redirects]]
+  from = "/api/awlr/*"
+  to = "https://opsdabwskal3.higertech.com/Station/:splat"
+  status = 200
+  force = true
