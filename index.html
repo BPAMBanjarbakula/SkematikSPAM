@@ -880,6 +880,9 @@ const LINE_STYLE = f => {
 };
 
 const map = L.map("map",{zoomControl:true,preferCanvas:false,attributionControl:true}).setView([-3.45,114.80],11);
+// titik kecil (air valve, wash out, dll.) di pane sendiri di atas garis pipa agar bisa diklik
+map.createPane("titik"); map.getPane("titik").style.zIndex = 450;
+const titikRenderer = L.svg({pane:"titik"});
 L.control.scale({imperial:false,position:"bottomright"}).addTo(map);
 
 // ---------- basemaps
@@ -946,7 +949,7 @@ function markerFor(f, latlng){
       html:`<div class="ico" style="width:${c.size}px;height:${c.size}px;background:${c.color};font-size:${c.txt.length>2?9:10}px">${c.txt}</div>`});
     return L.marker(latlng,{icon, riseOnHover:true, keyboard:true, title:f.properties.nama});
   }
-  return L.circleMarker(latlng,{radius:c.r||5,color:"#fff",weight:1.5,fillColor:c.color,fillOpacity:1});
+  return L.circleMarker(latlng,{pane:"titik",renderer:titikRenderer,radius:c.r||5,color:"#fff",weight:1.5,fillColor:c.color,fillOpacity:1});
 }
 function pointLayer(gj){
   return L.geoJSON(gj,{pointToLayer:(f,ll) => {
