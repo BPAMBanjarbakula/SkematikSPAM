@@ -828,6 +828,54 @@ table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowr
 .pleg{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);padding:0 0 4px}
 .pleg i{display:inline-block;width:16px;height:0;border-top:3px solid;vertical-align:middle;margin-right:4px}
 @media (max-width:820px){#prof{left:0;height:68vh}.pb{grid-template-columns:minmax(0,1fr);grid-template-rows:200px auto;overflow:auto}}
+/* ---- peta jalan */
+#rmap{position:fixed;inset:0;z-index:5100;display:grid;place-items:start center;overflow:auto;padding:28px 16px;color:#fff;
+  background:radial-gradient(1200px 600px at 15% -10%,rgba(59,201,219,.25),transparent 60%),radial-gradient(900px 600px at 110% 10%,rgba(151,117,250,.28),transparent 60%),rgba(4,14,28,.94);
+  backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .35s}
+#rmap.on{opacity:1;visibility:visible}
+.rmbox{position:relative;max-width:1080px;width:100%;transform:translateY(16px);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+#rmap.on .rmbox{transform:none}
+.rmx{position:sticky;top:0;float:right;font:inherit;font-size:16px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50%;width:40px;height:40px;cursor:pointer;z-index:2}
+.rmkick{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#66d9e8;font-weight:700}
+#rmap h2{all:unset;display:block;font-size:clamp(28px,4.6vw,48px);font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:10px 0 12px}
+#rmap h2 em{font-style:normal;background:linear-gradient(90deg,#74c0fc,#3bc9db,#b197fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rmlead{max-width:760px;color:#cfe2f3;line-height:1.65;font-size:15px;margin:0 0 26px}
+.rmline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;margin-bottom:22px}
+.rmline:before{content:"";position:absolute;left:4%;right:4%;top:23px;height:3px;border-radius:3px;background:linear-gradient(90deg,#40c057 0 30%,#3bc9db 30% 52%,rgba(255,255,255,.18) 52%);}
+.st{position:relative;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:58px 16px 16px;transition:transform .25s,border-color .25s;opacity:0;animation:stIn .6s ease forwards}
+.st:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.3)}
+@keyframes stIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.st .dotx{position:absolute;top:8px;left:16px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:#05202f;background:var(--c);box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 25%,transparent),0 0 24px var(--c)}
+.st.next .dotx{animation:glowp 1.8s ease-in-out infinite}
+@keyframes glowp{50%{box-shadow:0 0 0 12px color-mix(in srgb,var(--c) 10%,transparent),0 0 40px var(--c)}}
+.st .m4{position:absolute;top:13px;right:14px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.st h3{margin:0 0 2px;font-size:17px;font-weight:800}
+.st .stat{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;margin:4px 0 10px;background:color-mix(in srgb,var(--c) 22%,transparent);color:#fff}
+.st ul{margin:0;padding-left:17px;font-size:13px;line-height:1.55;color:#d6e6f5}
+.st .kv{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.18);font-size:12px;color:#a9c3dc;line-height:1.6}
+.st .kv b{color:#fff;font-weight:700}
+.rmgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
+.rmcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px}
+.rmcard h4{margin:0 0 12px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#99e9f2}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.sgrid div{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;font-size:12px;color:#cfe2f3;line-height:1.45}
+.sgrid b{display:block;font-size:13.5px;color:#fff;margin-bottom:2px}
+.sgrid .ic{font-size:18px;display:block;margin-bottom:4px}
+.rmbtn{margin-top:12px;font:inherit;font-weight:700;font-size:14px;color:#05202f;background:linear-gradient(90deg,#63e6be,#3bc9db);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;box-shadow:0 8px 24px rgba(59,201,219,.35)}
+.arch{display:grid;gap:8px}
+.arch div{position:relative;background:linear-gradient(90deg,rgba(116,192,252,.14),rgba(177,151,252,.10));border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 12px}
+.arch div:not(:last-child):after{content:"↓";position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);color:#66d9e8;font-weight:800;font-size:13px;z-index:1}
+.arch b{display:block;font-size:13.5px}.arch span{font-size:12px;color:#b8cde2}
+.rmnote{font-size:12px;color:#a9c3dc;line-height:1.55;margin:12px 0 0}
+.rmsrc{display:flex;gap:14px;align-items:flex-start;margin-top:16px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(255,212,59,.12),rgba(255,255,255,.04));border:1px solid rgba(255,212,59,.35);font-size:13px;line-height:1.6;color:#e9f1f8}
+.rmsrc b{color:#ffe066}
+.rmav{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#3d2c00;background:linear-gradient(135deg,#ffe066,#fab005);box-shadow:0 0 20px rgba(250,176,5,.5)}
+.rmfoot{font-size:11.5px;color:#8fa9c2;margin:12px 0 0}
+.sens{position:relative;width:0;height:0}
+.sens i{position:absolute;left:8px;top:-36px;width:26px;height:26px;border-radius:50%;border:2px solid #63e6be;animation:rp 2.2s ease-out infinite}
+.sens b{position:absolute;left:13px;top:-31px;width:16px;height:16px;border-radius:4px;transform:rotate(45deg);background:linear-gradient(135deg,#96f2d7,#12b886);border:2px solid #fff;box-shadow:0 0 12px rgba(18,184,134,.95)}
+@media (max-width:900px){.rmline{grid-template-columns:1fr 1fr}.rmline:before{display:none}.rmgrid{grid-template-columns:1fr}}
+@media (max-width:520px){.rmline{grid-template-columns:1fr}#rmap{padding:16px 12px}}
 /* ---- wah: tur, glow, glass */
 .leaflet-flow-pane svg{filter:drop-shadow(0 0 3px rgba(165,216,255,.95)) drop-shadow(0 0 8px rgba(77,171,247,.55))}
 .leaflet-casing-pane svg{filter:drop-shadow(0 0 6px rgba(21,170,191,.35))}
@@ -936,7 +984,39 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
     <h2 id="iTitle">GeoSPAM <em>Bakula</em></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Jalur air baku dari Bendung Karang Intan menuju IPA Pinus, serta distribusi air curah ke titik serah PTAM Bandarmasih, PTAM Intan Banjar, dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
     <div class="istats" id="istats"></div>
-    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG</span></div>
+    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><button class="btn-tour" id="btnRmI">🚀 Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG</span></div>
+  </div>
+</div>
+<div id="rmap" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
+  <div class="rmbox">
+    <button class="rmx" id="rmClose" aria-label="Tutup">✕</button>
+    <div class="rmkick">Peta jalan pengembangan · kerangka 4M Shamsi (2005)</div>
+    <h2 id="rmTitle">Dari <em>peta</em> menuju <em>jaringan pintar</em></h2>
+    <p class="rmlead">GeoSPAM Bakula dirancang bertahap: setiap tahap harus memberi manfaat terukur sebelum kompleksitas dinaikkan. Ujungnya adalah sistem pemantauan SPAM terintegrasi, dengan pompa, flowmeter, dan tekanan pipa terbaca langsung di peta lalu dimodelkan secara hidraulis.</p>
+    <div class="rmline" id="rmline"></div>
+    <div class="rmgrid">
+      <div class="rmcard">
+        <h4>Yang akan terbaca di peta (Tahap 2)</h4>
+        <div class="sgrid" id="sgrid"></div>
+        <button class="rmbtn" id="rmSensor">📍 Lihat titik sensor rencana di peta</button>
+      </div>
+      <div class="rmcard">
+        <h4>Arsitektur berlapis</h4>
+        <div class="arch">
+          <div><b>Sensor lapangan</b><span>flowmeter · tekanan · pompa (PLC) · level</span></div>
+          <div><b>Akuisisi data</b><span>data logger / RTU · Modbus · MQTT / REST API</span></div>
+          <div><b>Basis data</b><span>PostGIS spasial + deret waktu, kunci: ID komponen</span></div>
+          <div><b>Presentasi</b><span>dasbor WebGIS near real-time · peringatan anomali</span></div>
+        </div>
+        <p class="rmnote">Interoperabel dengan SIMSPAM Ditjen Cipta Karya dan Satu Data Indonesia. Otentikasi dan pencadangan data mengikuti PP 71/2019.</p>
+      </div>
+    </div>
+    <div class="rmsrc">
+      <div class="rmav">AN</div>
+      <div><b>Sumber: Karya Tulis Ilmiah Ir. Ade Nafis Prawira, S.T.</b><br>
+      <i>Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis Sistem Informasi Geografis dan Pengembangannya Menjadi WebGIS</i>. Prawira, A. N. &amp; Kartadipura, R. H. (2026), Prosiding Seminar Pendidikan Profesi Insinyur 2026, Program Studi PPI Universitas Lambung Mangkurat. Diseminarkan 6 November 2026.</div>
+    </div>
+    <p class="rmfoot">Target dan waktu bersifat usulan dan perlu disepakati pimpinan BPAM Banjarbakula. Titik sensor pada peta adalah konsep, belum terpasang.</p>
   </div>
 </div>
 <div id="tour" aria-live="polite">
@@ -956,6 +1036,7 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
     <p>WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula · BPAM Banjarbakula</p>
   </div>
   <div class="hdr-btns">
+    <button class="hbtn" id="btnRm" title="Peta jalan Tahap 2 & 3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="19" r="2"/><circle cx="20" cy="7" r="2"/></svg><span>Peta Jalan</span></button>
     <button class="hbtn tourb" id="btnTour" title="Tur jaringan otomatis"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Tur</span></button>
     <button class="hbtn" id="btnProf" aria-pressed="false" title="Profil elevasi & analisis gravitasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18"/><path d="m3 16 5-6 4 3 4-7 5 6"/></svg><span>Profil</span></button>
     <button class="hbtn" id="btnMeasure" aria-pressed="false" title="Ukur jarak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2m1-5 2 2m1-5 2 2"/></svg><span>Ukur</span></button>
@@ -1207,6 +1288,25 @@ function lineLayer(gj){
     searchIndex.push({name:f.properties.nama, cat:f.properties.jenis, layer:l, bounds:l.getBounds()});
   }});
 }
+// Titik prioritas pemasangan sensor menurut KTI (Tabel 8) — konsep, belum terpasang
+function sensorLayer(){
+  const all = [...DATA.titik_air_baku.features, ...DATA.titik_distribusi.features];
+  const find = n => all.find(f => f.properties.nama === n);
+  const SP = [
+    ["Intake Karang Intan", ["Flowmeter outlet intake","Status, arus & jam operasi pompa intake (PLC)"]],
+    ["IPA Pinus & Kantor BPAM Banjarbakula", ["Flowmeter outlet IPA","Level reservoir","pH & kekeruhan outlet IPA (opsional)"]],
+    ["BGT 1 (Booster Ground Transfer)", ["Transduser tekanan","Status, arus & jam operasi pompa booster","Level reservoir booster"]],
+    ["BGT 2 (Booster Ground Transfer)", ["Transduser tekanan","Status, arus & jam operasi pompa booster","Level reservoir booster"]]
+  ];
+  all.filter(f => f.properties.kategori === "offtake").forEach(f => SP.push([f.properties.nama, ["Flowmeter titik serah","Transduser tekanan"]]));
+  const g = L.featureGroup();
+  SP.forEach(([n, ss]) => { const f = find(n); if (!f) return;
+    const ll = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+    const ic = L.divIcon({className:"", iconSize:[0,0], html:`<div class="sens"><i></i><b>${ss.some(x => /Flowmeter/.test(x)) ? "Q" : "P"}</b></div>`});
+    L.marker(ll,{icon:ic, zIndexOffset:500}).bindPopup(`<div class="pp"><div class="phd" style="--c:#12b886"><span class="pic" style="background:#12b886">T2</span><div><h3>${esc(shortName(n))}</h3><div class="sub">Rencana sensor Tahap 2 · konsep KTI</div></div></div><div class="pbd"><table>${ss.map(x => `<tr><td>•</td><td>${esc(x)}</td></tr>`).join("")}</table><div class="note" style="background:#e6fcf5;color:#087f5b">Belum terpasang. Lokasi prioritas menurut KTI; final ditetapkan bersama operator (riwayat gangguan, akses, sinyal seluler, catu daya).</div><div class="src">Sumber: KTI Ir. Ade Nafis Prawira, S.T. (2026), Tabel 8</div></div></div>`, {maxWidth:330}).addTo(g);
+  });
+  return g;
+}
 const LAYERS = [
   {id:"transmisi", name:"Pipa transmisi air baku", lyr:lineLayer(DATA.transmisi_air_baku), on:true, sw:'<span class="sw" style="border-color:#1864ab"></span>', n:DATA.transmisi_air_baku.features.length + " ruas"},
   {id:"titik_ab", name:"Aset jalur air baku", lyr:pointLayer(DATA.titik_air_baku), on:true, sw:'<span class="dot" style="background:#f08c00"></span>', n:DATA.titik_air_baku.features.length + " titik"},
@@ -1215,6 +1315,7 @@ const LAYERS = [
   {id:"relief", name:"Peta elevasi berwarna", lyr:L.imageOverlay(DATA.relief.img, DATA.relief.bounds,{pane:"kontur", opacity:.8, interactive:false}), on:false, sw:'<span class="sw" style="border-top:8px solid;border-image:linear-gradient(90deg,#0f6e5a,#a6d96a,#fee08b,#e7643c,#7f3b08) 1"></span>', n:"DEM"},
   {id:"kontur", name:"Kontur elevasi (" + DATA.relief.step + " m)", lyr:L.geoJSON(null,{interactive:true, style:f => ({pane:"kontur", renderer:konturR, color:zColor(f.properties.z), weight:f.properties.mayor?2.2:1.1, opacity:f.properties.mayor?1:.9}),
     onEachFeature:(f,l) => l.bindTooltip("Kontur " + f.properties.z + " m",{sticky:true})}), on:false, sw:'<span class="sw" style="border-color:#f46d43;border-top-width:2px"></span>', n:"DEMNAS"},
+  {id:"sensor", name:"Rencana sensor Tahap 2 (konsep KTI)", lyr:sensorLayer(), on:false, sw:'<span class="dot" style="background:#12b886;box-shadow:0 0 0 3px rgba(18,184,134,.3)"></span>', n:"konsep"},
   {id:"rencana", name:"Rencana air baku Batola", lyr:L.featureGroup([lineLayer(DATA.rencana_batola), pointLayer(DATA.titik_rencana_batola)]), on:false, sw:'<span class="sw dash" style="border-color:#868e96"></span>', n:"rencana"}
 ];
 function zColor(z){
@@ -1238,10 +1339,10 @@ let saved = {}; try{ saved = JSON.parse(localStorage.getItem("bpam_layers") || "
 LAYERS.forEach(L0 => {
   const on = saved.hasOwnProperty(L0.id) ? saved[L0.id] : L0.on;
   const row = document.createElement("label"); row.className = "lyr";
-  row.innerHTML = `<input type="checkbox" ${on?"checked":""}> ${L0.sw} <span>${esc(L0.name)}</span><span class="cnt">${esc(L0.n)}</span>`;
+  row.innerHTML = `<input type="checkbox" data-id="${L0.id}" ${on?"checked":""}> ${L0.sw} <span>${esc(L0.name)}</span><span class="cnt">${esc(L0.n)}</span>`;
   const cb = row.querySelector("input");
   cb.onchange = () => { cb.checked ? L0.lyr.addTo(map) : map.removeLayer(L0.lyr); saved[L0.id] = cb.checked; try{ localStorage.setItem("bpam_layers", JSON.stringify(saved)); }catch(e){} };
-  const grpName = {transmisi:"Jaringan pipa", relief:"Elevasi", rencana:"Rencana"}[L0.id];
+  const grpName = {transmisi:"Jaringan pipa", relief:"Elevasi", sensor:"Rencana"}[L0.id];
   if (grpName) $("#layers").insertAdjacentHTML("beforeend", `<div class="lgrp">${grpName}</div>`);
   $("#layers").appendChild(row);
   if (on) L0.lyr.addTo(map);
@@ -1410,6 +1511,31 @@ $("#hud").innerHTML = `<div><b>${nf(R.transmisi_total_m/1000,1)} km</b><span>Tra
   document.addEventListener("keydown", e => { if (!document.body.classList.contains("touring")) return;
     if (e.key === "ArrowRight") show(i+1); else if (e.key === "ArrowLeft") show(i-1); else if (e.key === "Escape") stop(); });
   map.on("mousedown touchstart", () => { if (document.body.classList.contains("touring") && playing) setPlay(false); });
+})();
+
+// ---------- peta jalan (KTI)
+(function(){
+  const ST = [
+    {c:"#40c057", m:"Mapping", n:"0", t:"Tahap 0 · Fondasi", s:"Selesai · 2022–2024", k:["Survei GNSS lapangan 2022","WebGIS statis skematik.netlify.app (Aksi Perubahan 2024)","Jalur air baku ±37,4 km dalam 8 jenis layer"], kv:"<b>Capaian:</b> fungsi <i>mapping</i> terpenuhi"},
+    {c:"#3bc9db", m:"Maintenance", n:"1", t:"Tahap 1 · Tata kelola data", s:"Berjalan · GeoSPAM Bakula 2026", k:["Standardisasi atribut & penamaan, kode ruas","Migrasi basis data ke PostGIS","SOP pemutakhiran data & riwayat pemeliharaan"], kv:"<b>Target:</b> kelengkapan atribut 100%, SOP berlaku<br><b>Waktu:</b> tahun ke-1 · <b>PJ:</b> Seksi Distribusi<br><b>Biaya:</b> rendah (SDM internal, sumber terbuka)"},
+    {c:"#4dabf7", m:"Monitoring", n:"2", t:"Tahap 2 · Telemetri", s:"Berikutnya", k:["Flowmeter & pressure logger di titik prioritas","Dasbor near real-time di peta","Peringatan dini kebocoran / pecah pipa"], kv:"<b>Target:</b> latensi data &lt; 5 menit, ketersediaan sistem ≥ 95%<br><b>Waktu:</b> tahun ke-2–3 · <b>PJ:</b> Distribusi & Tim TI Balai<br><b>Biaya:</b> sedang (sensor & data logger)", next:true},
+    {c:"#b197fc", m:"Modeling", n:"3", t:"Tahap 3 · Jaringan cerdas", s:"Visi", k:["Integrasi SCADA pompa (intake & booster)","Model hidraulis EPANET terkalibrasi","Pertukaran data otomatis dengan SIMSPAM, menuju <i>digital twin</i>"], kv:"<b>Target:</b> model EPANET terkalibrasi, pertukaran data otomatis<br><b>Waktu:</b> tahun ke-3–5 · <b>PJ:</b> BPAM bersama Kementerian PU (Ditjen Cipta Karya)"}
+  ];
+  $("#rmline").innerHTML = ST.map((x,i) => `<div class="st${x.next ? " next" : ""}" style="--c:${x.c};animation-delay:${.12*i+.1}s"><span class="dotx">${x.n}</span><span class="m4">${x.m}</span><h3>${x.t}</h3><span class="stat">${x.s}</span><ul>${x.k.map(k => `<li>${k}</li>`).join("")}</ul><div class="kv">${x.kv}</div></div>`).join("");
+  const SG = [["💧","Debit & volume","Flowmeter di outlet intake, outlet IPA, tiap offtake → neraca air"],["📈","Tekanan pipa","Transduser di titik tinggi/rendah, booster, offtake → deteksi bocor"],["⚙️","Pompa","Status, arus, jam operasi dari PLC → efisiensi energi"],["🛢️","Level & kualitas","Level reservoir; pH/kekeruhan outlet IPA"],["📝","Kejadian lapangan","Status katup & pemeliharaan via aplikasi bergeotag"]];
+  $("#sgrid").innerHTML = SG.map(([i,b,t]) => `<div><span class="ic">${i}</span><b>${b}</b>${t}</div>`).join("");
+  const open = () => { closeIntro(true); $("#rmap").classList.add("on"); document.querySelectorAll("#rmline .st").forEach(e => { e.style.animation = "none"; e.offsetHeight; e.style.animation = ""; }); };
+  const close = () => $("#rmap").classList.remove("on");
+  $("#btnRm").onclick = open; $("#btnRmI").onclick = e => { e.stopPropagation(); open(); };
+  $("#rmClose").onclick = close;
+  $("#rmap").addEventListener("click", e => { if (e.target.id === "rmap") close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#rmap").classList.contains("on")) close(); });
+  $("#rmSensor").onclick = () => {
+    close(); const L0 = LAYERS.find(l => l.id === "sensor"); L0.lyr.addTo(map);
+    const cb = document.querySelector('#layers input[data-id="sensor"]'); if (cb) cb.checked = true;
+    map.flyToBounds(L0.lyr.getBounds(), {padding:[60,60], duration:2});
+    toast("Titik hijau = lokasi prioritas sensor Tahap 2 menurut KTI (konsep, belum terpasang). Klik untuk detail.");
+  };
 })();
 
 // tabel titik serah per PTAM
