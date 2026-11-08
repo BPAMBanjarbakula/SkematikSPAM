@@ -19,12 +19,17 @@
   "ipa": 1
  },
  "jumlah_distribusi": {
-  "air_valve": 42,
+  "air_valve": 20,
+  "av_wo": 4,
   "offtake": 4,
   "valve": 2,
-  "reservoir": 2,
   "patokan": 1,
-  "meter": 1,
+  "meter": 1
+ },
+ "jumlah_lanjutan": {
+  "air_valve": 17,
+  "av_wo": 1,
+  "reservoir": 2,
   "lainnya": 4
  }
 }
