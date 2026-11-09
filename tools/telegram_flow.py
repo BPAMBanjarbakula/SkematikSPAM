@@ -134,6 +134,21 @@ async def main(out):
             await cl.send_message(target, txt)
         print("peringatan terkirim:", txt)
     json.dump(data, open(out, "w"), separators=(",", ":"))
+    # arsip harian CSV (dibaca Google Sheet lewat IMPORTDATA)
+    import csv, os
+    with open(os.path.join(os.path.dirname(out) or ".", "harian.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["tanggal", "debit_dn900_ipa_pinus_lps", "jam_data_dn900", "debit_pematang_lps", "jam_data_pematang",
+                    "prased_estimasi_lps", "total_keluar_intake_lps", "kubikasi_intake_m3", "muka_air_bendung_m", "catatan"])
+        for k in sorted(harian):
+            r = harian[k]; a = (r.get("dn900") or {}); b = (r.get("pematang") or {})
+            qa, qb = a.get("q"), b.get("q")
+            tot = round(qa + qb + 60, 1) if qa is not None and qb is not None else ""
+            cat = []
+            if a.get("h", 24) < 20: cat.append("data DN900 tidak lengkap")
+            if b.get("h", 24) < 20: cat.append("data Pematang tidak lengkap")
+            w.writerow([k, "" if qa is None else round(qa, 1), int(a["h"]) if "h" in a else "", "" if qb is None else round(qb, 1), int(b["h"]) if "h" in b else "",
+                        60, tot, round(tot * 86.4) if tot != "" else "", r.get("lvl", ""), "; ".join(cat)])
     print({k: (v["last"] or {}).get("flow") for k, v in data["stations"].items()})
 
 if __name__ == "__main__":

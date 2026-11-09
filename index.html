@@ -716,6 +716,18 @@ html.lite #tele,html.lite #hud div,html.lite .lbl{background:rgba(7,22,40,.94)}
   #map.zlow .lv-id-dn900 .tx b::before{content:"IPA Pinus ";font-weight:600;font-size:10px;color:#ffc9c9}
 }
 @media (max-width:420px){.ttl h1 .wm1{font-size:14px!important;letter-spacing:0}.ttl{min-width:0}.ttl p{font-size:10.5px}.hdr-btns{gap:3px}.hbtn{padding:6px 7px}.hbtn svg{width:15px;height:15px}}
+
+/* ---- penanda estimasi & pemberitahuan logger */
+.lv.est .pl{border-style:dashed}
+.lv.est .tx small::after{content:"EST";margin-left:5px;padding:0 4px;border-radius:4px;background:#f08c00;color:#fff;font-size:8px;letter-spacing:.04em;vertical-align:1px}
+#map.zlow .lv.est .tx small::after,.lv-id-prased .tx small::after{display:none}
+#stbar{position:fixed;z-index:1200;left:50%;transform:translateX(-50%);top:calc(var(--hh,58px) + 8px);max-width:min(560px,calc(100vw - 24px));display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;border-radius:12px;background:#fff4e6;color:#7a3e00;border:1px solid #ffc078;box-shadow:0 8px 24px rgba(0,0,0,.25);font-size:12.5px;font-weight:600;cursor:pointer}
+#stbar.bad{background:#fff5f5;color:#8a1c1c;border-color:#ffa8a8}
+#stbar[hidden]{display:none}
+#stbar button{all:unset;cursor:pointer;padding:2px 6px;border-radius:6px;opacity:.7;font-size:13px}
+#stbar button:hover{opacity:1;background:rgba(0,0,0,.06)}
+body.tv #stbar,body.touring #stbar{display:none}
+@media (min-width:821px){#stbar{top:calc(var(--hh,64px) + 74px);left:calc(50% + 170px)}}
 </style>
 <style>
 :root{
@@ -1447,6 +1459,7 @@ window.LITE=f==="1"||(f!=="0"&&!!low);if(window.LITE)d.classList.add("lite")})()
     <button class="hbtn" id="btnPanel" aria-expanded="false" title="Layer &amp; info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg><span>Layer</span></button>
   </div>
 </header>
+<div id="stbar" hidden><span id="stTx"></span><button id="stX" aria-label="Tutup">✕</button></div>
 <main>
   <aside id="side" aria-label="Panel layer dan informasi">
     <button class="closebtn" id="btnClose" aria-label="Tutup panel">×</button>
@@ -2110,7 +2123,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     });
     const e = est();
     setLive("prased", "±" + PRASED + " L/dtk", "rata-rata");
-    if (e) setLive("intake", nf(e.tot,0) + " L/dtk", "≈ " + nf(e.tot*86.4,0) + " m³/hari");
+    if (e) setLive("intake", "≈ " + nf(e.tot,0) + " L/dtk", "≈ " + nf(e.tot*86.4,0) + " m³/hari");
     if (e){
       rows.push(`<div class="fmr est" data-id="prased"><span class="fi">≈</span><span class="fn">Prased · PTAM Intan Banjar<small>estimasi rata-rata</small></span><span class="fv">±${PRASED}<span>L/dtk</span></span></div>`);
       rows.push(`<div class="fmr tot" data-id="intake"><span class="fi">Σ</span><span class="fn">Total keluar Intake<small>estimasi neraca · ${fmtT(e.t)}</small></span><span class="fv">${nf(e.tot,0)}<span>L/dtk</span></span></div>`);
@@ -2136,7 +2149,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
       const st = D.stations[id], l = st && st.last; if (!l) return;
       const nm = id === "dn900" ? "DN900 (IPA Pinus)" : "Pematang";
       const ageH = (Date.now() - l.t)/36e5;
-      if (ageH > 3){ al.push(["warn", id, `Logger ${nm} tidak mengirim ${nf(ageH,0)} jam`]); return; }
+      if (ageH > 3){ const jm = new Date(l.t + 8*3600e3).toISOString().slice(11,16); al.push(["warn", id, `Logger ${nm} terputus sejak ${jm} WITA (${nf(ageH,0)} jam tidak mengirim)`]); return; }
       const ref = (st.series||[]).filter(p => p.t < l.t && p.t > l.t - 864e5).map(p => p.flow);
       if (ref.length >= 6){ const avg = ref.reduce((a,b) => a+b, 0)/ref.length, d = (l.flow - avg)/avg;
         if (d <= -0.2) al.push(["bad", id, `Debit ${nm} turun ${nf(-d*100,0)}% dari rata-rata 24 jam`]);
@@ -2149,6 +2162,19 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     $("#tele").classList.toggle("hasal", al.some(a => a[0] === "bad"));
     document.querySelectorAll("#tlAl .al").forEach(e => e.onclick = () => { const id = e.dataset.id; const ll = id === "awlr" ? [-3.456094,114.961683] : ST[id].ll; map.flyTo(ll, 15, {duration:1.2}); });
     window.__alerts = al;
+    // pemberitahuan di atas peta (logger terputus / debit anjlok / muka air siaga)
+    const imp = al.filter(a => a[0] === "bad" || /tidak mengirim|tertunda/.test(a[2]));
+    const sb = $("#stbar"), key = imp.map(a => a[2].replace(/\d+ jam/, "")).join("|");
+    let dis = ""; try{ dis = sessionStorage.getItem("bpam_stx") || ""; }catch(e){}
+    if (!imp.length || dis === key){ sb.hidden = true; }
+    else {
+      document.documentElement.style.setProperty("--hh", (document.querySelector("header").offsetHeight || 58) + "px");
+      sb.className = imp.some(a => a[0] === "bad") ? "bad" : "";
+      $("#stTx").textContent = (imp.some(a => a[0] === "bad") ? "⚠️ " : "📡 ") + imp[0][2] + (imp.length > 1 ? ` (+${imp.length - 1} lainnya)` : "");
+      sb.hidden = false;
+      sb.onclick = e => { if (e.target.id === "stX"){ sb.hidden = true; try{ sessionStorage.setItem("bpam_stx", key); }catch(_){} return; }
+        $("#tele").classList.remove("min"); const id = imp[0][1]; const ll = id === "awlr" ? [-3.456094,114.961683] : ST[id].ll; map.flyTo(ll, 14, {duration:1.2}); };
+    }
   };
   mkIn.on("click", () => window.nrcOpen());
   // ===== analisa neraca debit & kubikasi intake

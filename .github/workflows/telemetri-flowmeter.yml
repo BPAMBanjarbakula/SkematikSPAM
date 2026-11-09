@@ -32,6 +32,6 @@ jobs:
         run: |
           cd data
           git config user.name "geospam-bot"; git config user.email "geospam-bot@users.noreply.github.com"
-          git add flow.json
+          git add flow.json harian.csv
           git diff --cached --quiet && exit 0
           git commit -m "Data flowmeter $(date -u +%FT%TZ)" && git push origin telemetri
