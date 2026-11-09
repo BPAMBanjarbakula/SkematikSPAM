@@ -752,6 +752,7 @@ html.lite .tkr{animation:none!important}
 .ilv{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#ff8787;background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.3);border-radius:999px;padding:4px 10px}
 #iLiveTx b{color:#fff}
 #iLiveTx .sep{opacity:.35;margin:0 8px}
+#toast{z-index:6000!important}
 </style>
 <style>
 :root{
@@ -1313,7 +1314,7 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
 </style>
 <script>/* mode ringan utk HP spek rendah */(function(){var d=document.documentElement,f=null;try{f=localStorage.getItem("bpam_lite")}catch(e){}
 var n=navigator,low=(n.deviceMemory&&n.deviceMemory<=4)||(n.hardwareConcurrency&&n.hardwareConcurrency<=4)||(n.connection&&(n.connection.saveData||/2g/.test(n.connection.effectiveType||"")))||matchMedia("(prefers-reduced-motion: reduce)").matches;
-window.LITE=f==="1"||(f!=="0"&&!!low);if(window.LITE)d.classList.add("lite")})();</script>
+var au=null;try{au=localStorage.getItem("bpam_lite_auto")}catch(e){}window.LITE=f==="1"||(f!=="0"&&(!!low||au==="1"));if(window.LITE)d.classList.add("lite")})();</script>
 </head>
 <body>
 <div id="intro" role="dialog" aria-modal="true" aria-labelledby="iTitle">
@@ -1643,10 +1644,10 @@ L.control.scale({imperial:false,position:"bottomright"}).addTo(map);
 // ---------- basemaps
 const BASEMAPS = {
   "Jalan (OSM)": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}),
-  "Satelit": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:17,attribution:"Esri World Imagery"}),
-  "Topografi": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:18,attribution:"Esri World Topo"}),
+  "Satelit": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:17,attribution:"Esri World Imagery",crossOrigin:"anonymous",keepBuffer:innerWidth<=820?1:2}),
+  "Topografi": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:18,attribution:"Esri World Topo",crossOrigin:"anonymous",keepBuffer:innerWidth<=820?1:2}),
   "Topo kontur (OpenTopoMap)": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"© OpenTopoMap (CC-BY-SA), © OpenStreetMap"}),
-  "Malam (gelap)": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:16,attribution:"Esri World Dark Gray"}),
+  "Malam (gelap)": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",{maxZoom:20,maxNativeZoom:16,attribution:"Esri World Dark Gray",crossOrigin:"anonymous",keepBuffer:innerWidth<=820?1:2}),
   "Tanpa peta dasar": null
 };
 let currentBase = null, tileErrShown = false;
@@ -1673,6 +1674,7 @@ function toast(msg){
   t.style.display = "block"; t.querySelector("button").onclick = () => t.style.display = "none";
   setTimeout(() => t.style.display = "none", 9000);
 }
+window.toast = toast;
 
 // ---------- popups
 function rowsFrom(obj){ return Object.entries(obj).filter(([,v]) => v !== null && v !== "" && v !== undefined).map(([k,v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join(""); }
@@ -2418,7 +2420,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:") navigator.se
   $("#chkDark").onchange = e => setDark(e.target.checked, true);
   // mode ringan
   $("#chkLite").checked = !!window.LITE;
-  $("#chkLite").onchange = e => { try{ localStorage.setItem("bpam_lite", e.target.checked ? "1" : "0"); }catch(_){} location.reload(); };
+  $("#chkLite").onchange = e => { try{ localStorage.setItem("bpam_lite", e.target.checked ? "1" : "0"); localStorage.removeItem("bpam_lite_auto"); }catch(_){} location.reload(); };
   // layar penuh
   $("#btnFull").onclick = () => { const d = document; if (!d.fullscreenElement) d.documentElement.requestFullscreen?.(); else d.exitFullscreen?.(); };
   document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#share").classList.contains("on")) close(); });
@@ -2724,6 +2726,22 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   }
   clock(); setInterval(clock, 15000);
   setTimeout(build, 2500); setTimeout(build, 7000); setInterval(build, 60000);
+})();
+</script>
+<script>/* deteksi otomatis HP lambat: bila animasi < 35 fps, mode ringan dinyalakan */
+(function(){
+  let f = null; try{ f = localStorage.getItem("bpam_lite"); }catch(e){}
+  if (window.LITE || f === "0") return;
+  addEventListener("load", () => setTimeout(() => {
+    if (document.hidden) return;
+    let n = 0, t0 = performance.now(), worst = 0, last = t0;
+    (function tick(t){ n++; worst = Math.max(worst, t - last); last = t; if (t - t0 < 2500) requestAnimationFrame(tick); else {
+      const fps = n / ((t - t0)/1000);
+      if (fps < 30){ document.documentElement.classList.add("lite"); window.LITE = true; try{ localStorage.setItem("bpam_lite_auto","1"); }catch(e){}
+        const c = document.getElementById("chkLite"); if (c) c.checked = true;
+        if (window.toast) window.toast("⚡ HP terdeteksi lambat, Mode ringan dinyalakan otomatis. Bisa dimatikan di menu Layer."); }
+    } })(t0);
+  }, 3000));
 })();
 </script>
 </body>
