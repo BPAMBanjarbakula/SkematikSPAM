@@ -2371,7 +2371,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:") navigator.se
   const URLX = "https://geospambakula.netlify.app/";
   const txt = "GeoSPAM Bakula — WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula (BPAM Banjarbakula)\n" + URLX;
   $("#shUrl").textContent = URLX.replace(/^https?:\/\//,"").replace(/\/$/,"");
-  $("#shWa").href = "https://wa.me/?text=" + encodeURIComponent(txt);
+  $("#shWa").href = "https://wa.me/?text=" + encodeURIComponent(txt.replace(URLX, URLX + "?src=wa"));
   $("#shQr").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=0&color=0b3a63&data=" + encodeURIComponent(URLX);
   const open = () => $("#share").classList.add("on"), close = () => $("#share").classList.remove("on");
   $("#btnShare").onclick = open; $("#shClose").onclick = close;
@@ -2648,6 +2648,25 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
   document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === t.dataset.p));
 });
+})();
+</script>
+<script>/* statistik kunjungan anonim — hanya angka agregat, tanpa identitas */
+(function(){
+  if (!/netlify\.app$/.test(location.hostname)) return;
+  const URLH = "https://geospambakula.netlify.app/api/hit";
+  const send = o => { try{ const b = new Blob([JSON.stringify(o)], {type:"text/plain"}); if (!(navigator.sendBeacon && navigator.sendBeacon(URLH, b))) fetch(URLH, {method:"POST", body:b, keepalive:true, mode:"no-cors"}); }catch(e){} };
+  const day = new Date(Date.now() + 8*3600e3).toISOString().slice(0,10);
+  let n = 0; try{ if (localStorage.getItem("bpam_seen") !== day){ n = 1; localStorage.setItem("bpam_seen", day); } }catch(e){}
+  const q = new URLSearchParams(location.search).get("src"), r = document.referrer || "";
+  const ref = q || (matchMedia("(display-mode: standalone)").matches || navigator.standalone ? "aplikasi"
+    : /whatsapp|wa\.me/i.test(r + navigator.userAgent) ? "wa" : /google\./i.test(r) ? "google" : /t\.me|telegram/i.test(r + navigator.userAgent) ? "telegram" : r && !r.includes(location.hostname) ? "lain" : "langsung");
+  const w = Math.min(screen.width, screen.height), dev = /Mobi|Android|iPhone/i.test(navigator.userAgent) ? (w >= 600 ? "tab" : "hp") : (/iPad|Tablet/i.test(navigator.userAgent) ? "tab" : "pc");
+  send({e:"view", n, ref, dev, s:location.hostname.split(".")[0]});
+  const MAP = {nrcXls:"xlsx", btnTour:"tour", btnTourI:"tour", btnProf:"prof", btnShare:"share", btnTv:"tv", btnRm:"rm", btnRmI:"rm", chkLite:"lite", btnDark:"dark", chkDark:"dark"};
+  document.addEventListener("click", e => { const t = e.target.closest("[id], .kb1, .kb2"); if (!t) return;
+    const ev = MAP[t.id] || (t.classList.contains("kb1") || t.classList.contains("kb2") ? "kti" : null); if (ev) send({e:ev}); }, true);
+  const wrap = () => { if (window.nrcOpen && !window.nrcOpen.__t){ const f = window.nrcOpen; window.nrcOpen = function(){ send({e:"nrc"}); return f.apply(this, arguments); }; window.nrcOpen.__t = 1; } };
+  addEventListener("load", () => setTimeout(wrap, 1500));
 })();
 </script>
 </body>
