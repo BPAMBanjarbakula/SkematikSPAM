@@ -1603,7 +1603,7 @@ const LINE_STYLE = f => {
   return {color:"#0c8599",weight:5.5};
 };
 
-const map = L.map("map",{zoomControl:true,preferCanvas:false,attributionControl:true}).setView([-3.45,114.80],11);
+const map = L.map("map",{zoomControl:true,preferCanvas:false,attributionControl:true,zoomSnap:0.5}).setView([-3.45,114.80],11);
 // titik kecil (air valve, wash out, dll.) di pane sendiri di atas garis pipa agar bisa diklik
 map.createPane("titik"); map.getPane("titik").style.zIndex = 450;
 const titikRenderer = L.svg({pane:"titik"});
@@ -1779,12 +1779,13 @@ LAYERS.forEach(L0 => {
 LAYERS[0].lyr.bringToFront && LAYERS[0].lyr.bringToFront();
 const allBounds = L.featureGroup([LAYERS[0].lyr, LAYERS[2].lyr]).getBounds();
 let introOn = true; try{ introOn = sessionStorage.getItem("bpam_intro") !== "0"; }catch(e){}
-if (introOn) map.setView(allBounds.getCenter(), 10, {animate:false}); else map.fitBounds(allBounds, {padding:[20,20]});
+function viewPad(){ const m = innerWidth <= 820, t = document.getElementById("tele"); const teleOpen = !m && t && !t.classList.contains("min"); return {paddingTopLeft:[m ? 16 : 30, m ? 60 : 100], paddingBottomRight:[teleOpen ? 300 : (m ? 16 : 30), m ? 70 : 30]}; }
+if (introOn) map.setView(allBounds.getCenter(), 10, {animate:false}); else map.fitBounds(allBounds, viewPad());
 function closeIntro(noFly){
   if ($("#intro").classList.contains("hide")) return;
   $("#intro").classList.add("hide"); try{ sessionStorage.setItem("bpam_intro","0"); }catch(e){}
   setTimeout(() => document.body.classList.add("ready"), 300);
-  if (noFly !== true) setTimeout(() => map.flyToBounds(allBounds, {padding:[30,30], duration:2.2}), 250);
+  if (noFly !== true) setTimeout(() => map.flyToBounds(allBounds, Object.assign(viewPad(), {duration:2.2})), 250);
 }
 if (!introOn){ $("#intro").classList.add("hide"); document.body.classList.add("ready"); }
 $("#btnGo").onclick = closeIntro;
@@ -2232,7 +2233,8 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
       return `<polygon points="${top.concat(bot).join(" ")}" fill="${c}" opacity=".75"/>`; };
     let g = layer(o => 0, o => o.dn, "#4dabf7") + layer(o => o.dn, o => o.dn + o.pr, "#ff922b") + layer(o => o.dn + o.pr, o => o.tot, "#9775fa");
     for (let v = 0; v <= mx; v += 200) g += `<line x1="34" x2="${W-6}" y1="${Y(v)}" y2="${Y(v)}" stroke="rgba(255,255,255,.08)"/><text x="30" y="${Y(v)+3}" text-anchor="end" font-size="9.5" fill="#7f97ae">${v}</text>`;
-    const dset = new Set(); hs.forEach(o => { const k = dayKey(o.t); if (!dset.has(k)){ dset.add(k); const x = X(o.t); g += `<line x1="${x}" x2="${x}" y1="10" y2="${H-18}" stroke="rgba(255,255,255,.06)"/><text x="${x+3}" y="${H-5}" font-size="9.5" fill="#7f97ae">${new Date(o.t).toLocaleDateString("id-ID",{day:"numeric",month:"short",timeZone:"Asia/Makassar"})}</text>`; } });
+    { const t0 = hs[0].t, t1 = hs[hs.length-1].t; let m = Math.ceil((t0 + 8*3600e3) / 864e5) * 864e5 - 8*3600e3;
+      for (; m <= t1; m += 864e5){ const x = X(m); if (x > W - 40) break; g += `<line x1="${x}" x2="${x}" y1="10" y2="${H-18}" stroke="rgba(255,255,255,.07)"/><text x="${x+3}" y="${H-5}" font-size="9.5" fill="#7f97ae">${new Date(m).toLocaleDateString("id-ID",{day:"numeric",month:"short",timeZone:"Asia/Makassar"})}</text>`; } }
     return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${g}</svg>`;
   }
   function nrcRender(){
@@ -2379,7 +2381,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:") navigator.se
   $("#shCopy").onclick = async () => { try{ await navigator.clipboard.writeText(URLX); $("#shCopy").textContent = "Tersalin ✓"; setTimeout(() => $("#shCopy").textContent = "Salin", 1800); }catch(e){ prompt("Salin tautan:", URLX); } };
   if (navigator.share) $("#shNative").onclick = () => navigator.share({title:"GeoSPAM Bakula", text:txt, url:URLX}).catch(() => {}); else $("#shNative").style.display = "none";
   // mode gelap
-  let darkOn = false; try{ darkOn = localStorage.getItem("bpam_dark") === "1"; }catch(e){}
+  let darkOn = true; try{ darkOn = localStorage.getItem("bpam_dark") !== "0"; }catch(e){}
   function setDark(on, switchBase){
     document.body.classList.toggle("dark", on); $("#btnDark").setAttribute("aria-pressed", on); $("#chkDark").checked = on;
     try{ localStorage.setItem("bpam_dark", on ? "1" : "0"); }catch(e){}
