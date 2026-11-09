@@ -753,6 +753,13 @@ html.lite .tkr{animation:none!important}
 #iLiveTx b{color:#fff}
 #iLiveTx .sep{opacity:.35;margin:0 8px}
 #toast{z-index:6000!important}
+
+/* profil elevasi: kontras tema gelap */
+body.dark #prof{background:#0b1a2c!important;backdrop-filter:none!important;border-top:1px solid rgba(99,230,190,.25);box-shadow:0 -12px 34px rgba(0,0,0,.45)}
+body.dark .ph h3{color:#e7f5ff}
+body.dark .ph select{background:#13263d;color:#e7f5ff;border-color:rgba(255,255,255,.18)}
+body.dark .ph .x{background:rgba(255,255,255,.08);color:#cfe2f3}
+body.dark .pleg{color:#a9c4dc}
 </style>
 <style>
 :root{
@@ -2609,7 +2616,7 @@ function draw(){
   const X = s => m.l + s/xs*(W-m.l-m.r), Y = z => H-m.b - (z-y0)/(y1-y0)*(H-m.t-m.b);
   view = {X, Y, m, W, H, xs};
   ctx.clearRect(0,0,W,H);
-  ctx.font = "11px 'Plus Jakarta Sans',system-ui"; ctx.fillStyle = "#6b7785"; ctx.strokeStyle = "#e9edf2"; ctx.lineWidth = 1;
+  ctx.font = "11px 'Plus Jakarta Sans',system-ui"; const DK = document.body.classList.contains("dark"); ctx.fillStyle = DK ? "#8aa4bd" : "#6b7785"; ctx.strokeStyle = DK ? "rgba(255,255,255,.08)" : "#e9edf2"; ctx.lineWidth = 1;
   const yStep = (y1-y0) > 60 ? 20 : (y1-y0) > 25 ? 10 : 5;
   for (let z = Math.ceil(y0/yStep)*yStep; z <= y1; z += yStep){ ctx.beginPath(); ctx.moveTo(m.l,Y(z)); ctx.lineTo(W-m.r,Y(z)); ctx.stroke(); ctx.fillText(z+" m",4,Y(z)+4); }
   const xStep = xs > 20000 ? 5000 : xs > 8000 ? 2000 : xs > 3000 ? 1000 : 500;
@@ -2623,9 +2630,9 @@ function draw(){
     for (let i = 1; i < p.length; i++) if (hg[i][1] < p[i][1]){ ctx.fillRect(X(p[i-1][0]),Y(p[i][1]),Math.max(1,X(p[i][0])-X(p[i-1][0])),Y(hg[i][1])-Y(p[i][1])); } }
   cur.series.forEach(s => { ctx.beginPath(); s.d.forEach((q,i) => i ? ctx.lineTo(X(q[0]),Y(q[1])) : ctx.moveTo(X(q[0]),Y(q[1]))); ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.setLineDash(s.dash||[]); ctx.stroke(); ctx.setLineDash([]); });
   // titik aset
-  cur.marks.forEach(t => { const x = X(t.s); ctx.strokeStyle = "rgba(7,26,46,.25)"; ctx.setLineDash([2,3]); ctx.beginPath(); ctx.moveTo(x,m.t); ctx.lineTo(x,H-m.b); ctx.stroke(); ctx.setLineDash([]);
+  cur.marks.forEach(t => { const x = X(t.s); ctx.strokeStyle = document.body.classList.contains("dark") ? "rgba(255,255,255,.18)" : "rgba(7,26,46,.25)"; ctx.setLineDash([2,3]); ctx.beginPath(); ctx.moveTo(x,m.t); ctx.lineTo(x,H-m.b); ctx.stroke(); ctx.setLineDash([]);
     const c = (CAT[t.k]||CAT.lainnya).color; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x,m.t+6,4,0,7); ctx.fill();
-    if (["intake","offtake","bgt"].includes(t.k)){ ctx.save(); ctx.translate(x+4,m.t+14); ctx.rotate(Math.PI/2); ctx.fillStyle = "#0b3a63"; ctx.font = "600 10.5px 'Plus Jakarta Sans',system-ui"; ctx.fillText(t.n.replace(/ \(.*\)| – PTAM.*/,""),0,0); ctx.restore(); } });
+    if (["intake","offtake","bgt"].includes(t.k)){ ctx.save(); ctx.translate(x+4,m.t+14); ctx.rotate(Math.PI/2); ctx.fillStyle = document.body.classList.contains("dark") ? "#99e9f2" : "#0b3a63"; ctx.font = "600 10.5px 'Plus Jakarta Sans',system-ui"; ctx.fillText(t.n.replace(/ \(.*\)| – PTAM.*/,""),0,0); ctx.restore(); } });
 }
 function hoverAt(clientX){
   if (!view) return; const r = pc.getBoundingClientRect(), x = clientX - r.left;
