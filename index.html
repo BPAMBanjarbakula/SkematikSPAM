@@ -728,6 +728,30 @@ html.lite #tele,html.lite #hud div,html.lite .lbl{background:rgba(7,22,40,.94)}
 #stbar button:hover{opacity:1;background:rgba(0,0,0,.06)}
 body.tv #stbar,body.touring #stbar{display:none}
 @media (min-width:821px){#stbar{top:calc(var(--hh,64px) + 74px);left:calc(50% + 170px)}}
+
+/* ---- ticker live & baris live di layar pembuka */
+#tick{position:fixed;left:0;right:0;bottom:0;height:28px;z-index:1100;display:flex;align-items:center;background:linear-gradient(90deg,rgba(4,14,26,.96),rgba(7,30,52,.94));border-top:1px solid rgba(99,230,190,.25);color:#cfe2f3;font-size:12px;box-shadow:0 -6px 20px rgba(0,0,0,.3)}
+#tick[hidden]{display:none}
+.tkl{flex:none;display:flex;align-items:center;gap:6px;padding:0 12px;height:100%;font-weight:800;letter-spacing:.08em;font-size:10.5px;color:#ff8787;background:rgba(255,107,107,.1);border-right:1px solid rgba(255,255,255,.08)}
+.tkl b{color:#fff;font-variant-numeric:tabular-nums;letter-spacing:.02em;font-size:12px}
+.tkl i,.ilv i{width:7px;height:7px;border-radius:50%;background:#ff6b6b;animation:lv 1.6s infinite}
+.tkw{flex:1;overflow:hidden;height:100%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.tkr{display:inline-flex;white-space:nowrap;height:100%;align-items:center;animation:tkmove var(--tkd,60s) linear infinite;will-change:transform}
+.tkw:hover .tkr{animation-play-state:paused}
+.tkr span{padding:0 22px;position:relative}
+.tkr span:after{content:"◆";position:absolute;right:-5px;color:rgba(99,230,190,.45);font-size:8px;top:2px}
+.tkr b{color:#fff;font-variant-numeric:tabular-nums}
+.tkr em{font-style:normal;color:#8aa4bd}
+@keyframes tkmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+body.tick #tele{bottom:40px}body.tick #app{height:calc(100% - 28px)}
+body.tv #tick,body.touring #tick{display:none}
+@media (max-width:820px){#tick{display:none!important}body.tick #app{height:100%}}
+html.lite .tkr{animation:none!important}
+#iLive{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-14px 0 24px;font-size:13.5px;color:#cfe2f3;animation:fup .8s ease .9s both}
+#iLive[hidden]{display:none}
+.ilv{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#ff8787;background:rgba(255,107,107,.14);border:1px solid rgba(255,107,107,.3);border-radius:999px;padding:4px 10px}
+#iLiveTx b{color:#fff}
+#iLiveTx .sep{opacity:.35;margin:0 8px}
 </style>
 <style>
 :root{
@@ -1329,6 +1353,7 @@ window.LITE=f==="1"||(f!=="0"&&!!low);if(window.LITE)d.classList.add("lite")})()
     <h2 id="iTitle" class="wm"><span class="wm1 w">GeoSPAM</span><span class="wm2row w"><span class="wm2">BAKULA</span><i></i></span></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Jalur air baku dari Bendung Karang Intan menuju IPA Pinus, serta distribusi air curah ke titik serah PTAM Bandarmasih, PTAM Intan Banjar, dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
     <div class="istats" id="istats"></div>
+    <div id="iLive" hidden><span class="ilv"><i></i>LIVE</span><span id="iLiveTx"></span></div>
     <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><button class="btn-tour" id="btnRmI">🚀 Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2">📄 baca KTI</a></span></div>
   </div>
 </div>
@@ -1459,6 +1484,7 @@ window.LITE=f==="1"||(f!=="0"&&!!low);if(window.LITE)d.classList.add("lite")})()
     <button class="hbtn" id="btnPanel" aria-expanded="false" title="Layer &amp; info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg><span>Layer</span></button>
   </div>
 </header>
+<div id="tick" hidden><span class="tkl"><i></i>LIVE <b id="tkClock">--.--</b> WITA</span><div class="tkw"><div class="tkr" id="tkRun"></div></div></div>
 <div id="stbar" hidden><span id="stTx"></span><button id="stX" aria-label="Tutup">✕</button></div>
 <main>
   <aside id="side" aria-label="Panel layer dan informasi">
@@ -2669,6 +2695,35 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     const ev = MAP[t.id] || (t.classList.contains("kb1") || t.classList.contains("kb2") ? "kti" : null); if (ev) send({e:ev}); }, true);
   const wrap = () => { if (window.nrcOpen && !window.nrcOpen.__t){ const f = window.nrcOpen; window.nrcOpen = function(){ send({e:"nrc"}); return f.apply(this, arguments); }; window.nrcOpen.__t = 1; } };
   addEventListener("load", () => setTimeout(wrap, 1500));
+})();
+</script>
+<script>/* ticker live (laptop) + baris live di layar pembuka */
+(function(){
+  const g = id => { const e = document.getElementById("lv_" + id); return e ? e.firstChild && e.firstChild.textContent ? e.firstChild.textContent.trim() : e.textContent.trim() : ""; };
+  const ok = v => v && !/^[-–…]/.test(v) && /\d/.test(v);
+  function clock(){ const d = new Date(Date.now() + 8*3600e3); document.getElementById("tkClock").textContent = d.toISOString().slice(11,16).replace(":", "."); }
+  function build(){
+    const A = window.__awlr, items = [];
+    if (A && A.last) items.push(`Muka air Bendung Karang Intan <b>${A.last.v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2})} m</b> <em>${A.st || ""}</em>`);
+    const dn = g("dn900"), pm = g("pematang"), pr = g("prased"), it = g("intake");
+    if (ok(dn)) items.push(`Debit ke IPA Pinus (DN900) <b>${dn}</b>`);
+    if (ok(pm)) items.push(`Offtake Pematang <b>${pm}</b>`);
+    if (ok(pr)) items.push(`Prased <b>${pr}</b> <em>estimasi</em>`);
+    if (ok(it)){ items.push(`Total keluar Intake <b>${it}</b>`); const q = parseFloat(it.replace(/[^\d,]/g,"").replace(",", ".")); if (q > 0){ items.push(`Kubikasi <b>≈ ${Math.round(q*86.4).toLocaleString("id-ID")} m³/hari</b>`); items.push(`Pemakaian kuota SIPA <b>${(q/1500*100).toLocaleString("id-ID",{maximumFractionDigits:1})}%</b> <em>dari 1.500 L/dtk</em>`); } }
+    (window.__alerts || []).slice(0,2).forEach(a => items.push(`${a[0] === "bad" ? "⚠️" : "📡"} ${a[2]}`));
+    if (!items.length) return;
+    items.push(`Jaringan <b>37,4 km</b> transmisi air baku · <b>35,9 km</b> distribusi air curah`);
+    const html = items.map(t => `<span>${t}</span>`).join("");
+    const run = document.getElementById("tkRun"); run.innerHTML = html + html; run.style.setProperty("--tkd", Math.max(40, items.length * 9) + "s");
+    if (innerWidth > 820 && !document.body.classList.contains("tv")){ document.getElementById("tick").hidden = false; document.body.classList.add("tick"); }
+    const il = [];
+    if (ok(it)) il.push(`Keluar Intake <b>${it}</b>`);
+    if (A && A.last) il.push(`Muka air bendung <b>${A.last.v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2})} m</b>`);
+    if (ok(dn)) il.push(`IPA Pinus <b>${dn}</b>`);
+    if (il.length){ document.getElementById("iLiveTx").innerHTML = il.join('<span class="sep">|</span>'); document.getElementById("iLive").hidden = false; }
+  }
+  clock(); setInterval(clock, 15000);
+  setTimeout(build, 2500); setTimeout(build, 7000); setInterval(build, 60000);
 })();
 </script>
 </body>
