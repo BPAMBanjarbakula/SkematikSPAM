@@ -135,7 +135,7 @@ async def main(out):
         print("peringatan terkirim:", txt)
     json.dump(data, open(out, "w"), separators=(",", ":"))
     # arsip harian CSV (dibaca Google Sheet lewat IMPORTDATA)
-    import csv, os
+    import csv
     with open(os.path.join(os.path.dirname(out) or ".", "harian.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["tanggal", "debit_dn900_ipa_pinus_lps", "jam_data_dn900", "debit_pematang_lps", "jam_data_pematang",
