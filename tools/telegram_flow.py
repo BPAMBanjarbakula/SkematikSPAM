@@ -126,7 +126,7 @@ async def main(out):
         from telethon import TelegramClient
         from telethon.sessions import StringSession
         txt = ("⚠️ GeoSPAM Bakula – peringatan\n" + "\n".join("• " + a for a in alerts)) if alerts else "✅ GeoSPAM Bakula – kondisi debit kembali normal"
-        txt += "\nhttps://skematik.netlify.app"
+        txt += "\nhttps://geospambanjarbakula.netlify.app"
         async with TelegramClient(StringSession(sess), api_id, api_hash) as cl:
             target = chat
             async for dlg in cl.iter_dialogs():
