@@ -2701,7 +2701,8 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
   let adm = false; try{ const qa = new URLSearchParams(location.search).get("admin");
     if (qa === "1") localStorage.setItem("gs_admin","1"); else if (qa === "0") localStorage.setItem("gs_admin","0");
     adm = localStorage.getItem("gs_admin") === "1"; }catch(e){}
-  if (adm){ send({e:"view", a:1}); return; }  /* perangkat admin: dicatat terpisah, tidak masuk statistik */
+  if (adm){ send({e:"view", a:1}); return; }
+  if (navigator.webdriver || /HeadlessChrome|Lighthouse|bot|crawl|spider/i.test(navigator.userAgent)){ send({e:"view", bot:1}); return; }  /* bot/otomasi: dicatat terpisah */  /* perangkat admin: dicatat terpisah, tidak masuk statistik */
   let n = 0; try{ if (localStorage.getItem("bpam_seen") !== day){ n = 1; localStorage.setItem("bpam_seen", day); } }catch(e){}
   const q = new URLSearchParams(location.search).get("src"), r = document.referrer || "";
   const ref = q || (matchMedia("(display-mode: standalone)").matches || navigator.standalone ? "aplikasi"
