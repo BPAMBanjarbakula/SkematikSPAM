@@ -11,14 +11,6 @@ export default async (req, context) => {
   const store = getStore({ name: "statistik", consistency: "strong" });
   const k = "d/" + day, d = (await store.get(k, { type: "json" })) || { v: 0, u: 0, h: Array(24).fill(0), dev: {}, ref: {}, kota: {}, ev: {}, situs: {} };
   const inc = (o, key) => { if (key) o[key] = (o[key] || 0) + 1; };
-  const ua = req.headers.get("user-agent") || "", city = String((context.geo && context.geo.city) || "");
-  const BOT_UA = /bot|crawl|spider|slurp|headless|phantom|puppeteer|playwright|selenium|lighthouse|pagespeed|preview|facebookexternalhit|whatsapp|telegram|curl|wget|python|node-fetch|axios|go-http|java\//i;
-  const DC_CITY = /^(Ashburn|Boardman|Council Bluffs|The Dalles|Santa Clara|San Jose|Mountain View|Moses Lake|Quincy|Des Moines|Columbus|Newark|North Charleston|Clifton|Dublin|Frankfurt am Main|Amsterdam)$/i;
-  if (b.bot || BOT_UA.test(ua) || (DC_CITY.test(city) && context.geo && context.geo.country && context.geo.country.code !== "ID")) {
-    if (ev === "view") { d.bot = (d.bot || 0) + 1; await store.setJSON(k, d); }
-    return new Response("ok", { headers: CORS });
-  }
-  if (b.a) { if (ev === "view") { d.adm = (d.adm || 0) + 1; await store.setJSON(k, d); } return new Response("ok", { headers: CORS }); }
   if (ev === "view") {
     d.v++; d.h[hr]++; if (b.n) d.u++;
     inc(d.dev, b.dev === "hp" ? "HP" : b.dev === "tab" ? "Tablet" : "Laptop/PC");

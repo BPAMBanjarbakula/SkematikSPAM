@@ -61,7 +61,6 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
     <div class="card"><h2>Fitur yang dipakai</h2><div id="ev"></div></div>
   </div>
   <div class="card"><h2>Jam ramai (WITA)</h2><div class="hr" id="hr"></div><div class="ax"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div></div>
-  <p class="note" id="admNote"></p>
   <p class="note">"Pengunjung harian unik" menghitung satu perangkat sekali per hari. Kota diperkirakan dari jaringan internet dan bisa meleset (misalnya tercatat Jakarta atau Singapura untuk operator seluler). Data mulai tercatat sejak fitur ini dipasang, 9 November 2026.</p>
 </div>
 <script>
@@ -88,23 +87,10 @@ async function load(){
   const mx = Math.max(1, ...D.map(d => d.v));
   document.getElementById("bars").innerHTML = D.map(d => `<div style="height:${Math.max(d.v ? 3 : 1, d.v/mx*100)}%;${d.v ? "" : "opacity:.25"}" title="${tglf(d.tgl)}: ${d.v} kunjungan, ${d.u} unik"></div>`).join("");
   document.getElementById("a0").textContent = tglf(D[0].tgl); document.getElementById("a1").textContent = tglf(D[D.length-1].tgl);
-  window.__botTotal = sum(d => d.bot);
-  admUI(sum(d => d.adm));
   list("ref", agg("ref")); list("dev", agg("dev")); list("kota", agg("kota")); list("ev", agg("ev"));
   const H = Array(24).fill(0); D.forEach(d => (d.h||[]).forEach((v,i) => H[i] += v)); const hm = Math.max(1, ...H);
   document.getElementById("hr").innerHTML = H.map((v,i) => `<div style="height:${Math.max(2, v/hm*100)}%" title="${String(i).padStart(2,"0")}.00: ${v}"></div>`).join("");
 }
-function admUI(admTotal){
-  let on = false; try{ on = localStorage.getItem("gs_admin") === "1"; }catch(e){}
-  const el = document.getElementById("admNote");
-  el.innerHTML = (on ? "✅ <b>Perangkat ini ditandai sebagai admin.</b> Kunjungan Anda dari browser ini tidak masuk statistik di atas. "
-    : "⚠️ <b>Perangkat ini belum ditandai admin</b>, kunjungan Anda masih ikut terhitung. ")
-    + `<a href="#" id="admT">${on ? "Batalkan tanda admin" : "Tandai perangkat ini sebagai admin"}</a>`
-    + (admTotal != null ? ` · Kunjungan admin pada periode ini (tidak dihitung): <b>${nf(admTotal)}</b>` : "")
-    + (window.__botTotal != null ? ` · Bot/mesin yang disaring: <b>${nf(window.__botTotal)}</b>` : "");
-  document.getElementById("admT").onclick = ev => { ev.preventDefault(); try{ localStorage.setItem("gs_admin", on ? "0" : "1"); }catch(e){} admUI(admTotal); };
-}
-try{ if (localStorage.getItem("gs_admin") === null) localStorage.setItem("gs_admin","1"); }catch(e){}
 document.getElementById("rg").onchange = load; load();
 </script>
 </body>
