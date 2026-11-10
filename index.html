@@ -782,6 +782,18 @@ body.dark .pleg{color:#a9c4dc}
 #awSvg .ln{fill:none;stroke:#1098ad;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 #awSvg .dt{fill:#fff;stroke:#1098ad;stroke-width:1.6}
 #awSvg .dt.now{fill:#1098ad}
+
+.fwc{--tc:#1c7ed6;background:linear-gradient(180deg,#f3f7ff,#fff);border-color:#d0ebff}
+.fwc .awtab button{color:var(--tc);background:color-mix(in srgb,var(--tc) 12%,#fff)}
+.fwc .awtab button.on{background:var(--tc);color:#fff}
+.fwSvg{width:100%;height:132px;display:block;overflow:visible}
+.fwSvg text{font-size:9px;fill:#7a8794;font-family:inherit}
+.fwSvg .gl{stroke:#e3ebf2;stroke-width:1}
+.fwSvg .bd{fill:color-mix(in srgb,var(--tc) 16%,transparent)}
+.fwSvg .ar{fill:color-mix(in srgb,var(--tc) 14%,transparent)}
+.fwSvg .ln{fill:none;stroke:var(--tc);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.fwSvg .dt{fill:#fff;stroke:var(--tc);stroke-width:1.6}
+.fwSvg .dt.now{fill:var(--tc)}
 </style>
 <style>
 :root{
@@ -2104,7 +2116,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Ambang siaga", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
     return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note" style="background:#e3fafc;color:#0b7285">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
-  mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90]});
+  mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[innerWidth > 820 ? 330 : 20, 40]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
   const HIST = {}; let rng = 7;
   const dkey = ms => new Date(ms + 8*3600e3).toISOString().slice(0,10);
@@ -2210,7 +2222,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
   const mk = {};
   Object.entries(ST).forEach(([id, s]) => {
     mk[id] = L.marker(s.ll, {icon: liveIcon(id, id === "dn900" ? "#4dabf7" : "#9775fa", id === "dn900" ? "Debit ke IPA Pinus" : "Debit Offtake Pematang", "u"), pane:"live", zIndexOffset:880}).addTo(map);
-    mk[id].bindPopup(() => popup(id), {maxWidth:340, autoPanPaddingTopLeft:[20,90]});
+    mk[id].bindPopup(() => popup(id), {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[innerWidth > 820 ? 330 : 20, 40]});
   });
   function sparkSVG(series){
     if (!series || series.length < 2) return "";
@@ -2226,7 +2238,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     const age = (Date.now() - l.t)/36e5;
     const sinyal = l.rssi == null ? "–" : `${nf(l.rssi,0)} dBm (${l.rssi >= -75 ? "baik" : l.rssi >= -85 ? "cukup" : "lemah"})`;
     const rows = [["Debit", `<b>${nf(l.flow,1)} L/dtk</b>`], ["Total volume", l.cons != null ? nf(l.cons,0) + " m³" : "–"], ["Pembacaan", fmtT(l.t) + (age > 3 ? " ⚠️" : "")], ["Baterai logger", l.batt != null ? nf(l.batt,2) + " V" : "–"], ["Sinyal", sinyal], ["Suhu logger", l.temp != null ? nf(l.temp,1) + " °C" : "–"]];
-    return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Telemetri debit · per jam</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Onpoint</span></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${sparkSVG(st.series)}<p style="font-size:12px;color:#5c6b7a;margin:8px 0 0">${s.ket}</p><div class="src">Sumber: logger Onpoint (laporan otomatis grup Telegram BPAM Banjarbakula), diperbarui tiap jam</div></div></div>`;
+    return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Telemetri debit · per jam</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Onpoint</span></div><div class="awc fwc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr">Memuat tren…</div><svg class="fwSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><p style="font-size:12px;color:#5c6b7a;margin:8px 0 0">${s.ket}</p><div class="src">Sumber: logger Onpoint (laporan otomatis grup Telegram BPAM Banjarbakula), diperbarui tiap jam</div></div></div>`;
   }
   function render(){
     const rows = [];
@@ -2291,7 +2303,66 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
         $("#tele").classList.remove("min"); const id = imp[0][1]; const ll = id === "awlr" ? [-3.456094,114.961683] : ST[id].ll; map.flyTo(ll, 14, {duration:1.2}); };
     }
   };
-  mkIn.on("click", () => window.nrcOpen());
+  mkIn.bindPopup(() => { const e = est();
+    const rows = e ? [["Total keluar intake", `<b>≈ ${nf(e.tot,0)} L/dtk</b>`], ["Kubikasi", `≈ ${nf(e.tot*86.4,0)} m³/hari`], ["IPA Pinus (DN900)", nf(e.dn,0) + " L/dtk"], ["Pematang", nf(e.pm,0) + " L/dtk"], ["Prased", `±${PRASED} L/dtk <span style="color:#e8590c">(estimasi)</span>`], ["Kuota SIPA", `${nf(e.tot/1500*100,1)}% dari 1.500 L/dtk`], ["Pembacaan", fmtT(e.t)]] : [["Status", "Data logger belum tersedia"]];
+    return `<div class="pp"><div class="phd" style="--c:#0ca678"><span class="pic" style="background:#0ca678">Σ</span><div><h3>Keluar Intake Karang Intan</h3><div class="sub">Neraca debit · IPA Pinus + Pematang + Prased</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Estimasi neraca</span></div><div class="awc fwc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr">Memuat tren…</div><svg class="fwSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="pbtns"><button class="gbtn" style="background:#0ca678;color:#fff;border:0;cursor:pointer" onclick="window.nrcOpen()">Buka neraca lengkap &amp; laporan BWS →</button></div><div class="src">Total = DN900 + Pematang (logger Onpoint) + Prased ±${PRASED} L/dtk (belum ada logger).</div></div></div>`; }, {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[innerWidth > 820 ? 330 : 20, 40]});
+  // ---- grafik tren debit (24 jam / 7 hari / 30 hari)
+  const dkey = ms => new Date(ms + 8*3600e3).toISOString().slice(0,10);
+  const dlab = k => new Date(k + "T00:00:00Z").toLocaleDateString("id-ID",{day:"numeric",month:"short",timeZone:"UTC"});
+  function hourly(id){
+    if (id !== "intake") return ((D && D.stations[id] && D.stations[id].series) || []).map(p => ({t:p.t, v:p.flow})).filter(p => p.v != null);
+    const h = k => Math.round(k/36e5), A = {}, B = {};
+    ((D && D.stations.dn900 && D.stations.dn900.series) || []).forEach(p => A[h(p.t)] = p.flow);
+    ((D && D.stations.pematang && D.stations.pematang.series) || []).forEach(p => B[h(p.t)] = p.flow);
+    return Object.keys(A).filter(k => B[k] != null).map(Number).sort((a,b) => a-b).map(k => ({t:k*36e5, v:A[k] + B[k] + PRASED}));
+  }
+  function dailyOf(id, n){
+    const by = {}; hourly(id).forEach(p => { const k = dkey(p.t); (by[k] = by[k] || []).push(p.v); });
+    const out = {}; Object.entries(by).forEach(([k,a]) => out[k] = {k, avg:a.reduce((x,y)=>x+y,0)/a.length, min:Math.min(...a), max:Math.max(...a), part:a.length < 20});
+    Object.entries((D && D.harian) || {}).forEach(([k, r]) => { if (out[k]) return;
+      const q = id === "intake" ? (r.dn900 && r.pematang ? r.dn900.q + r.pematang.q + PRASED : null) : (r[id] && r[id].q);
+      if (q != null) out[k] = {k, avg:q, min:q, max:q, part:false}; });
+    const ks = Object.keys(out).sort(), cut = dkey(Date.now() - (n-1)*864e5);
+    return ks.filter(k => k >= cut).map(k => out[k]);
+  }
+  function flowTrend(root, id, rng){
+    const svg = root.querySelector(".fwSvg"), tr = root.querySelector(".awtr");
+    root.querySelectorAll(".awtab button").forEach(b => b.classList.toggle("on", +b.dataset.r === rng));
+    const W = 300, H = 132, ml = 34, mr = 6, mt = 8, mb = 20, col = id === "pematang" ? "#7048e8" : id === "intake" ? "#0ca678" : "#1c7ed6";
+    root.style.setProperty("--tc", col);
+    const fmtD = v => Math.abs(v) < 2 ? `<b class="fl">→ stabil</b>` : v > 0 ? `<b class="up">▲ naik ${nf(Math.abs(v),0)} L/dtk</b>` : `<b class="dn">▼ turun ${nf(Math.abs(v),0)} L/dtk</b>`;
+    let g = "", vals;
+    if (rng === 1){
+      const pts = hourly(id).filter(p => p.t > Date.now() - 864e5 - 36e5);
+      if (pts.length < 2){ tr.textContent = "Data 24 jam belum cukup."; svg.innerHTML = ""; return; }
+      vals = pts.map(p => p.v);
+      let lo = Math.min(...vals), hi = Math.max(...vals); const pad = Math.max(3,(hi-lo)*.15); lo -= pad; hi += pad;
+      const Y = v => mt + (hi - v)/(hi - lo)*(H-mt-mb), t0 = pts[0].t, t1 = pts[pts.length-1].t, X = t => ml + (t-t0)/Math.max(1,t1-t0)*(W-ml-mr);
+      g += grid(lo, hi, Y);
+      const d = pts.map((p,i) => (i ? "L" : "M") + X(p.t).toFixed(1) + "," + Y(p.v).toFixed(1)).join("");
+      g += `<path d="${d}L${X(t1)},${H-mb}L${X(t0)},${H-mb}Z" class="ar"/><path d="${d}" class="ln"/><circle cx="${X(t1)}" cy="${Y(pts[pts.length-1].v)}" r="3" class="dt now"/>`;
+      for (let h = Math.ceil(t0/216e5)*216e5; h <= t1; h += 216e5) g += `<text x="${X(h)}" y="${H-5}" text-anchor="middle">${new Date(h).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"})}</text>`;
+      const avg = vals.reduce((a,b) => a+b, 0)/vals.length;
+      tr.innerHTML = `24 jam terakhir: ${fmtD(vals[vals.length-1] - vals[0])}<br><span>rata-rata ${nf(avg,0)} · min ${nf(Math.min(...vals),0)} · maks ${nf(Math.max(...vals),0)} L/dtk</span>`;
+    } else {
+      const dd = dailyOf(id, rng), n = dd.length;
+      if (n < 2){ tr.textContent = "Data harian belum cukup."; svg.innerHTML = ""; return; }
+      vals = dd.flatMap(d => [d.min, d.max]);
+      let lo = Math.min(...vals), hi = Math.max(...vals); const pad = Math.max(3,(hi-lo)*.15); lo -= pad; hi += pad;
+      const Y = v => mt + (hi - v)/(hi - lo)*(H-mt-mb), X = i => ml + i*(W-ml-mr)/(n-1), every = Math.ceil(n/5);
+      g += grid(lo, hi, Y);
+      const band = dd.map((d,i) => `${X(i)},${Y(d.max)}`).join(" ") + " " + dd.slice().reverse().map((d,j) => `${X(n-1-j)},${Y(d.min)}`).join(" ");
+      g += `<polygon points="${band}" class="bd"/><path d="${dd.map((d,i) => (i ? "L" : "M") + X(i).toFixed(1) + "," + Y(d.avg).toFixed(1)).join("")}" class="ln"/>`;
+      g += dd.map((d,i) => `<circle cx="${X(i)}" cy="${Y(d.avg)}" r="${n > 12 ? 2 : 3}" class="dt${i === n-1 ? " now" : ""}"><title>${dlab(d.k)}: rata-rata ${nf(d.avg,0)} L/dtk${d.min !== d.max ? ` (min ${nf(d.min,0)} · maks ${nf(d.max,0)})` : ""} · ≈ ${nf(d.avg*86.4,0)} m³</title></circle>` + (((i % every === 0 && n-1-i >= every) || i === n-1) ? `<text x="${X(i)}" y="${H-5}" text-anchor="${i === 0 ? "start" : i === n-1 ? "end" : "middle"}">${dlab(d.k)}</text>` : "")).join("");
+      const a = dd[n-1], b = dd[n-2];
+      tr.innerHTML = `Rata-rata hari ini <span>(s.d. jam ini)</span> <b>${nf(a.avg,0)} L/dtk</b> · vs kemarin ${fmtD(a.avg - b.avg)}<br><span>${n} hari tercatat: ${fmtD(a.avg - dd[0].avg)} · rata-rata ${nf(dd.reduce((x,d) => x + d.avg, 0)/n,0)} L/dtk${rng === 30 && n < 30 ? " · data mulai " + dlab(dd[0].k) : ""}</span>`;
+    }
+    svg.innerHTML = g;
+    function grid(lo, hi, Y){ const r = hi - lo, st = r > 200 ? 50 : r > 80 ? 20 : r > 30 ? 10 : 5; let o = ""; for (let z = Math.ceil(lo/st)*st; z <= hi; z += st) o += `<line x1="${ml}" x2="${W-mr}" y1="${Y(z)}" y2="${Y(z)}" class="gl"/><text x="${ml-4}" y="${Y(z)+3}" text-anchor="end">${nf(z,0)}</text>`; return o; }
+  }
+  function hookTrend(m, id){ m.on("popupopen", e => { const el = e.popup.getElement(), root = el && el.querySelector(".fwc"); if (!root) return; let r = 7;
+    root.querySelectorAll(".awtab button").forEach(b => b.onclick = ev => { ev.stopPropagation(); r = +b.dataset.r; flowTrend(root, id, r); }); flowTrend(root, id, r); }); }
+  hookTrend(mkIn, "intake"); Object.keys(ST).forEach(id => hookTrend(mk[id], id));
   // ===== analisa neraca debit & kubikasi intake
   const SIPA = 1500;
   function volSeries(st){ // volume per interval: selisih totalizer bila wajar, else debit x waktu
