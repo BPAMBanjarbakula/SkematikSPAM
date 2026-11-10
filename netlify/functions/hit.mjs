@@ -11,6 +11,7 @@ export default async (req, context) => {
   const store = getStore({ name: "statistik", consistency: "strong" });
   const k = "d/" + day, d = (await store.get(k, { type: "json" })) || { v: 0, u: 0, h: Array(24).fill(0), dev: {}, ref: {}, kota: {}, ev: {}, situs: {} };
   const inc = (o, key) => { if (key) o[key] = (o[key] || 0) + 1; };
+  if (b.a) { if (ev === "view") { d.adm = (d.adm || 0) + 1; await store.setJSON(k, d); } return new Response("ok", { headers: CORS }); }
   if (ev === "view") {
     d.v++; d.h[hr]++; if (b.n) d.u++;
     inc(d.dev, b.dev === "hp" ? "HP" : b.dev === "tab" ? "Tablet" : "Laptop/PC");
