@@ -2084,8 +2084,8 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
   const today = () => { const d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); };
   const yday = () => { const d = new Date(Date.now() + 8*3600e3 - 864e5); return d.toISOString().slice(0,10); };
   const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
-  // ambang muka air: banjir = resmi BWS Kal III; kering = usulan BPAM dari analisa rekaman AWLR Jun–Nov 2026 (tahun kering)
-  const KERING = {waspada:9.20, siaga:9.00, awas:8.90};
+  // ambang muka air: banjir = resmi BWS Kal III; kering = usulan BPAM dari rekaman AWLR Jun–Nov 2026 + data pengambilan SIPA Triwulan III
+  const KERING = {waspada:9.00, siaga:8.85, awas:8.70};  // disesuaikan 11 Nov 2026: Sep 2026 (rata-rata harian 8,92–9,00 m) intake tetap mengambil 747 L/dtk
   const avg6 = () => { const c = Date.now() - 6*36e5, a = series.filter(p => p.t >= c).map(p => p.v); return a.length >= 6 ? a.reduce((x,y) => x+y, 0)/a.length : (last ? last.v : null); };
   function status(v){
     if (siaga){ if (v >= siaga.siaga1) return ["Siaga 1 banjir","s1"]; if (v >= siaga.siaga2) return ["Siaga 2 banjir","s2"]; if (v >= siaga.siaga3) return ["Siaga 3 banjir","s3"]; }
