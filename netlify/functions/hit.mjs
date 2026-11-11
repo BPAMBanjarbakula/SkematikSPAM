@@ -1,7 +1,7 @@
 // Penghitung kunjungan anonim GeoSPAM Bakula (tanpa cookie, tanpa IP, tanpa identitas)
 import { getStore } from "@netlify/blobs";
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Allow-Methods": "POST, OPTIONS" };
-const EV = new Set(["view","nrc","xlsx","tour","prof","share","tv","rm","kti","lite","dark"]);
+const EV = new Set(["view","nrc","xlsx","tour","prof","share","tv","rm","kti","lite","dark","3d"]);
 export default async (req, context) => {
   if (req.method === "OPTIONS") return new Response("", { headers: CORS });
   if (req.method !== "POST") return new Response("POST only", { status: 405, headers: CORS });
