@@ -794,6 +794,33 @@ body.dark .pleg{color:#a9c4dc}
 .fwSvg .ln{fill:none;stroke:var(--tc);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .fwSvg .dt{fill:#fff;stroke:var(--tc);stroke-width:1.6}
 .fwSvg .dt.now{fill:var(--tc)}
+
+/* ---- modal analisa ketersediaan air */
+.anl{position:fixed;inset:0;z-index:7000;background:rgba(3,10,20,.72);display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto}
+.anl[hidden]{display:none}
+.anlbox{position:relative;width:min(860px,100%);background:#fff;color:#1c2b3a;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden}
+.anlx{position:absolute;top:12px;right:12px;all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-size:15px;z-index:2}
+.anlx{position:absolute;top:12px;right:12px}
+.anlhd{display:flex;gap:12px;align-items:center;padding:20px 56px 18px 22px;background:linear-gradient(120deg,#0b3a63,#0b7285);color:#fff}
+.anlhd h2{margin:0;font-size:19px!important;text-transform:none!important;letter-spacing:0!important;color:#fff!important;opacity:1!important;font-weight:800;background:none!important;-webkit-text-fill-color:#fff!important}.anlhd h2::before,.anlhd h2::after{display:none!important}.anlhd p{margin:3px 0 0;font-size:12.5px;opacity:.8}
+.anlic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.15);font-size:22px;flex:none}
+.anlbd{padding:18px 22px 22px;font-size:14px;line-height:1.55}
+.anlbd h3{margin:20px 0 8px;font-size:15px;color:#0b3a63}
+.anlbd img{width:100%;height:auto;border-radius:10px;border:1px solid #e3ebf2;margin:6px 0 4px}
+.anlbd ul{margin:6px 0;padding-left:20px}.anlbd li{margin:4px 0}
+.anlkpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.anlkpi div{background:#f1f8fd;border:1px solid #d0ebff;border-radius:12px;padding:10px 12px}
+.anlkpi b{display:block;font-size:20px;color:#0b5cad}.anlkpi span{font-size:11.5px;color:#5c6b7a;line-height:1.3;display:block}
+.anltb{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.anltb th{text-align:left;background:#0b3a63;color:#fff;padding:7px 9px;font-weight:600}
+.anltb td{padding:7px 9px;border-bottom:1px solid #e9eef3;vertical-align:top}
+.anltb td:nth-child(2){white-space:nowrap;font-weight:700}
+.anltb tr.r1 td:first-child{border-left:4px solid #e03131}.anltb tr.r2 td:first-child{border-left:4px solid #fd7e14}.anltb tr.r3 td:first-child{border-left:4px solid #fab005}.anltb tr.r0 td:first-child{border-left:4px solid #2f9e44}
+.anlnt{font-size:12.5px;color:#5c6b7a;background:#f8f9fa;border-radius:10px;padding:8px 10px}
+.anlsrc{font-size:11.5px;color:#7a8794;margin-top:14px;border-top:1px solid #e9eef3;padding-top:10px}
+@media (max-width:620px){.anlkpi{grid-template-columns:1fr 1fr}.anlbd{padding:14px}.anlhd h2{font-size:16px}.anltb{font-size:12px}.anltb td:nth-child(2){white-space:normal}}
+.tlbtns{flex-wrap:nowrap}.tlbtns button,.tlbtns a{white-space:nowrap;padding:6px 10px!important;font-size:11.5px!important;flex:1;text-align:center}
+@media (min-width:821px){#tele{z-index:1001!important}}
 </style>
 <style>
 :root{
@@ -1457,7 +1484,7 @@ var au=null;try{au=localStorage.getItem("bpam_lite_auto")}catch(e){}window.LITE=
     <svg id="tlSpark" viewBox="0 0 260 64" preserveAspectRatio="none"></svg>
     <div class="tlmeta"><span id="tlT">–</span><span id="tlB"></span></div>
     <div class="tlfm" id="tlFm"></div>
-    <div class="tlbtns"><button id="tlNrc">📊 Neraca air</button><button id="tlGo" class="sec">📍 Bendung</button></div>
+    <div class="tlbtns"><button id="tlNrc">📊 Neraca</button><button id="tlGo" class="sec">📍 Bendung</button><button id="tlAnl" class="sec" onclick="window.anlOpen()" title="Analisa ketersediaan air &amp; ambang siaga">📈 Analisa</button></div>
   </div>
 </div>
 <div id="nrc" role="dialog" aria-modal="true" aria-labelledby="nrcT">
@@ -2120,7 +2147,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     if (!last) return `<div class="pp"><div class="pbd">Data telemetri belum tersedia.</div></div>`;
     const [st] = status(last.v);
     const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
-    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note" style="background:#e3fafc;color:#0b7285">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
+    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note" style="background:#e3fafc;color:#0b7285">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">📊 Analisa ketersediaan air</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[innerWidth > 820 ? 330 : 20, 40]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
@@ -2907,6 +2934,61 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     } })(t0);
   }, 3000));
 })();
+</script>
+
+<div id="anl" class="anl" hidden role="dialog" aria-modal="true" aria-labelledby="anlT">
+  <div class="anlbox">
+    <button class="anlx" id="anlX" aria-label="Tutup">✕</button>
+    <div class="anlhd"><span class="anlic">💧</span><div><h2 id="anlT">Analisa Ketersediaan Air Baku</h2><p>Bendung Karang Intan · Sungai Riam Kanan · disusun 11 November 2026</p></div></div>
+    <div class="anlbd">
+      <div class="anlkpi">
+        <div><b>117 mm</b><span>Hujan kemarau 2026 (Jul–Okt)</span></div>
+        <div><b>⅓</b><span>dari median 1991–2025 (357 mm)</span></div>
+        <div><b>8,92 m</b><span>Rata-rata harian terendah (Sep 2026)</span></div>
+        <div><b>747 L/dtk</b><span>Pengambilan Sep 2026, tetap penuh</span></div>
+      </div>
+      <h3>1. Ketersediaan air dari tahun ke tahun</h3>
+      <p>Rekaman AWLR Bendung Karang Intan (BWS Kalimantan III) baru tersedia sejak 6 Juni 2026, sehingga perbandingan antartahun memakai <b>curah hujan musim kemarau (Juli–Oktober) DAS Riam Kanan</b> dari reanalisis ERA5 1991–2026 sebagai pembanding.</p>
+      <img src="anl_hujan.webp" alt="Grafik hujan musim kemarau DAS Riam Kanan 1991–2026" width="1400" height="582" loading="lazy">
+      <ul>
+        <li>Kemarau <b>2026 tergolong kering</b>: 117 mm, masuk 20% tahun terkering dalam 35 tahun, setara 2019 (112 mm) dan 2002.</li>
+        <li>Tahun yang lebih kering dari 2026: <b>2015 (55 mm)</b>, <b>1997 (64 mm)</b>, 2006, 1991 dan 1994. Pada tahun seperti itu muka air berpotensi turun lebih rendah dari yang terekam pada 2026.</li>
+        <li>Muka air bendung juga dipengaruhi pelepasan air <b>PLTA/Waduk Riam Kanan</b>. Sejak Oktober 2026 terlihat naik-turun harian sekitar 0,5 m, kemungkinan besar mengikuti pola operasi PLTA.</li>
+      </ul>
+      <h3>2. Muka air 2026 dan ambang siaga</h3>
+      <img src="anl_ambang.webp" alt="Grafik muka air Bendung Karang Intan 2026 dengan ambang siaga" width="1400" height="728" loading="lazy">
+      <p>Pada September 2026 muka air berada di titik terendah (rata-rata harian 8,92–9,00 m), tetapi pengambilan air baku justru <b>747 L/dtk, tertinggi sepanjang 2026</b> (Laporan Penggunaan Air Triwulan III). Artinya pada muka air ±8,9 m intake masih bekerja penuh. Atas dasar itu ambang kering ditetapkan sebagai berikut:</p>
+      <table class="anltb">
+        <thead><tr><th>Status</th><th>Muka air</th><th>Dasar &amp; tindakan</th></tr></thead>
+        <tbody>
+          <tr class="r1"><td>Siaga 1 banjir</td><td>≥ 11,20 m</td><td>Resmi BWS Kalimantan III</td></tr>
+          <tr class="r2"><td>Siaga 2 banjir</td><td>≥ 10,90 m</td><td>Resmi BWS Kalimantan III</td></tr>
+          <tr class="r3"><td>Siaga 3 banjir</td><td>≥ 10,60 m</td><td>Resmi BWS Kalimantan III</td></tr>
+          <tr class="r3"><td>Waspada tinggi</td><td>≥ 10,40 m</td><td>BPAM; terlampaui 12 hari pada Juni 2026. Pantau kekeruhan air baku.</td></tr>
+          <tr class="r0"><td>Normal</td><td>9,00 – 10,40 m</td><td>Operasi biasa</td></tr>
+          <tr class="r3"><td>Waspada kering</td><td>&lt; 9,00 m</td><td>Rentang terendah kemarau 2026 (21 hari, Sep 2026). Intake masih aman; pantau harian.</td></tr>
+          <tr class="r2"><td>Siaga kering</td><td>&lt; 8,85 m</td><td>Di bawah rata-rata harian terendah yang pernah terekam; kemampuan intake belum teruji. Koordinasi dengan BWS/PLN soal pelepasan air.</td></tr>
+          <tr class="r1"><td>Awas kering</td><td>&lt; 8,70 m</td><td>Di bawah bacaan terendah yang pernah tercatat (8,71 m). Siapkan intake darurat Irigasi Pinus II (150 L/dtk) dan prioritas distribusi.</td></tr>
+        </tbody>
+      </table>
+      <p class="anlnt">Status kering dinilai dari <b>rata-rata 6 jam</b> agar turun-naik sesaat akibat operasi PLTA tidak memicu peringatan palsu. Nilai adalah bacaan sensor AWLR, bukan elevasi mdpl.</p>
+      <h3>3. Batasan dan tindak lanjut</h3>
+      <ul>
+        <li>Ambang Siaga dan Awas kering masih berupa <b>batas aman berbasis data</b>, karena kondisi sekering itu belum pernah terekam alat ini.</li>
+        <li>Perlu masukan operator intake: pada muka air berapa pompa/pintu intake mulai kesulitan mengambil air (elevasi ambang intake).</li>
+        <li>Catatan peilschaal harian BPAM tahun-tahun sebelumnya atau data muka air historis BWS dapat dipakai untuk mengkalibrasi ambang dengan tahun kering 2019 dan 2023.</li>
+        <li>Mulai kemarau 2027, muka air dapat dicocokkan langsung dengan debit flowmeter DN900 (terekam sejak 2 November 2026).</li>
+      </ul>
+      <p class="anlsrc">Sumber: AWLR HGT1486 BWS Kalimantan III (opsdabwskal3.higertech.com); ERA5 via Open-Meteo Archive API; Laporan Penggunaan Air Triwulan I–III 2026 BPAM Banjarbakula; SIPA Kepmen PUPR 1830/KPTS/M/2022. Analisa: Ir. Ade Nafis Prawira, S.T.</p>
+    </div>
+  </div>
+</div>
+<script>
+window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden = false; m.scrollTop = 0; document.body.style.overflow = "hidden"; };
+(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; };
+  document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
+  if (/[?&#]analisa\b/.test(location.href)) setTimeout(window.anlOpen, 800); })();
 </script>
 </body>
 </html>
