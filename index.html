@@ -2084,11 +2084,17 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
   const today = () => { const d = new Date(Date.now() + 8*3600e3); return d.toISOString().slice(0,10); };
   const yday = () => { const d = new Date(Date.now() + 8*3600e3 - 864e5); return d.toISOString().slice(0,10); };
   const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
+  // ambang muka air: banjir = resmi BWS Kal III; kering = usulan BPAM dari analisa rekaman AWLR Jun–Nov 2026 (tahun kering)
+  const KERING = {waspada:9.20, siaga:9.00, awas:8.90};
+  const avg6 = () => { const c = Date.now() - 6*36e5, a = series.filter(p => p.t >= c).map(p => p.v); return a.length >= 6 ? a.reduce((x,y) => x+y, 0)/a.length : (last ? last.v : null); };
   function status(v){
-    if (!siaga) return ["Normal","s0"];
-    if (v >= siaga.siaga1) return ["Siaga 1","s1"]; if (v >= siaga.siaga2) return ["Siaga 2","s2"]; if (v >= siaga.siaga3) return ["Siaga 3","s3"];
+    if (siaga){ if (v >= siaga.siaga1) return ["Siaga 1 banjir","s1"]; if (v >= siaga.siaga2) return ["Siaga 2 banjir","s2"]; if (v >= siaga.siaga3) return ["Siaga 3 banjir","s3"]; }
+    if (v >= 10.40) return ["Waspada tinggi","s3"];
+    const m = avg6(); if (m != null){            // kering dinilai dari rata-rata 6 jam (abaikan turun-naik sesaat akibat pola buka-tutup PLTA)
+      if (m < KERING.awas) return ["Awas kering","s1"]; if (m < KERING.siaga) return ["Siaga kering","s2"]; if (m < KERING.waspada) return ["Waspada kering","s3"]; }
     return ["Normal","s0"];
   }
+  window.__KERING = KERING;
   function spark(){
     const svg = $("#tlSpark"); if (series.length < 2){ svg.innerHTML = ""; return; }
     const xs = series.map(p => p.t), ys = series.map(p => p.v);
@@ -2113,7 +2119,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
   function popup(){
     if (!last) return `<div class="pp"><div class="pbd">Data telemetri belum tersedia.</div></div>`;
     const [st] = status(last.v);
-    const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Ambang siaga", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
+    const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
     return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note" style="background:#e3fafc;color:#0b7285">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[innerWidth > 820 ? 330 : 20, 40]});
@@ -2148,7 +2154,8 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     const Y = v => mt + (hi - v) / (hi - lo) * (H - mt - mb);
     let g = "", step = (hi-lo) > 1.2 ? .5 : (hi-lo) > .5 ? .2 : .1;
     for (let z = Math.ceil(lo/step)*step; z <= hi; z += step) g += `<line x1="${ml}" x2="${W-mr}" y1="${Y(z)}" y2="${Y(z)}" class="gl"/><text x="${ml-4}" y="${Y(z)+3}" text-anchor="end">${nf(z, step < .5 ? 1 : 1)}</text>`;
-    if (siaga && siaga.siaga3 <= hi && siaga.siaga3 >= lo) g += `<line x1="${ml}" x2="${W-mr}" y1="${Y(siaga.siaga3)}" y2="${Y(siaga.siaga3)}" stroke="#f59f00" stroke-dasharray="4 3"/><text x="${W-mr}" y="${Y(siaga.siaga3)-3}" text-anchor="end" fill="#e67700">Siaga 3</text>`;
+    const thr = [[siaga && siaga.siaga3, "#f59f00", "Siaga 3 banjir"], [KERING.waspada, "#fab005", "Waspada kering"], [KERING.siaga, "#fd7e14", "Siaga kering"], [KERING.awas, "#e03131", "Awas kering"]];
+    thr.forEach(([v, c, t]) => { if (v && v <= hi && v >= lo) g += `<line x1="${ml}" x2="${W-mr}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-dasharray="4 3" stroke-width="1"/><text x="${t === "Awas kering" ? ml + 2 : W-mr}" y="${t === "Awas kering" ? Y(v)+8 : Y(v)-2}" text-anchor="${t === "Awas kering" ? "start" : "end"}" fill="${c}" style="font-size:8px">${t}</text>`; });
     if (daily){
       const n = daily.length, X = i => ml + (n === 1 ? (W-ml-mr)/2 : i * (W-ml-mr) / (n-1));
       const band = daily.map((d,i) => `${X(i)},${Y(d.max)}`).join(" ") + " " + daily.slice().reverse().map((d,j) => `${X(n-1-j)},${Y(d.min)}`).join(" ");
@@ -2270,7 +2277,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     const A = window.__awlr;
     if (A && A.last){
       if (A.stale) al.push(["warn","awlr","Data muka air bendung tertunda > 1 jam"]);
-      else if (A.st && A.st !== "Normal") al.push(["bad","awlr",`Muka air bendung ${A.st} (${nf(A.last.v,2)} m)`]);
+      else if (A.st && A.st !== "Normal") al.push([/Waspada/.test(A.st) ? "warn" : "bad","awlr",`Muka air bendung ${A.st} (${nf(A.last.v,2)} m)` + (/kering/.test(A.st) ? " · ketersediaan air baku menurun" : "")]);
     }
     if (D) Object.entries(ST).forEach(([id, s]) => {
       const st = D.stations[id], l = st && st.last; if (!l) return;
