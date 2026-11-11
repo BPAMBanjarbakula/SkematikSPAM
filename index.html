@@ -828,6 +828,37 @@ body:has(.leaflet-popup) #stbar{display:none}
   #stbar{left:52px;right:auto;transform:none;max-width:calc(100vw - 112px);font-size:11.5px;padding:5px 6px 5px 10px;border-radius:10px;line-height:1.3}
   .leaflet-control-scale{display:none}
 }
+
+/* ---- cuaca DAS, pengambilan 2026, kondisi hari ini */
+.wx{border-radius:14px;padding:12px;background:linear-gradient(160deg,rgba(28,126,214,.16),rgba(12,166,120,.10));border:1px solid rgba(116,192,252,.25);margin-bottom:6px}
+.wxload{font-size:12px;opacity:.7}
+.wxhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wxhead .ic{font-size:30px;line-height:1}
+.wxhead b{display:block;font-size:14px}.wxhead span{font-size:11.5px;opacity:.75}
+.wxdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wxd{text-align:center;border-radius:10px;padding:6px 2px 5px;background:rgba(255,255,255,.06);font-size:10.5px}
+.wxd .dn{opacity:.75;font-weight:600}.wxd .di{font-size:17px;margin:2px 0}.wxd .dm{font-weight:800;font-variant-numeric:tabular-nums}
+.wxd .db{height:4px;border-radius:2px;background:#4dabf7;margin:4px 3px 0;opacity:.85}
+.wxd.today{outline:1.5px solid #63e6be}
+.wxfoot{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;font-size:11.5px}
+.wxfoot div{background:rgba(255,255,255,.06);border-radius:10px;padding:7px 9px}
+.wxfoot b{display:block;font-size:15px}
+.wxsrc{font-size:10px;opacity:.55;margin-top:6px}
+body:not(.dark) .wxd,body:not(.dark) .wxfoot div{background:rgba(11,58,99,.06)}
+.ab26{border-radius:14px;padding:10px 10px 8px;border:1px solid rgba(116,192,252,.25);margin-bottom:6px}
+.ab26 svg{width:100%;height:auto;display:block}
+.ab26 text{font-size:9px;fill:currentColor;opacity:.75;font-family:inherit}
+.ab26 .lg{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;margin-top:4px;opacity:.85}
+.ab26 .lg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.ab26 .ft{font-size:11.5px;margin-top:6px;line-height:1.45}
+.ab26 .src{font-size:10px;opacity:.55;margin-top:4px}
+#iNow{display:flex;align-items:flex-start;gap:10px;margin:-16px 0 22px;padding:10px 12px;border-radius:14px;background:rgba(99,230,190,.08);border:1px solid rgba(99,230,190,.28);font-size:13px;color:#d3f9d8;line-height:1.45;animation:fup .8s ease 1s both;max-width:640px}
+#iNow[hidden]{display:none}
+#iNow.warn{background:rgba(250,176,5,.10);border-color:rgba(250,176,5,.35);color:#fff3bf}
+#iNow.bad{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.4);color:#ffe3e3}
+.inb{flex:none;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.12);margin-top:1px}
+#iNowTx b{color:#fff}
+@media (max-width:620px){#iNow{flex-direction:column;gap:5px;font-size:12.5px}}
 </style>
 <style>
 :root{
@@ -1430,6 +1461,7 @@ var au=null;try{au=localStorage.getItem("bpam_lite_auto")}catch(e){}window.LITE=
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Jalur air baku dari Bendung Karang Intan menuju IPA Pinus, serta distribusi air curah ke titik serah PTAM Bandarmasih, PTAM Intan Banjar, dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
     <div class="istats" id="istats"></div>
     <div id="iLive" hidden><span class="ilv"><i></i>LIVE</span><span id="iLiveTx"></span></div>
+    <div id="iNow" hidden><span class="inb" id="iNowB">Kondisi hari ini</span><span id="iNowTx"></span></div>
     <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI">▶ Tur jaringan</button><button class="btn-tour" id="btnRmI">🚀 Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2">📄 baca KTI</a></span></div>
   </div>
 </div>
@@ -1590,6 +1622,10 @@ var au=null;try{au=localStorage.getItem("bpam_lite_auto")}catch(e){}window.LITE=
       <div class="leg" id="legend"></div></details>
     </div>
     <div class="pane" id="pSum">
+      <h2>Cuaca DAS Riam Kanan</h2>
+      <div class="wx" id="wx"><div class="wxload">Memuat prakiraan hujan…</div></div>
+      <h2>Pengambilan air baku 2026</h2>
+      <div class="ab26" id="ab26"></div>
       <h2>Panjang jaringan</h2>
       <div class="kpi" id="kpi"></div>
       <h2>Transmisi air baku per material</h2>
@@ -2146,7 +2182,7 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     $("#tlV").textContent = nf(last.v, 2); $("#tlS").textContent = stale ? "Data tertunda" : st; $("#tlS").className = "tlst " + (stale ? "s3" : cls);
     $("#tele").classList.toggle("stale", stale);
     $("#tlT").textContent = "Update " + fmtT(last.t); $("#tlB").textContent = last.b ? "🔋 " + nf(last.b,1) + " V" : "";
-    window.__awlr = {last, siaga, st, stale}; window.alertsRefresh && window.alertsRefresh();
+    window.__awlr = {last, siaga, st, stale, series}; window.alertsRefresh && window.alertsRefresh();
     setLive("awlr", nf(last.v, 2) + " m", stale ? "tertunda" : st);
     spark();
   }
@@ -2996,6 +3032,76 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
   if (/[?&#]analisa\b/.test(location.href)) setTimeout(window.anlOpen, 800); })();
+</script>
+<script>/* cuaca DAS Riam Kanan + pengambilan air baku 2026 + kondisi hari ini */
+(function(){
+  const NORM = [304,262,294,266,161,130,100,65,81,152,260,301]; // rata-rata hujan bulanan 1991–2025 (ERA5, mm)
+  const WX = {0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",48:"🌫️",51:"🌦️",53:"🌦️",55:"🌦️",61:"🌧️",63:"🌧️",65:"🌧️",80:"🌦️",81:"🌧️",82:"⛈️",95:"⛈️",96:"⛈️",99:"⛈️"};
+  const nf = (v,d=0) => (+v).toLocaleString("id-ID",{minimumFractionDigits:d,maximumFractionDigits:d});
+  window.__wx = null;
+  async function weather(){
+    const el = document.getElementById("wx"); if (!el) return;
+    try{
+      const u = "https://api.open-meteo.com/v1/forecast?latitude=-3.55&longitude=115.1&daily=precipitation_sum,precipitation_probability_max,weather_code&past_days=30&forecast_days=7&timezone=Asia%2FMakassar";
+      const d = (await fetch(u).then(r => r.json())).daily;
+      const n = d.time.length, today = new Date(Date.now() + 8*3600e3).toISOString().slice(0,10), ti = d.time.indexOf(today);
+      const past = d.precipitation_sum.slice(0, ti).reduce((a,b) => a + (b||0), 0);
+      let norm = 0; for (let i = 0; i < ti; i++){ const dt = new Date(d.time[i] + "T00:00:00Z"); const days = new Date(Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth()+1, 0)).getUTCDate(); norm += NORM[dt.getUTCMonth()] / days; }
+      const fut = d.time.slice(ti, ti+7).map((t,i) => ({t, p: d.precipitation_sum[ti+i] || 0, pr: d.precipitation_probability_max[ti+i], w: d.weather_code[ti+i]}));
+      const next3 = fut.slice(0,3).reduce((a,b) => a + b.p, 0), wk = fut.reduce((a,b) => a + b.p, 0), pct = norm ? past/norm*100 : 0;
+      let out, ic;
+      if (next3 < 5){ out = "3 hari ke depan cenderung kering — muka air bendung cenderung turun/stabil"; ic = "☀️"; }
+      else if (next3 > 40){ out = "Hujan lebat diprakirakan — muka air bendung berpotensi naik, waspadai kekeruhan"; ic = "⛈️"; }
+      else { out = "Hujan ringan–sedang diprakirakan — muka air bendung relatif terjaga"; ic = "🌦️"; }
+      window.__wx = {next3, wk, past, pct, out};
+      const mx = Math.max(10, ...fut.map(f => f.p));
+      el.innerHTML = `<div class="wxhead"><span class="ic">${ic}</span><div><b>${out}</b><span>Prakiraan 7 hari · ${nf(wk)} mm</span></div></div>
+        <div class="wxdays">${fut.map((f,i) => `<div class="wxd${i === 0 ? " today" : ""}" title="${f.t}: ${nf(f.p,1)} mm · peluang ${f.pr ?? "–"}%"><div class="dn">${i === 0 ? "Hari ini" : new Date(f.t + "T00:00:00Z").toLocaleDateString("id-ID",{weekday:"short",timeZone:"UTC"})}</div><div class="di">${WX[f.w] || "🌥️"}</div><div class="dm">${nf(f.p, f.p < 10 ? 1 : 0)}</div><div class="db" style="width:${Math.max(4, f.p/mx*100)}%;margin-left:auto;margin-right:auto"></div></div>`).join("")}</div>
+        <div class="wxfoot"><div><b>${nf(past)} mm</b>Hujan 30 hari terakhir</div><div><b style="color:${pct < 60 ? "#ff922b" : pct > 140 ? "#4dabf7" : "#63e6be"}">${nf(pct)}%</b>dari normal (${nf(norm)} mm)</div></div>
+        <div class="wxsrc">Satuan mm/hari · titik DAS Riam Kanan (−3,55; 115,10) · sumber Open-Meteo; normal = rata-rata ERA5 1991–2025</div>`;
+    }catch(e){ el.innerHTML = '<div class="wxload">Prakiraan cuaca belum bisa dimuat.</div>'; }
+    now();
+  }
+  function abstraksi(){
+    const el = document.getElementById("ab26"); if (!el) return;
+    // Laporan Penggunaan Air Triwulan I–III 2026 (m³/bulan): IPA Pinus, PTAM Bandarmasih, PTAM Intan Banjar
+    const M = [["Jan",31,1401960,310488,115975],["Feb",28,1295820,317075,201925],["Mar",31,1390403,274581,186464],["Apr",30,1372963,254788,148081],["Mei",31,1455125,292323,139691],["Jun",30,1425733,301324,159837],["Jul",31,1499566,293596,159207],["Agu",31,1519550,281102,143256],["Sep",30,1501169,294341,140695]];
+    const C = ["#4dabf7","#9775fa","#ff922b"], W = 300, H = 150, ml = 26, mb = 16, mt = 14, bw = (W-ml-6)/M.length;
+    const lps = M.map(m => (m[2]+m[3]+m[4]) / (m[1]*86.4)), top = 1000, Y = v => mt + (1 - v/top) * (H-mt-mb);
+    let g = "";
+    [0,250,500,750,1000].forEach(v => g += `<line x1="${ml}" x2="${W-4}" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" stroke-opacity=".12"/><text x="${ml-4}" y="${Y(v)+3}" text-anchor="end">${v}</text>`);
+    M.forEach((m,i) => { const x = ml + i*bw + 3, tot = m[2]+m[3]+m[4], q = lps[i]; let y0 = Y(0);
+      [m[2],m[3],m[4]].forEach((v,k) => { const h = (v/tot*q)/top*(H-mt-mb); g += `<rect x="${x}" y="${y0-h}" width="${bw-6}" height="${h}" rx="${k===2?2:0}" fill="${C[k]}"><title>${m[0]} 2026 · ${["IPA Pinus","PTAM Bandarmasih","PTAM Intan Banjar"][k]}: ${nf(v)} m³</title></rect>`; y0 -= h; });
+      g += `<text x="${x+(bw-6)/2}" y="${y0-3}" text-anchor="middle" style="font-weight:700;opacity:.9">${nf(q)}</text><text x="${x+(bw-6)/2}" y="${H-4}" text-anchor="middle">${m[0]}</text>`; });
+    const tot = M.reduce((a,m) => a+m[2]+m[3]+m[4], 0), days = M.reduce((a,m) => a+m[1], 0), avg = tot/(days*86.4);
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Pengambilan air baku bulanan 2026">${g}</svg>
+      <div class="lg"><span><i style="background:${C[0]}"></i>IPA Pinus</span><span><i style="background:${C[1]}"></i>PTAM Bandarmasih</span><span><i style="background:${C[2]}"></i>PTAM Intan Banjar</span></div>
+      <div class="ft">Jan–Sep 2026: <b>${nf(tot/1e6,2)} juta m³</b> · rata-rata <b>${nf(avg)} L/dtk</b> (${nf(avg/1500*100,1)}% kuota SIPA 1.500 L/dtk). Puncak: September ${nf(lps[8])} L/dtk.</div>
+      <div class="src">Angka di atas batang = rata-rata L/dtk. Sumber: Laporan Penggunaan Air Triwulan I–III 2026 BPAM Banjarbakula.</div>`;
+  }
+  function now(){
+    const A = window.__awlr, box = document.getElementById("iNow"); if (!box) return;
+    const parts = []; let lvl = "ok";
+    if (A && A.last){
+      const s = A.series || [], c = Date.now() - 864e5, old = s.find(p => p.t >= c);
+      const d = old ? A.last.v - old.v : 0, tr = Math.abs(d) < .05 ? "stabil" : d > 0 ? `naik ${nf(d*100)} cm/24 jam` : `turun ${nf(-d*100)} cm/24 jam`;
+      parts.push(`muka air bendung <b>${nf(A.last.v,2)} m</b> (${(A.st || "Normal").toLowerCase()}, ${tr})`);
+      if (/kering|banjir|tinggi/i.test(A.st || "")) lvl = /Waspada/.test(A.st) ? "warn" : "bad";
+    }
+    const it = document.getElementById("lv_intake"), itv = it && it.firstChild ? it.firstChild.textContent.trim() : "";
+    const q = parseFloat(itv.replace(/[^\d,]/g,"").replace(",", "."));
+    if (q > 0) parts.push(`keluar intake <b>≈ ${nf(q)} L/dtk</b> (${nf(q/1500*100)}% kuota)`);
+    if (window.__wx) parts.push(window.__wx.next3 < 5 ? "prakiraan 3 hari <b>kering</b>" : window.__wx.next3 > 40 ? "prakiraan <b>hujan lebat</b>" : "prakiraan hujan ringan–sedang");
+    const al = (window.__alerts || []).filter(a => a[1] !== "awlr");
+    if (al.length){ parts.push(`<b>${al.length} logger/peringatan perlu dicek</b>`); if (lvl === "ok") lvl = "warn"; }
+    if (!parts.length) return;
+    const head = lvl === "bad" ? "⚠️ Perlu perhatian" : lvl === "warn" ? "Air baku aman · ada catatan" : "✅ Air baku aman";
+    document.getElementById("iNowB").textContent = "Kondisi hari ini";
+    document.getElementById("iNowTx").innerHTML = `<b>${head}</b> — ` + parts.join(" · ") + ".";
+    box.className = lvl === "ok" ? "" : lvl; box.hidden = false;
+  }
+  abstraksi(); weather(); setTimeout(now, 3000); setTimeout(now, 8000); setInterval(now, 60000); setInterval(weather, 3*3600e3);
+})();
 </script>
 </body>
 </html>
