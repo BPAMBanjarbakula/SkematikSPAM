@@ -442,26 +442,26 @@ function probe(cx, cy) {
 
 // ---------- simpan tampilan sebagai gambar PNG (relief + pipa + label + legenda)
 function snap() {
-  const r = S.renderer, pr0 = r.getPixelRatio(), pr = Math.min(3, Math.max(2, pr0)), w = S.vw, h = S.vh;
+  const r = S.renderer, pr0 = r.getPixelRatio(), pr = Math.min(3, Math.max(2, pr0)), h = S.vh;
+  const crop = S.vw > 820 && !$(".g3-flow").classList.contains("off") ? 332 : 0, w = S.vw - crop;   // tanpa area panel Alur
   const c = document.createElement("canvas"); c.width = Math.round(w * pr); c.height = Math.round(h * pr); const g = c.getContext("2d"); g.scale(pr, pr);
   const bg = g.createRadialGradient(w / 2, h * .36, 0, w / 2, h * .36, Math.max(w, h) * .85); bg.addColorStop(0, "#0f3654"); bg.addColorStop(.5, "#081a2c"); bg.addColorStop(1, "#040b14"); g.fillStyle = bg; g.fillRect(0, 0, w, h);
-  try { r.setPixelRatio(pr); r.setSize(w, h, false); r.render(S.scene, S.camera); g.drawImage(r.domElement, 0, 0, w, h); }
-  finally { r.setPixelRatio(pr0); r.setSize(w, h, false); S.need = true; }
+  try { r.setPixelRatio(pr); r.setSize(S.vw, h, false); r.render(S.scene, S.camera); const el = r.domElement; g.drawImage(el, 0, 0, Math.round(el.width * w / S.vw), el.height, 0, 0, w, h); }
+  finally { r.setPixelRatio(pr0); r.setSize(S.vw, h, false); S.need = true; }
   const F = (wt, px, it) => `${it ? "italic " : ""}${wt} ${px}px "Plus Jakarta Sans",system-ui,sans-serif`;
   const rr = (x, y, wd, ht, rad) => { g.beginPath(); g.moveTo(x + rad, y); g.arcTo(x + wd, y, x + wd, y + ht, rad); g.arcTo(x + wd, y + ht, x, y + ht, rad); g.arcTo(x, y + ht, x, y, rad); g.arcTo(x, y, x + wd, y, rad); g.closePath(); };
   const it = (S.live && S.live.items) || {};
   g.textBaseline = "middle"; g.textAlign = "center";
-  S.towns.forEach(t => { if (!t.vis || t.state === "off") return; g.font = F(600, 10.5, 1); g.shadowColor = "rgba(0,0,0,.9)"; g.shadowBlur = 4; g.fillStyle = t.sea ? "rgba(116,192,252,.85)" : "rgba(235,245,255,.78)"; g.fillText(t.label.split("").join("\u200a"), t.sx, t.sy); });
+  S.towns.forEach(t => { if (!t.vis || t.state === "off") return; g.font = F(600, 10.5, 1); g.shadowColor = "rgba(0,0,0,.9)"; g.shadowBlur = 4; g.fillStyle = t.sea ? "rgba(116,192,252,.85)" : "rgba(235,245,255,.78)"; g.fillText(t.label.split("").join(" "), t.sx, t.sy); });
   g.shadowBlur = 0; g.shadowColor = "transparent";
-  S.marks.filter(m => m.vis && m.state !== "off").sort((a, b) => a.sy - b.sy).forEach(m => {
-    const col = m.k.c, full = m.state === "";
-    if (full) { g.strokeStyle = col; g.lineWidth = 1; g.beginPath(); g.moveTo(m.sx, m.sy - 6); g.lineTo(m.sx, m.sy - 6 - m.st); g.stroke(); }
-    g.beginPath(); g.arc(m.sx, m.sy, full ? 5 : 4, 0, 7); g.fillStyle = col; g.fill(); g.lineWidth = 2; g.strokeStyle = "#fff"; g.stroke();
-    if (!full) return;
-    const v = m.lk && it[m.lk], t2 = v ? v.v + " " + v.u : "";
+  const ms = S.marks.filter(m => m.vis && m.state !== "off").sort((a, b) => (a.sy - a.st) - (b.sy - b.st));
+  ms.forEach(m => { if (m.state !== "") return; g.strokeStyle = m.k.c; g.lineWidth = 1; g.beginPath(); g.moveTo(m.sx, m.sy - 6); g.lineTo(m.sx, m.sy - 6 - m.st); g.stroke(); });
+  ms.forEach(m => { const full = m.state === ""; g.beginPath(); g.arc(m.sx, m.sy, full ? 5 : 4, 0, 7); g.fillStyle = m.k.c; g.fill(); g.lineWidth = 2; g.strokeStyle = "#fff"; g.stroke(); });
+  ms.forEach(m => { if (m.state !== "") return;
+    const col = m.k.c, v = m.lk && it[m.lk], t2 = v ? v.v + " " + v.u : "";
     g.font = F(700, 11.5); const w1 = g.measureText(m.short).width; g.font = F(800, 11.5); const w2 = t2 ? g.measureText(t2).width + 6 : 0;
     const wd = w1 + w2 + 20, x0 = m.sx + (m.dx || 0) - wd / 2, y0 = m.sy - m.st - 6 - 24;
-    rr(x0, y0, wd, 24, 12); g.fillStyle = "rgba(6,18,31,.92)"; g.fill(); g.strokeStyle = col; g.lineWidth = 1; g.stroke();
+    rr(x0, y0, wd, 24, 12); g.fillStyle = "rgb(6,18,31)"; g.fill(); g.strokeStyle = col; g.lineWidth = 1; g.stroke();
     g.textAlign = "left"; g.font = F(700, 11.5); g.fillStyle = "#fff"; g.fillText(m.short, x0 + 10, y0 + 12.5);
     if (t2) { g.font = F(800, 11.5); g.fillStyle = col; g.fillText(t2, x0 + 16 + w1, y0 + 12.5); }
   });
@@ -471,13 +471,13 @@ function snap() {
   g.font = '900 21px Orbitron,"Plus Jakarta Sans",sans-serif'; g.fillStyle = gr; g.fillText("GeoSPAM BAKULA", 22, 40);
   const d = new Date(), tgl = d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Makassar" }) + ", " + d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Makassar" }) + " WITA";
   g.font = F(600, 12); g.fillStyle = "#b9cde0"; g.fillText("Jaringan SPAM Regional Banjarbakula · tampilan 3D", 22, 60);
-  g.font = F(500, 11); g.fillStyle = "#8fb3cf"; g.fillText(tgl, 22, 77);
+  g.font = F(500, 11); g.fillStyle = "#8fb3cf"; g.fillText(tgl + (it.awlr ? " · muka air bendung " + it.awlr.v + " " + it.awlr.u + (it.awlr.st ? " (" + it.awlr.st + ")" : "") : ""), 22, 77);
   // legenda
   const LG = [["#ff7a3d", "GRP DN 1.200 mm"], ["#4dabf7", "HDPE DN 1.200 mm"], ["#22d3ee", "HDPE Ø 710 mm"], ["#9775fa", "Distribusi air curah (JDU)"], ["#d0bfff", "Jaringan lanjutan PTAM", 1]];
-  const ly = h - 26 - LG.length * 17; rr(14, ly - 14, 208, LG.length * 17 + 20, 12); g.fillStyle = "rgba(6,18,31,.78)"; g.fill();
+  const ly = h - 42 - LG.length * 17; rr(14, ly - 14, 208, LG.length * 17 + 20, 12); g.fillStyle = "rgba(6,18,31,.78)"; g.fill();
   g.textBaseline = "middle"; LG.forEach(([col, t, dash], i) => { const y = ly + 4 + i * 17; g.strokeStyle = col; g.lineWidth = 3.5; g.setLineDash(dash ? [5, 4] : []); g.beginPath(); g.moveTo(26, y); g.lineTo(50, y); g.stroke(); g.setLineDash([]); g.font = F(600, 11); g.fillStyle = "#dbe8f5"; g.fillText(t, 60, y + .5); });
-  g.textAlign = "right"; g.font = F(500, 10.5); g.fillStyle = "rgba(200,220,240,.75)";
-  g.fillText("Relief DEMNAS (BIG)" + (S.texMode === "sat" ? " · citra Esri World Imagery" : "") + " · tinggi diperbesar " + nf(S.ex, S.ex % 1 ? 1 : 0) + "× · geospambakula.netlify.app", w - 18, h - 16);
+  g.font = F(500, 10.5); g.fillStyle = "rgba(200,220,240,.75)";
+  g.fillText("Relief DEMNAS (BIG)" + (S.texMode === "sat" ? " · citra Esri World Imagery" : "") + " · tinggi diperbesar " + nf(S.ex, S.ex % 1 ? 1 : 0) + "× · geospambakula.netlify.app", 18, h - 14);
   const name = "GeoSPAM-3D-" + new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-") + ".png";
   c.toBlob(b => { if (!b) return toast("Gambar gagal dibuat.");
     const save = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000); toast("Gambar disimpan: " + name); };

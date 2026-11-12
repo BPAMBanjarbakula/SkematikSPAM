@@ -3040,7 +3040,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 
 // ---------- Mode 3D (modul three.js dimuat hanya saat dibuka)
 (function(){
-  const G3V = "3";
+  const G3V = "4";
   const focus = name => { const it = searchIndex.find(i => !i.bounds && i.name === name); if (!it) return;
     const grp = LAYERS.find(l => l.lyr.hasLayer && l.lyr.hasLayer(it.layer));
     if (grp && !map.hasLayer(grp.lyr)){ grp.lyr.addTo(map); const cb = [...document.querySelectorAll("#layers input")][LAYERS.indexOf(grp)]; if (cb) cb.checked = true; }
