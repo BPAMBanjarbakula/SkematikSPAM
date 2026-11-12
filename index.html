@@ -2860,7 +2860,7 @@ if ("serviceWorker" in navigator && location.protocol === "https:") navigator.se
   window.perfUI = () => { const pf = window.PERF_PREF, t = window.PERF;
     document.querySelectorAll("#perfBox [data-perf]").forEach(b => b.setAttribute("aria-pressed", b.dataset.perf === pf));
     $("#perfNow").textContent = (pf === "auto" ? "aktif: " + PN[t] : "") + (window.PERF_FPS ? (pf === "auto" ? " · " : "") + window.PERF_FPS + " fps" : "");
-    $("#perfTx").textContent = (pf === "auto" ? "Otomatis memilih " + PN[t] + " (" + window.PERF_WHY + ")" + (window.PERF_LEARNED ? "; ketuk Otomatis lagi untuk mengukur ulang. " : ", dan turun sendiri bila gerakan peta tersendat. ") : "") + PD[t]; };
+    $("#perfTx").textContent = (pf === "auto" ? "Otomatis memilih " + PN[t] + " (" + window.PERF_WHY + ")" + (window.PERF_LEARNED ? "; ketuk Otomatis lagi untuk mengukur ulang. " : t < 2 ? ", dan turun sendiri bila gerakan peta tersendat. " : ". ") : "") + PD[t]; };
   window.perfUI();
   $("#perfBox").addEventListener("click", e => { const b = e.target.closest("[data-perf]"); if (!b) return;
     if (b.dataset.perf === window.PERF_PREF && !(b.dataset.perf === "auto" && window.PERF_LEARNED)) return;
