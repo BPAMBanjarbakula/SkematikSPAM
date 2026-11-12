@@ -189,10 +189,10 @@
   .g3-flow{left:8px;right:8px;top:auto;bottom:108px;width:auto;max-height:min(54vh,430px)}
   .g3-flow.off{transform:translateY(calc(100% + 130px))}
   .g3-card{left:8px;right:8px;width:auto;bottom:108px}
-  .g3-tour{top:62px;padding:11px 13px 10px}
+  .g3-tour{top:72px;padding:11px 13px 10px}
   .g3-tour h3{font-size:15.5px}.g3-tour p{font-size:12px}
   .g3-hint{bottom:112px;font-size:11px}
-  .g3-toast{top:62px;max-width:calc(100vw - 24px);white-space:normal;text-align:center}
+  .g3-toast{top:72px;max-width:calc(100vw - 24px);white-space:normal;text-align:center}
   .g3-att{right:auto;left:12px;bottom:auto;top:54px;font-size:9.5px}
   .g3l .b{font-size:11px;height:23px;padding:0 9px}
 }
@@ -202,7 +202,7 @@
   .g3-seg button{padding:0 8px;font-size:12px;gap:5px}
   .g3-rel{min-width:118px;padding:0 8px;gap:7px}.g3-rel span{display:none}
   .g3-bar .g3-b{padding:0 6px;font-size:11.5px;gap:5px}
-  .g3-pill span{display:none}.g3-pill{padding:0 9px}
 }
+@media (max-width:345px){.g3-pill span{display:none}.g3-pill{padding:0 9px}}
 html.lite #g3d .g3-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,20,34,.95)}
 @media (prefers-reduced-motion:reduce){#g3d *{animation:none!important}}

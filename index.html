@@ -1456,7 +1456,7 @@ button.gbtn{font:inherit;font-size:12.5px;font-weight:700;background:none;cursor
 .tlal .al{display:flex;gap:6px;align-items:flex-start}
 .tlal .al .i{margin-top:2px}
 .sgrid .ic{color:#66d9e8}
-.i.wx{stroke-width:1.7;color:#dbe8f5;width:22px;height:22px}
+.i.wxi{stroke-width:1.7;color:#dbe8f5;width:22px;height:22px}
 .wxhead .ic .i{width:36px;height:36px}
 .wxd .di{line-height:1}.wxd .di .i{width:20px;height:20px}
 .wxs{stroke:#ffd43b}.wxr{stroke:#74c0fc}.wxb{stroke:#ffd43b}
@@ -3039,7 +3039,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 
 // ---------- Mode 3D (modul three.js dimuat hanya saat dibuka)
 (function(){
-  const G3V = "1";
+  const G3V = "2";
   const focus = name => { const it = searchIndex.find(i => !i.bounds && i.name === name); if (!it) return;
     const grp = LAYERS.find(l => l.lyr.hasLayer && l.lyr.hasLayer(it.layer));
     if (grp && !map.hasLayer(grp.lyr)){ grp.lyr.addTo(map); const cb = [...document.querySelectorAll("#layers input")][LAYERS.indexOf(grp)]; if (cb) cb.checked = true; }
@@ -3212,8 +3212,8 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       else { out = "Hujan ringan–sedang diprakirakan — muka air bendung relatif terjaga"; ic = "w-driz"; }
       window.__wx = {next3, wk, past, pct, out};
       const mx = Math.max(10, ...fut.map(f => f.p));
-      el.innerHTML = `<div class="wxhead"><span class="ic">${I(ic,"wx")}</span><div><b>${out}</b><span>Prakiraan 7 hari · ${nf(wk)} mm</span></div></div>
-        <div class="wxdays">${fut.map((f,i) => `<div class="wxd${i === 0 ? " today" : ""}" title="${f.t}: ${nf(f.p,1)} mm · peluang ${f.pr ?? "–"}%"><div class="dn">${i === 0 ? "Hari ini" : new Date(f.t + "T00:00:00Z").toLocaleDateString("id-ID",{weekday:"short",timeZone:"UTC"})}</div><div class="di">${I(WX[f.w] || "w-cloud","wx")}</div><div class="dm">${nf(f.p, f.p < 10 ? 1 : 0)}</div><div class="db" style="width:${Math.max(4, f.p/mx*100)}%;margin-left:auto;margin-right:auto"></div></div>`).join("")}</div>
+      el.innerHTML = `<div class="wxhead"><span class="ic">${I(ic,"wxi")}</span><div><b>${out}</b><span>Prakiraan 7 hari · ${nf(wk)} mm</span></div></div>
+        <div class="wxdays">${fut.map((f,i) => `<div class="wxd${i === 0 ? " today" : ""}" title="${f.t}: ${nf(f.p,1)} mm · peluang ${f.pr ?? "–"}%"><div class="dn">${i === 0 ? "Hari ini" : new Date(f.t + "T00:00:00Z").toLocaleDateString("id-ID",{weekday:"short",timeZone:"UTC"})}</div><div class="di">${I(WX[f.w] || "w-cloud","wxi")}</div><div class="dm">${nf(f.p, f.p < 10 ? 1 : 0)}</div><div class="db" style="width:${Math.max(4, f.p/mx*100)}%;margin-left:auto;margin-right:auto"></div></div>`).join("")}</div>
         <div class="wxfoot"><div><b>${nf(past)} mm</b>Hujan 30 hari terakhir</div><div><b style="color:${pct < 60 ? "#ff922b" : pct > 140 ? "#4dabf7" : "#63e6be"}">${nf(pct)}%</b>dari normal (${nf(norm)} mm)</div></div>
         <div class="wxsrc">Satuan mm/hari · titik DAS Riam Kanan (−3,55; 115,10) · sumber Open-Meteo; normal = rata-rata ERA5 1991–2025</div>`;
     }catch(e){ el.innerHTML = '<div class="wxload">Prakiraan cuaca belum bisa dimuat.</div>'; }

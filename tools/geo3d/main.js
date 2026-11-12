@@ -347,12 +347,16 @@ function labels() {
   S.towns.forEach(t => put(t));
   if (!decl) return; S.lastDecl = performance.now();
   const taken = [], hit = r => taken.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1]);
+  const rb = root.getBoundingClientRect();
+  taken.push([0, 0, w, w <= 820 ? 70 : 60]);
+  [".g3-bar", ".g3-leg", ".g3-flow", ".g3-card", ".g3-tour"].forEach(q => { const e = $(q); if (!e || e.classList.contains("off")) return; const b = e.getBoundingClientRect(); if (b.width && b.height) taken.push([b.left - rb.left - 4, b.top - rb.top - 4, b.right - rb.left + 4, b.bottom - rb.top + 4]); });
   const setState = (o, s) => { if (o.state !== s) { o.state = s; o.el.classList.toggle("off", s === "off"); o.el.classList.toggle("min", s === "min"); } };
   const order = S.sel ? [S.sel, ...S.marks.filter(m => m !== S.sel)] : S.marks;
   order.forEach(m => { if (!m.vis) return setState(m, "off");
-    const cx = m.sx + (m.dx || 0), ks = [m.k0 || 0, 0, 1, 2, 3, 4];
-    for (const k of ks) { const st = 30 + k * 29, r = [cx - m.w / 2 - 4, m.sy - st - 6 - m.h - 2, cx + m.w / 2 + 4, m.sy - st - 4];
-      if (hit(r)) continue; taken.push(r); m.k0 = k; if (m.st !== st) { m.st = st; m.el.style.setProperty("--st", st + "px"); } return setState(m, ""); }
+    const cx = m.sx + (m.dx || 0);
+    for (let k = 0; k < 5; k++) { const st = 30 + k * 29, r = [cx - m.w / 2 - 4, m.sy - st - 6 - m.h - 2, cx + m.w / 2 + 4, m.sy - st - 4];
+      if (hit(r)) continue; taken.push(r); if (m.st !== st) { m.st = st; m.el.style.setProperty("--st", st + "px"); }
+      const zi = m === S.sel ? 9999 : Math.max(1, Math.round(m.sy - st)); if (zi !== m.zi) { m.zi = zi; m.el.style.zIndex = zi; } return setState(m, ""); }
     setState(m, "min"); });
   S.marks.forEach(m => { if (m.vis) taken.push([m.sx - 7, m.sy - 7, m.sx + 7, m.sy + 7]); });
   S.towns.forEach(t => { if (!t.vis) return setState(t, "off"); const r = [t.sx - t.w / 2, t.sy - t.h / 2, t.sx + t.w / 2, t.sy + t.h / 2]; if (hit(r)) setState(t, "off"); else { taken.push(r); setState(t, ""); } });
@@ -475,7 +479,12 @@ function snap() {
   g.textAlign = "right"; g.font = F(500, 10.5); g.fillStyle = "rgba(200,220,240,.75)";
   g.fillText("Relief DEMNAS (BIG)" + (S.texMode === "sat" ? " · citra Esri World Imagery" : "") + " · tinggi diperbesar " + nf(S.ex, S.ex % 1 ? 1 : 0) + "× · geospambakula.netlify.app", w - 18, h - 16);
   const name = "GeoSPAM-3D-" + new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-") + ".png";
-  c.toBlob(b => { if (!b) return toast("Gambar gagal dibuat."); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000); toast("Gambar disimpan: " + name); }, "image/png");
+  c.toBlob(b => { if (!b) return toast("Gambar gagal dibuat.");
+    const save = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000); toast("Gambar disimpan: " + name); };
+    let file = null; try { file = new File([b], name, { type: "image/png" }); } catch (e) {}
+    if (file && matchMedia("(pointer:coarse)").matches && navigator.canShare && navigator.canShare({ files: [file] }))
+      navigator.share({ files: [file], title: "GeoSPAM Bakula · tampilan 3D" }).catch(e => { if (!e || e.name !== "AbortError") save(); });
+    else save(); }, "image/png");
 }
 
 // ---------- tur 3D
@@ -504,13 +513,22 @@ function frame(now) {
     setCam({ t: a.t.clone().lerp(to.t, e), r: a.r * Math.pow(to.r / a.r, e), phi: a.phi + (to.phi - a.phi) * e, theta: a.theta + A.d * e }); if (k >= 1) S.anim = null; }
   else if (S.controls.update()) S.need = true;
   if (S.voT && (Math.abs(S.vo[0] - S.voT[0]) > .5 || Math.abs(S.vo[1] - S.voT[1]) > .5)) { const k = Math.min(1, dt * 7); applyVO(S.vo[0] + (S.voT[0] - S.vo[0]) * k, S.vo[1] + (S.voT[1] - S.vo[1]) * k); }
-  const flowing = !S.lite && !S.reduce && S.flows.length;
+  const flowing = !S.lite && !S.reduce && !S.noFlow && S.flows.length;
   if (flowing && now - S.lastFlow >= 30) { const off = (S.fo = ((S.fo || 0) - Math.min(.1, (now - S.lastFlow) / 1000) * 1.5) % 1.16); S.lastFlow = now; S.flows.forEach(m => m.dashOffset = off); S.need = true; }
   if (S.controls.autoRotate) S.need = true;
-  if (!S.need) return; S.need = false; S.lastDraw = now;
+  if (!S.need) return; S.need = false;
+  if (flowing && !S.anim && now - S.lastDraw < 400) { S.slow = (S.slow || 0) * .9 + (now - S.lastDraw > 55 ? 1 : 0); if (S.slow > 7) degrade(); }
+  S.lastDraw = now;
   S.renderer.render(S.scene, S.camera); labels();
   const az = Math.atan2(S.camera.position.x - S.controls.target.x, S.camera.position.z - S.controls.target.z); $(".g3-cmp svg").style.transform = `rotate(${(az / DEG).toFixed(1)}deg)`;
   if (S.probe) { V.set(S.probe.x, S.probe.h * S.ex, S.probe.z).project(S.camera); const px = (V.x * .5 + .5) * S.vw, pe = $(".g3-probe"); pe.style.transform = `translate3d(${px.toFixed(1)}px,${((-V.y * .5 + .5) * S.vh).toFixed(1)}px,0)`; pe.classList.toggle("l", px > S.vw * .52); }
+}
+
+function degrade() {
+  S.slow = 0; const pr = S.renderer.getPixelRatio();
+  if (pr > 1.05) { S.renderer.setPixelRatio(Math.max(1, pr * .7)); S.renderer.setSize(S.vw, S.vh, false); }
+  else { S.noFlow = true; S.flows.forEach(m => m.visible = false); }
+  S.need = true;
 }
 
 // ---------- aksi UI
@@ -562,6 +580,7 @@ export async function open(opts) {
     catch (e) { S = null; ld.classList.add("err"); root.classList.add("fail"); $(".g3-load .ms").textContent = e.message === "nowebgl" ? "Perangkat atau browser ini tidak mendukung tampilan 3D (WebGL)." : "Gagal memuat data 3D. Periksa koneksi lalu coba lagi."; console.warn("[3D]", e); return; }
     S.reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (S.vw > 1100) setFlow(true);
+    try { $('[data-a="close"]').focus({ preventScroll: true }); } catch (e) {}
     start(); S.renderer.render(S.scene, S.camera);
     requestAnimationFrame(() => { root.classList.add("ready"); setTimeout(() => { if (at) goAt(at); else fly(S.home, 2600); hint(true); }, 250); });
   } else { resize(); refreshLive(); start(); S.need = true; if (at) goAt(at); }
