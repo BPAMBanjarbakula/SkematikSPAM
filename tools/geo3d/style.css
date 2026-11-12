@@ -204,5 +204,7 @@
   .g3-bar .g3-b{padding:0 6px;font-size:11.5px;gap:5px}
 }
 @media (max-width:345px){.g3-pill span{display:none}.g3-pill{padding:0 9px}}
-html.lite #g3d .g3-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,20,34,.95)}
+html.lite #g3d .g3-glass,html.t1 #g3d .g3-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,20,34,.95)}
+html.t1 .g3l.live s:after{animation-timing-function:steps(5,end)}
+html.t1 .g3-live i{animation:none}
 @media (prefers-reduced-motion:reduce){#g3d *{animation:none!important}}

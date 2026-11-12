@@ -118,11 +118,11 @@ async function loadDem(base, step) {
   }
   const gw = Math.floor((fw - 1) / step) + 1, gh = Math.floor((fh - 1) / step) + 1, H = new Float32Array(gw * gh);
   for (let j = 0; j < gh; j++) for (let i = 0; i < gw; i++) H[j * gw + i] = F[(j * step) * fw + i * step];
-  return { H, gw, gh };
+  return { H, gw, gh, cx: step / (fw - 1) * SX, cz: step / (fh - 1) * SZ };      // cx, cz = ukuran sel (km)
 }
 function hAt(x, z) {                                             // km, tepat di permukaan segitiga mesh
-  const { H, gw, gh } = S.dem;
-  let fi = (x + SX / 2) / SX * (gw - 1), fj = (z + SZ / 2) / SZ * (gh - 1);
+  const { H, gw, gh, cx, cz } = S.dem;
+  let fi = (x + SX / 2) / cx, fj = (z + SZ / 2) / cz;
   fi = Math.max(0, Math.min(gw - 1.0001, fi)); fj = Math.max(0, Math.min(gh - 1.0001, fj));
   const i = fi | 0, j = fj | 0, u = fi - i, v = fj - j, k = j * gw + i, a = H[k], b = H[k + 1], c = H[k + gw], d = H[k + gw + 1];
   return u + v <= 1 ? a + u * (b - a) + v * (c - a) : d + (1 - u) * (c - d) + (1 - v) * (b - d);
@@ -130,41 +130,48 @@ function hAt(x, z) {                                             // km, tepat di
 
 // ---------- adegan
 async function build() {
-  const lite = !!O.lite, base = O.base || "data/";
+  const tier = O.tier != null ? Math.max(0, Math.min(2, +O.tier || 0)) : (O.lite ? 2 : 0), lite = tier >= 2, base = O.base || "data/";
+  // kualitas menurut tingkat kinerja perangkat: penuh · hemat · ringan
+  const Q = [{ step: 1, pr: 2, aa: true, flow: 30, aniso: 8, satZ: 12, hd: true, tex: 0 },
+             { step: 2, pr: 1.5, aa: false, flow: 66, aniso: 4, satZ: 12, hd: false, tex: 0 },
+             { step: 3, pr: 1, aa: false, flow: 0, aniso: 2, satZ: 11, hd: false, tex: 1024 }][tier];
   const canvas = $("canvas");
   let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, alpha: true, powerPreference: "high-performance" }); }
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: Q.aa, alpha: true, powerPreference: "high-performance" }); }
   catch (e) { throw new Error("nowebgl"); }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, Q.pr));
   renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x06121f, 150, 420);
   const camera = new THREE.PerspectiveCamera(32, 1, 0.5, 900);
   const controls = new OrbitControls(camera, canvas);
   Object.assign(controls, { enableDamping: true, dampingFactor: .09, rotateSpeed: .55, zoomSpeed: .9, panSpeed: .8, minDistance: 3.5, maxDistance: 300, maxPolarAngle: 86 * DEG, autoRotateSpeed: .55, screenSpacePanning: false });
-  S = { lite, base, renderer, scene, camera, controls, ex: 5, vw: 1, vh: 1, mats: [], flows: [], marks: [], towns: [], anim: null, need: true, running: false, tex: {}, texMode: "elev", lastDecl: 0, tour: null, sel: null };
+  S = { lite, tier, Q, base, renderer, scene, camera, controls, ex: 5, vw: 1, vh: 1, mats: [], flows: [], marks: [], towns: [], anim: null, need: true, running: false, tex: {}, texMode: "elev", lastDecl: 0, tour: null, sel: null };
 
   prog(.12, "Memuat grid ketinggian DEMNAS…");
-  S.dem = await loadDem(base, lite ? 2 : 1);
+  S.dem = await loadDem(base, Q.step);
   prog(.4, "Membentuk permukaan 3D…");
-  const { H, gw, gh } = S.dem;
+  const { H, gw, gh, cx: CX, cz: CZ } = S.dem;
   const world = S.world = new THREE.Group(); world.scale.y = S.ex; scene.add(world);
 
   // permukaan
   const pos = new Float32Array(gw * gh * 3), uv = new Float32Array(gw * gh * 2), idx = new Uint32Array((gw - 1) * (gh - 1) * 6);
   for (let j = 0, p = 0, q = 0; j < gh; j++) for (let i = 0; i < gw; i++) {
-    pos[p++] = -SX / 2 + i / (gw - 1) * SX; pos[p++] = H[j * gw + i]; pos[p++] = -SZ / 2 + j / (gh - 1) * SZ;
-    uv[q++] = i / (gw - 1); uv[q++] = 1 - j / (gh - 1);
+    pos[p++] = -SX / 2 + i * CX; pos[p++] = H[j * gw + i]; pos[p++] = -SZ / 2 + j * CZ;
+    uv[q++] = i * CX / SX; uv[q++] = 1 - j * CZ / SZ;
   }
   for (let j = 0, t = 0; j < gh - 1; j++) for (let i = 0; i < gw - 1; i++) { const a = j * gw + i, b = a + 1, c = a + gw, d = c + 1; idx[t++] = a; idx[t++] = c; idx[t++] = b; idx[t++] = b; idx[t++] = c; idx[t++] = d; }
   const tg = new THREE.BufferGeometry();
   tg.setAttribute("position", new THREE.BufferAttribute(pos, 3)); tg.setAttribute("uv", new THREE.BufferAttribute(uv, 2)); tg.setIndex(new THREE.BufferAttribute(idx, 1));
   tg.computeBoundingSphere();
   const tl = new THREE.TextureLoader();
-  const prepTex = t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(lite ? 2 : 8, renderer.capabilities.getMaxAnisotropy()); t.minFilter = THREE.LinearMipmapLinearFilter; t.generateMipmaps = true; return t; };
+  const prepTex = t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(Q.aniso, renderer.capabilities.getMaxAnisotropy()); t.minFilter = THREE.LinearMipmapLinearFilter; t.generateMipmaps = true; return t; };
   S.prepTex = prepTex;
   prog(.55, "Memuat tekstur elevasi…");
-  S.tex.elev = prepTex(await tl.loadAsync(base + "relief3d.webp"));
+  if (Q.tex) {                                   // mode ringan: tekstur diperkecil agar hemat memori GPU
+    const im = await loadImg(base + "relief3d.webp"), c = document.createElement("canvas"); c.width = Q.tex; c.height = Math.round(Q.tex * im.height / im.width);
+    c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); S.tex.elev = prepTex(new THREE.CanvasTexture(c));
+  } else S.tex.elev = prepTex(await tl.loadAsync(base + "relief3d.webp"));
   const tmat = S.tmat = new THREE.MeshBasicMaterial({ map: S.tex.elev, fog: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
   const terrain = S.terrain = new THREE.Mesh(tg, tmat); terrain.frustumCulled = false; world.add(terrain);
 
@@ -200,7 +207,7 @@ async function build() {
       const mk = (o, ro) => { const m = new LineMaterial(Object.assign({ fog: false, worldUnits: false }, o)); S.mats.push(m); const l = new Line2(geo, m); l.computeLineDistances(); l.renderOrder = ro; l.frustumCulled = false; world.add(l); return m; };
       mk({ color: 0x04121f, linewidth: st.w + 2.4, depthWrite: false }, 1);
       mk(st.dash ? { color: st.c, linewidth: st.w, dashed: true, dashSize: .34, gapSize: .26, depthWrite: false } : { color: st.c, linewidth: st.w, depthWrite: false }, 2);
-      if (!st.dash) S.flows.push(mk({ color: 0xffffff, linewidth: Math.max(1.6, st.w * .42), dashed: true, dashSize: .16, gapSize: 1.0, transparent: true, opacity: .95, depthWrite: false }, 3));
+      if (!st.dash && Q.flow) S.flows.push(mk({ color: 0xffffff, linewidth: Math.max(1.6, st.w * .42), dashed: true, dashSize: .16, gapSize: 1.0, transparent: true, opacity: .95, depthWrite: false }, 3));
     });
   });
   addLines(D.jaringan_distribusi); addLines(D.transmisi_air_baku);
@@ -325,10 +332,10 @@ async function setTex(mode) {
   const bs = root.querySelectorAll(".g3-seg button"), mark = () => bs.forEach(b => b.classList.toggle("on", b.dataset.tex === S.texMode));
   if (mode === "sat" && !S.tex.sat) {
     S.texBusy = true; const b = $('[data-tex="sat"]'); b.classList.add("busy");
-    try { S.tex.sat = await buildSat(S.lite ? 11 : 12); }
+    try { S.tex.sat = await buildSat(S.Q.satZ); }
     catch (e) { toast("Citra satelit gagal dimuat. Periksa koneksi, lalu coba lagi."); b.classList.remove("busy"); S.texBusy = false; return; }
     b.classList.remove("busy"); S.texBusy = false;
-    if (!S.lite && S.vw > 820) setTimeout(async () => { try { const hd = await buildSat(13, true); const old = S.tex.sat; S.tex.sat = hd; if (S.texMode === "sat") { S.tmat.map = hd; S.tmat.needsUpdate = true; S.need = true; } old.dispose(); } catch (e) {} }, 2500);
+    if (S.Q.hd && S.vw > 820) setTimeout(async () => { try { const hd = await buildSat(13, true); const old = S.tex.sat; S.tex.sat = hd; if (S.texMode === "sat") { S.tmat.map = hd; S.tmat.needsUpdate = true; S.need = true; } old.dispose(); } catch (e) {} }, 2500);
   }
   S.texMode = mode; S.tmat.map = S.tex[mode]; S.tmat.needsUpdate = true; S.need = true; mark();
   $(".g3-leg .el").style.display = mode === "elev" ? "block" : "none";
@@ -508,27 +515,29 @@ function tourEnd() { if (!S.tour) return; clearTimeout(S.tour.timer); const fw =
 function start() { if (S.running) return; S.running = true; S.last = S.lastFlow = performance.now(); S.lastDraw = 0; requestAnimationFrame(frame); }
 function frame(now) {
   if (!S || !S.running) return; requestAnimationFrame(frame);
-  const dt = Math.min(.1, (now - S.last) / 1000); S.last = now;
+  const raw = now - S.last, dt = Math.min(.1, raw / 1000); S.last = now;
+  if (S.drew) { S.drew = false; if (raw < 400) { S.slow = (S.slow || 0) * .9 + (raw > 55 ? 1 : 0); if (S.slow > 7 && !S.anim) degrade(); } }
   if (S.anim) { const A = S.anim, k = Math.min(1, (now - A.t0) / A.ms), e = ease(k), a = A.a, to = A.to;
     setCam({ t: a.t.clone().lerp(to.t, e), r: a.r * Math.pow(to.r / a.r, e), phi: a.phi + (to.phi - a.phi) * e, theta: a.theta + A.d * e }); if (k >= 1) S.anim = null; }
   else if (S.controls.update()) S.need = true;
   if (S.voT && (Math.abs(S.vo[0] - S.voT[0]) > .5 || Math.abs(S.vo[1] - S.voT[1]) > .5)) { const k = Math.min(1, dt * 7); applyVO(S.vo[0] + (S.voT[0] - S.vo[0]) * k, S.vo[1] + (S.voT[1] - S.vo[1]) * k); }
-  const flowing = !S.lite && !S.reduce && !S.noFlow && S.flows.length;
-  if (flowing && now - S.lastFlow >= 30) { const off = (S.fo = ((S.fo || 0) - Math.min(.1, (now - S.lastFlow) / 1000) * 1.5) % 1.16); S.lastFlow = now; S.flows.forEach(m => m.dashOffset = off); S.need = true; }
+  const flowing = S.Q.flow && !S.reduce && !S.noFlow && S.flows.length;
+  if (flowing && now - S.lastFlow >= S.Q.flow) { const off = (S.fo = ((S.fo || 0) - Math.min(.1, (now - S.lastFlow) / 1000) * 1.5) % 1.16); S.lastFlow = now; S.flows.forEach(m => m.dashOffset = off); S.need = true; }
   if (S.controls.autoRotate) S.need = true;
-  if (!S.need) return; S.need = false;
-  if (flowing && !S.anim && now - S.lastDraw < 400) { S.slow = (S.slow || 0) * .9 + (now - S.lastDraw > 55 ? 1 : 0); if (S.slow > 7) degrade(); }
+  if (!S.need) return; S.need = false; S.drew = true;
   S.lastDraw = now;
   S.renderer.render(S.scene, S.camera); labels();
   const az = Math.atan2(S.camera.position.x - S.controls.target.x, S.camera.position.z - S.controls.target.z); $(".g3-cmp svg").style.transform = `rotate(${(az / DEG).toFixed(1)}deg)`;
   if (S.probe) { V.set(S.probe.x, S.probe.h * S.ex, S.probe.z).project(S.camera); const px = (V.x * .5 + .5) * S.vw, pe = $(".g3-probe"); pe.style.transform = `translate3d(${px.toFixed(1)}px,${((-V.y * .5 + .5) * S.vh).toFixed(1)}px,0)`; pe.classList.toggle("l", px > S.vw * .52); }
 }
 
-function degrade() {
+function degrade() {            // perangkat lambat: turunkan resolusi → matikan animasi aliran → resolusi di bawah 1
   S.slow = 0; const pr = S.renderer.getPixelRatio();
-  if (pr > 1.05) { S.renderer.setPixelRatio(Math.max(1, pr * .7)); S.renderer.setSize(S.vw, S.vh, false); }
-  else { S.noFlow = true; S.flows.forEach(m => m.visible = false); }
-  S.need = true;
+  if (pr > 1.05) S.renderer.setPixelRatio(Math.max(1, pr * .75));
+  else if (!S.noFlow && S.flows.length) { S.noFlow = true; S.flows.forEach(m => m.visible = false); }
+  else if (pr > .62) S.renderer.setPixelRatio(Math.max(.6, pr * .8));
+  else return;
+  S.renderer.setSize(S.vw, S.vh, false); S.need = true;
 }
 
 // ---------- aksi UI
@@ -582,7 +591,8 @@ export async function open(opts) {
     if (S.vw > 1100) setFlow(true);
     try { $('[data-a="close"]').focus({ preventScroll: true }); } catch (e) {}
     start(); S.renderer.render(S.scene, S.camera);
-    requestAnimationFrame(() => { root.classList.add("ready"); setTimeout(() => { if (at) goAt(at); else fly(S.home, 2600); hint(true); }, 250); });
+    requestAnimationFrame(() => { root.classList.add("ready"); setTimeout(() => { if (at) goAt(at); else fly(S.home, 2600); hint(true);
+      if (S.tier === 2) toast("Mode ringan: detail 3D dikurangi agar tetap lancar di HP ini.", 4500); }, 250); });
   } else { resize(); refreshLive(); start(); S.need = true; if (at) goAt(at); }
   if (O.onOpen) try { O.onOpen(); } catch (e) {}
 }

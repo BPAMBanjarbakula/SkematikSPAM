@@ -59,6 +59,7 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
     <div class="card"><h2>Perangkat</h2><div id="dev"></div></div>
     <div class="card"><h2>Perkiraan kota</h2><div id="kota"></div></div>
     <div class="card"><h2>Fitur yang dipakai</h2><div id="ev"></div></div>
+    <div class="card"><h2>Tingkat kinerja perangkat</h2><div id="perf"></div></div>
   </div>
   <div class="card"><h2>Jam ramai (WITA)</h2><div class="hr" id="hr"></div><div class="ax"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div></div>
   <p class="note">"Pengunjung harian unik" menghitung satu perangkat sekali per hari. Kota diperkirakan dari jaringan internet dan bisa meleset (misalnya tercatat Jakarta atau Singapura untuk operator seluler). Data mulai tercatat sejak fitur ini dipasang, 9 November 2026.</p>
@@ -66,7 +67,7 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
 <script>
 const API = "https://geospambakula.netlify.app/api/stat";
 const NM = {wa:"WhatsApp",google:"Google",telegram:"Telegram",langsung:"Link langsung / bookmark",aplikasi:"Aplikasi homescreen",lain:"Lainnya",
-  nrc:"Neraca air",xlsx:"Unduh Excel BWS",tour:"Tur jaringan",prof:"Profil elevasi",share:"Bagikan",tv:"Mode TV",rm:"Peta jalan",kti:"Baca KTI",lite:"Mode ringan",dark:"Mode gelap","3d":"Mode 3D",
+  nrc:"Neraca air",xlsx:"Unduh Excel BWS",tour:"Tur jaringan",prof:"Profil elevasi",share:"Bagikan",tv:"Mode TV",rm:"Peta jalan",kti:"Baca KTI",lite:"Mode ringan",dark:"Mode gelap","3d":"Mode 3D",turun:"Kinerja diturunkan otomatis",
   geospambakula:"geospambakula",geospambanjarbakula:"geospambanjarbakula",skematik:"skematik"};
 const nf = n => n.toLocaleString("id-ID");
 const tglf = s => new Date(s + "T00:00:00").toLocaleDateString("id-ID", {day:"numeric", month:"short"});
@@ -87,7 +88,7 @@ async function load(){
   const mx = Math.max(1, ...D.map(d => d.v));
   document.getElementById("bars").innerHTML = D.map(d => `<div style="height:${Math.max(d.v ? 3 : 1, d.v/mx*100)}%;${d.v ? "" : "opacity:.25"}" title="${tglf(d.tgl)}: ${d.v} kunjungan, ${d.u} unik"></div>`).join("");
   document.getElementById("a0").textContent = tglf(D[0].tgl); document.getElementById("a1").textContent = tglf(D[D.length-1].tgl);
-  list("ref", agg("ref")); list("dev", agg("dev")); list("kota", agg("kota")); list("ev", agg("ev"));
+  list("ref", agg("ref")); list("dev", agg("dev")); list("kota", agg("kota")); list("ev", agg("ev")); list("perf", agg("perf"));
   const H = Array(24).fill(0); D.forEach(d => (d.h||[]).forEach((v,i) => H[i] += v)); const hm = Math.max(1, ...H);
   document.getElementById("hr").innerHTML = H.map((v,i) => `<div style="height:${Math.max(2, v/hm*100)}%" title="${String(i).padStart(2,"0")}.00: ${v}"></div>`).join("");
 }

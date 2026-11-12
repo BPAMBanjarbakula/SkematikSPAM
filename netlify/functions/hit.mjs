@@ -1,7 +1,7 @@
 // Penghitung kunjungan anonim GeoSPAM Bakula (tanpa cookie, tanpa IP, tanpa identitas)
 import { getStore } from "@netlify/blobs";
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Allow-Methods": "POST, OPTIONS" };
-const EV = new Set(["view","nrc","xlsx","tour","prof","share","tv","rm","kti","lite","dark","3d"]);
+const EV = new Set(["view","nrc","xlsx","tour","prof","share","tv","rm","kti","lite","dark","3d","turun"]);
 export default async (req, context) => {
   if (req.method === "OPTIONS") return new Response("", { headers: CORS });
   if (req.method !== "POST") return new Response("POST only", { status: 405, headers: CORS });
@@ -17,6 +17,7 @@ export default async (req, context) => {
     inc(d.ref, ["wa","google","telegram","langsung","lain","aplikasi"].includes(b.ref) ? b.ref : "lain");
     const c = context.geo && context.geo.city; inc(d.kota, c ? String(c).slice(0, 40) : "Tidak diketahui");
     inc(d.situs, ["geospambakula","geospambanjarbakula","skematik"].includes(b.s) ? b.s : "lain");
+    if (b.p === 0 || b.p === 1 || b.p === 2) { d.perf = d.perf || {}; inc(d.perf, ["Penuh","Hemat","Ringan"][b.p]); }
   } else inc(d.ev, ev);
   await store.setJSON(k, d);
   return new Response("ok", { headers: CORS });
