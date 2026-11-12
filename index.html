@@ -1439,6 +1439,7 @@ body.g3on > :not(#g3d){visibility:hidden}
 .btn-tour.b3 em{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:999px;background:#38d9a9;color:#04121f}
 @media (max-width:820px){#btnRm{display:none}.hbtn.b3d svg{display:none}.hbtn.b3d span{display:inline!important;font-size:11.5px}.hbtn.b3d{padding:7px 8px!important}}
 html.lite .hbtn.b3d{animation:none}
+@media (max-width:372px){.ttl .tbj{display:none}}
 button.gbtn{font:inherit;font-size:12.5px;font-weight:700;background:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .gbtn.g3go{border-color:rgba(34,184,207,.6)!important}
 @media (min-width:821px) and (max-width:1240px){.ttl .tlg{display:none}.ttl .tsh{display:block}.hbtn:not(.b3d):not(.tourb) span{display:none}.hbtn{padding:7px 9px}}
@@ -3039,7 +3040,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 
 // ---------- Mode 3D (modul three.js dimuat hanya saat dibuka)
 (function(){
-  const G3V = "2";
+  const G3V = "3";
   const focus = name => { const it = searchIndex.find(i => !i.bounds && i.name === name); if (!it) return;
     const grp = LAYERS.find(l => l.lyr.hasLayer && l.lyr.hasLayer(it.layer));
     if (grp && !map.hasLayer(grp.lyr)){ grp.lyr.addTo(map); const cb = [...document.querySelectorAll("#layers input")][LAYERS.indexOf(grp)]; if (cb) cb.checked = true; }

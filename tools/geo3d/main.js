@@ -554,7 +554,7 @@ function onClick(e) {
   else if (a === "tplay") tourPlay(!S.tour.playing);
 }
 function onKey(e) { if (!root || !root.classList.contains("on")) return; if (e.key === "Escape") { e.stopPropagation(); if (S && S.tour) tourEnd(); else if (S && S.sel) select(null); else close(); } }
-function onPop() { if (root && root.classList.contains("on") && !(history.state && history.state.g3d)) close(true); }
+function onPop() { const st = history.state && history.state.g3d, on = root && root.classList.contains("on"); if (on && !st) close(true); else if (!on && st && O) open(); }
 
 function showProbe(h, label) {
   const el = $(".g3-probe"), la = LAT(h.z), lo = LON(h.x); S.probe = h;
