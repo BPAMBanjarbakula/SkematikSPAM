@@ -1,7 +1,7 @@
 // Service worker GeoSPAM Bakula (v4, ringan):
 // - halaman: jaringan dulu, tapi kalau sinyal lambat (>3,5 dtk) langsung pakai cache
 // - data statis & gambar: pakai cache, diperbarui diam-diam di belakang
-const C = "geospam-v11", T = "geospam-tiles-v1", TMAX = 900;
+const C = "geospam-v12", T = "geospam-tiles-v1", TMAX = 900;
 let puts = 0;
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(
