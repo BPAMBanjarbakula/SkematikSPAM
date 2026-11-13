@@ -17,7 +17,7 @@ h1{margin:0;font-size:20px;letter-spacing:-.01em}
 header p{margin:2px 0 0;color:var(--mu);font-size:12.5px}
 .sp{flex:1}
 select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:7px 10px;text-decoration:none}
-.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px}
 .k{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
 .k b{display:block;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
 .k span{color:var(--mu);font-size:12px}
@@ -52,6 +52,7 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
     <div class="k"><b id="kU">–</b><span>Pengunjung harian unik</span></div>
     <div class="k"><b id="kT">–</b><span>Kunjungan hari ini</span></div>
     <div class="k"><b id="kP">–</b><span>Hari tersibuk</span></div>
+    <div class="k"><b id="kB">–</b><span>Disaring (bot, uji otomatis, luar negeri)</span></div>
   </div>
   <div class="card"><h2>Kunjungan per hari</h2><div class="bars" id="bars"></div><div class="ax"><span id="a0"></span><span id="a1"></span></div></div>
   <div class="g2">
@@ -62,7 +63,7 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
     <div class="card"><h2>Tingkat kinerja perangkat</h2><div id="perf"></div></div>
   </div>
   <div class="card"><h2>Jam ramai (WITA)</h2><div class="hr" id="hr"></div><div class="ax"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div></div>
-  <p class="note">"Pengunjung harian unik" menghitung satu perangkat sekali per hari. Kota diperkirakan dari jaringan internet dan bisa meleset (misalnya tercatat Jakarta atau Singapura untuk operator seluler). Data mulai tercatat sejak fitur ini dipasang, 9 November 2026.</p>
+  <p class="note">"Pengunjung harian unik" menghitung satu perangkat sekali per hari. Kota diperkirakan dari jaringan internet dan bisa meleset (misalnya tercatat Jakarta atau Singapura untuk operator seluler). Data mulai tercatat sejak fitur ini dipasang, 9 November 2026. Angka utama hanya pengunjung nyata dari Indonesia; kunjungan bot/perayap, uji otomatis, salinan deploy dan akses luar negeri dihitung terpisah pada kotak "Disaring". Untuk data 9–13 November (sebelum penyaring dipasang) penyaringan dilakukan dari perkiraan kota, sehingga sebaran jam dan perangkat hari-hari itu merupakan perkiraan proporsional.</p>
 </div>
 <script>
 const API = "https://geospambakula.netlify.app/api/stat";
@@ -72,16 +73,26 @@ const NM = {wa:"WhatsApp",google:"Google",telegram:"Telegram",langsung:"Link lan
 const nf = n => n.toLocaleString("id-ID");
 const tglf = s => new Date(s + "T00:00:00").toLocaleDateString("id-ID", {day:"numeric", month:"short"});
 function list(el, obj){
-  const e = Object.entries(obj).sort((a,b) => b[1]-a[1]).slice(0, 8), mx = Math.max(1, ...e.map(x => x[1]));
+  const e = Object.entries(obj).filter(x => x[1] > 0).sort((a,b) => b[1]-a[1]).slice(0, 8), mx = Math.max(1, ...e.map(x => x[1]));
   document.getElementById(el).innerHTML = e.length ? e.map(([k,v]) => `<div class="row"><span>${NM[k]||k}</span><i style="width:${Math.max(3, v/mx*100)}%"></i><em>${nf(v)}</em></div>`).join("") : '<div class="em">Belum ada data</div>';
 }
 async function load(){
   const n = document.getElementById("rg").value;
   let D = [];
   try{ D = await fetch(API + "?hari=" + n).then(r => r.json()); }catch(e){ document.getElementById("bars").innerHTML = '<div class="em" style="background:none;flex:1">Gagal memuat data</div>'; return; }
+  // Data lama (sebelum penyaring v2, 9–13 Nov 2026): kunjungan dari luar Indonesia (uji otomatis & bot di AS/Kanada)
+  // dikeluarkan dari angka utama. Kota Indonesia/tak diketahui dianggap pengunjung nyata.
+  const KID = /banjar|martapura|palembang|jakarta|kalimantan|samarinda|balikpapan|surabaya|bandung|medan|makassar|semarang|yogyakarta|tidak diketahui/i;
+  D.forEach(d => { if (!d.v || d.ver >= 2) return; let out = 0; const k2 = {};
+    Object.entries(d.kota||{}).forEach(([k,v]) => KID.test(k) ? k2[k] = v : out += v);
+    const v2 = Math.max(0, d.v - out), f = d.v ? v2 / d.v : 0;
+    d.bot = (d.bot||0) + out; d.u = Math.round(d.u * f); d.v = v2; d.kota = k2; delete (d.situs||{}).lain;
+    ["dev","ref","perf"].forEach(key => Object.keys(d[key]||{}).forEach(x => d[key][x] = Math.round(d[key][x] * f)));
+    d.h = (d.h||[]).map(x => Math.round(x * f)); });
   const sum = (f) => D.reduce((a,d) => a + (f(d)||0), 0), agg = key => { const o = {}; D.forEach(d => Object.entries(d[key]||{}).forEach(([k,v]) => o[k] = (o[k]||0)+v)); return o; };
   document.getElementById("kV").textContent = nf(sum(d => d.v));
   document.getElementById("kU").textContent = nf(sum(d => d.u));
+  document.getElementById("kB").textContent = nf(sum(d => (d.bot||0) + (d.luar||0)));
   document.getElementById("kT").textContent = nf(D[D.length-1].v || 0);
   const pk = D.reduce((a,d) => d.v > a.v ? d : a, {v:0});
   document.getElementById("kP").textContent = pk.v ? tglf(pk.tgl) + " · " + pk.v : "–";
