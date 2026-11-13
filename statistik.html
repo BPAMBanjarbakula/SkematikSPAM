@@ -83,7 +83,7 @@ async function load(){
   // Data lama (sebelum penyaring v2, 9–13 Nov 2026): kunjungan dari luar Indonesia (uji otomatis & bot di AS/Kanada)
   // dikeluarkan dari angka utama. Kota Indonesia/tak diketahui dianggap pengunjung nyata.
   const KID = /banjar|martapura|palembang|jakarta|kalimantan|samarinda|balikpapan|surabaya|bandung|medan|makassar|semarang|yogyakarta|tidak diketahui/i;
-  D.forEach(d => { if (!d.v || d.ver >= 2) return; let out = 0; const k2 = {};
+  D.forEach(d => { if (!d.v) return; let out = 0; const k2 = {};
     Object.entries(d.kota||{}).forEach(([k,v]) => KID.test(k) ? k2[k] = v : out += v);
     const v2 = Math.max(0, d.v - out), f = d.v ? v2 / d.v : 0;
     d.bot = (d.bot||0) + out; d.u = Math.round(d.u * f); d.v = v2; d.kota = k2; delete (d.situs||{}).lain;
