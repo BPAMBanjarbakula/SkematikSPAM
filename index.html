@@ -819,6 +819,9 @@ body.dark .anlgo button{background:#122238;border-color:#1e3550}body.dark .anlgo
 .anllead .bd,.srch .bd{font-size:10px;font-weight:800;border-radius:999px;padding:1px 7px;color:#fff;background:#2f9e44;white-space:nowrap}.bd.lab{background:#0c8599}.bd.pub{background:#1971c2}.bd.es{background:#e8590c}
 body.dark .srci{background:#122238;border-color:#1e3550}body.dark .srch b{color:#e7f5ff}body.dark .srcg h4,body.dark .srch small{color:#9fb3c8}body.dark .srcw th{background:#16283f}body.dark .srcb button[data-a="d"]{background:#16283f;color:#c5d3e0;border-color:#2a3a4d}body.dark .srcb button[data-a="v"]{background:#0e2a44;border-color:#1e4a70;color:#74c0fc}
 @media (max-width:620px){.srch{flex-direction:column;align-items:flex-start}}
+.anltabs button[hidden]{display:none!important}
+.srcx{font-size:11.5px;color:#7a8794;margin:4px 0 12px;line-height:1.45}.srcx b{color:#5c6b7a;font-weight:700}body.dark .srcx{color:#8fa7bd}body.dark .srcx b{color:#adc3d6}
+.isrc{display:block;font-size:11px;color:#86a5c2;margin-top:3px;font-weight:400}
 /* ---- modal analisa ketersediaan air */
 .anl{position:fixed;inset:0;z-index:7000;background:rgba(3,10,20,.72);display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto}
 .anl[hidden]{display:none}
@@ -3449,48 +3452,57 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     <button class="anlx" id="anlX" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
     <div class="anlhd"><span class="anlic"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><div><h2 id="anlT">Analisa Air Baku</h2><p>Intake Bendung Karang Intan · Sungai Riam Kanan</p></div></div>
     <div class="anlbd">
-      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="s">Sumber data</button><button role="tab" data-t="l">Analisa lainnya</button></div>
+      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="s" hidden>Sumber data</button><button role="tab" data-t="l">Analisa lainnya</button></div>
       <div class="anlpane" data-p="h">
         <div id="hyW"></div>
-        <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div></div>
+        <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div><p class="srcx" style="margin:6px 0 0"><b>Sumber:</b> AWLR & ARR BWS Kalimantan III, BMKG, model GloFAS/Open-Meteo.</p></div>
         <div class="anlkpi" id="hyK"><div><b>–</b><span>Tinggi air bendung</span><em></em></div><div><b>–</b><span>Naik/turun 7 hari</span><em></em></div><div><b>–</b><span>Hujan 7 hari terakhir</span><em></em></div><div><b>–</b><span>Hujan 3 hari ke depan (BMKG)</span><em></em></div></div>
         <h3>1. Tinggi air bendung sejak Juni <span class="hyb">LIVE</span></h3>
         <div class="hyart" id="hyA1"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy1"></div>
+        <p class="srcx"><b>Sumber:</b> AWLR HGT1486 Bendung Karang Intan, BWS Kalimantan III (opsdabwskal3.higertech.com), data tiap 5 menit.</p>
         <details class="hytek"><summary>Penjelasan teknis</summary><p>Rata-rata harian (garis) dan rentang minimum–maksimum (pita) AWLR HGT1486 BWS Kalimantan III sejak 6 Juni 2026, data 5 menit. Jalur warna = ambang kering BPAM (9,00/8,85/8,70 m) dan ambang banjir BWS (10,60/10,90/11,20 m).</p></details>
         <h3>2. Hujan dan tinggi air, 60 hari terakhir <span class="hyb">LIVE</span></h3>
         <div class="hyart" id="hyA2"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy2"></div>
+        <p class="srcx"><b>Sumber:</b> hujan: ARR PCH Liang Anggang (HGT645) dan ULM (HGT205), BWS Kalimantan III (hkakal3.higertech.com); bila pos kosong dipakai hujan model Open-Meteo/ERA5. Muka air: AWLR HGT1486.</p>
         <details class="hytek"><summary>Penjelasan teknis</summary><p id="hyT2"></p></details>
         <h3>3. Cuaca 3 hari ke depan <span class="hyb pub">BMKG</span></h3>
         <div class="hyart" id="hyABM"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hyBM"></div>
+        <p class="srcx"><b>Sumber:</b> BMKG, prakiraan cuaca per desa (Mandikapau Barat dan Aranio), data.bmkg.go.id.</p>
         <button type="button" class="hybtn" onclick="document.getElementById('anlX').click(); window.awanShow && window.awanShow()">Lihat awan hujan di peta →</button>
         <h3>4. Aliran sungai 30 hari ke depan <span class="hyb es">ESTIMASI</span></h3>
         <div class="hyart" id="hyA6"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy6"></div>
+        <p class="srcx"><b>Sumber:</b> Copernicus GloFAS v4 (model global) melalui Open-Meteo Flood API; klimatologi normal 1997–2025.</p>
         <details class="hytek"><summary>Penjelasan teknis</summary><p>Debit harian Sungai Riam Kanan hulu bendung dari model GloFAS v4 (Copernicus): garis biru = 60 hari terakhir, garis putus = prakiraan 30 hari, pita = rentang kemungkinan (persentil 25–75), garis abu-abu = debit andalan Q80 normal. Model tidak memperhitungkan pelepasan PLTA Riam Kanan; yang dipakai arah naik/turunnya, bukan angka mutlaknya.</p></details>
         <details class="hytek hysrcw"><summary id="hySrcS">Sumber data</summary><div id="hySrc"></div><p>LIVE = hasil ukur alat BWS Kalimantan III; BMKG = data resmi BMKG; ESTIMASI = model (Open-Meteo, GloFAS). Diperbarui otomatis tiap 10 menit selama panel terbuka.</p></details>
       </div>
       <div class="anlpane" data-p="q" hidden>
-        <div class="hysum" id="kqS"><div class="hyst"><span class="hydot"></span><b>Memuat data kualitas air…</b></div><ul></ul><div class="hyupd" id="kqU"></div></div>
+        <div class="hysum" id="kqS"><div class="hyst"><span class="hydot"></span><b>Memuat data kualitas air…</b></div><ul></ul><div class="hyupd" id="kqU"></div><p class="srcx" style="margin:6px 0 0"><b>Sumber:</b> Laboratorium BPAM Banjarbakula, BB Labkesmas Banjarbaru, PT Sucofindo.</p></div>
         <div class="anlkpi" id="kqK"><div><b>–</b><span>Kekeruhan air baku</span><em></em></div><div><b>–</b><span>Kekeruhan air curah</span><em></em></div><div><b>–</b><span>Sisa klor reservoir</span><em></em></div><div><b>–</b><span>Catatan di offtaker</span><em></em></div></div>
         <h3>1. Kekeruhan: air sungai vs air curah</h3>
         <div class="hyart" id="kqA1"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p id="kqT1"></p></details>
         <div class="hyc" id="kq1"></div>
+        <p class="srcx"><b>Sumber:</b> laporan harian Laboratorium BPAM Banjarbakula: Google Sheet rekap lab (Juni 2026) dan Laporan Kualitas Air BPAM Mei 2026.</p>
         <h3>2. Kenapa air sungai keruh di hari kerja?</h3>
         <div class="hyart" id="kqAW"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="kqW"></div>
+        <p class="srcx"><b>Sumber:</b> diolah dari laporan harian Laboratorium BPAM Banjarbakula (Mei–Juni 2026); hujan dari ARR BWS Kalimantan III.</p>
         <details class="hytek"><summary>Penjelasan teknis</summary><p id="kqTW"></p></details>
         <h3>3. Sisa klor di reservoir</h3>
         <div class="hyart" id="kqA2"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Sisa klor bebas Reservoir 1000 dan 2000 (rata-rata harian). Baku mutu Permenkes 2/2023: 0,2–0,5 mg/L. Di bawah 0,2 mg/L perlindungan terhadap kuman di jaringan berkurang; di atas 0,5 mg/L air dapat berbau/berasa kaporit.</p></details>
         <div class="hyc" id="kq2"></div>
+        <p class="srcx"><b>Sumber:</b> laporan harian Laboratorium BPAM Banjarbakula, Reservoir 1000 dan 2000.</p>
         <h3>4. Air curah di titik offtaker</h3>
         <div class="hyart" id="kqA3"><b>Artinya:</b> memuat…</div>
         <div id="kq3"></div>
+        <p class="srcx"><b>Sumber:</b> rekap mingguan titik offtaker PTAM Intan Banjar (Lab BPAM Banjarbakula); uji bulanan PT Sucofindo.</p>
         <h3>5. Bakteri &amp; oksigen air sungai per bulan</h3>
         <div class="hyart" id="kqA4"><b>Artinya:</b> memuat…</div>
         <div id="kq4"></div>
+        <p class="srcx"><b>Sumber:</b> Laporan Hasil Uji air sungai Intake Mandikapau, BB Labkesmas Banjarbaru (BBLKM), Januari–Juni 2026.</p>
         <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), Laporan Kualitas Air BPAM Mei 2026, LHU BBLKM air baku Jan–Jun 2026, Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
       </div>
       <div class="anlpane" data-p="s" hidden>
@@ -3525,6 +3537,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         <li>Tahun yang lebih kering dari 2026: <b>2015 (55 mm)</b>, <b>1997 (64 mm)</b>, 2006, 1991 dan 1994. Pada tahun seperti itu muka air berpotensi turun lebih rendah dari yang terekam pada 2026.</li>
         <li>Muka air bendung juga dipengaruhi pelepasan air <b>PLTA/Waduk Riam Kanan</b>. Sejak Oktober 2026 terlihat naik-turun harian sekitar 0,5 m, kemungkinan besar mengikuti pola operasi PLTA.</li>
       </ul>
+      <p class="srcx"><b>Sumber:</b> Laporan Penggunaan Air Triwulan I–III 2026 BPAM Banjarbakula; data hujan ERA5 (Open-Meteo Archive).</p>
       <h3>2. Muka air 2026 dan ambang siaga</h3>
       <img src="anl_ambang.webp" alt="Grafik muka air Bendung Karang Intan 2026 dengan ambang siaga" width="1400" height="728" loading="lazy">
       <p>Pada September 2026 muka air berada di titik terendah (rata-rata harian 8,92–9,00 m), tetapi pengambilan air baku justru <b>747 L/dtk, tertinggi sepanjang 2026</b> (Laporan Penggunaan Air Triwulan III). Artinya pada muka air ±8,9 m intake masih bekerja penuh. Atas dasar itu ambang kering ditetapkan sebagai berikut:</p>
@@ -3542,6 +3555,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         </tbody>
       </table>
       <p class="anlnt">Status kering dinilai dari <b>rata-rata 6 jam</b> agar turun-naik sesaat akibat operasi PLTA tidak memicu peringatan palsu. Nilai adalah bacaan sensor AWLR, bukan elevasi mdpl.</p>
+      <p class="srcx"><b>Sumber:</b> AWLR HGT1486 Bendung Karang Intan, BWS Kalimantan III; ambang dari BWS (banjir) dan BPAM (kering).</p>
       <h3>3. Batasan dan tindak lanjut</h3>
       <ul>
         <li>Ambang Siaga dan Awas kering masih berupa <b>batas aman berbasis data</b>, karena kondisi sekering itu belum pernah terekam alat ini.</li>
@@ -3825,7 +3839,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   }
 
   const hariN = k => k === todayW() ? "Hari ini" : k === addD(todayW(),1) ? "Besok" : wd(k).toLocaleDateString("id-ID",{weekday:"long",timeZone:"UTC"});
-  const lebat = d => d.c >= 63 || d.mm >= 20, petir = d => d.c >= 95;
+  const lebat = d => d.mm >= 20 || (d.c >= 63 && d.c < 80 && d.mm >= 10), petir = d => d.c >= 95;
   function cBM(box, X){
     const row = (nm, sub, a) => !a || !a.length ? `<div class="bmrow"><div class="bmnm">${nm}<small>${sub}</small></div><p class="hynote">Prakiraan BMKG belum dapat dimuat.</p></div>` :
       `<div class="bmrow"><div class="bmnm">${nm}<small>${sub}</small></div><div class="bmd">${a.map(d => `<div class="${lebat(d) ? "hx" : d.c >= 60 ? "hv" : ""}"><span>${hariN(d.k)}</span>${d.img ? `<img src="${d.img}" alt="" width="34" height="34" loading="lazy">` : ""}<b>${d.desc}</b><em>${nf(d.mm,0)} mm</em></div>`).join("")}</div></div>`;
@@ -3888,7 +3902,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     L.push(Z.v >= 9 && Z.v < 10.6 ? `Tinggi air <b>${nf(Z.v)} m</b>, ${cm(Z.v-9)} di atas batas waspada kering. Intake mengambil air seperti biasa.` : Z.v < 9 ? `Tinggi air <b>${nf(Z.v)} m</b>, di bawah batas waspada kering 9,00 m; pantau harian.` : `Tinggi air <b>${nf(Z.v)} m</b>, di atas batas siaga banjir 10,60 m; waspadai air keruh dan sampah di intake.`);
     L.push(`Hujan seminggu terakhir: Liang Anggang ${nf(Z.la7,0)} mm, ULM ${nf(Z.ul7,0)} mm` + (Math.max(Z.la7,Z.ul7) > 2.5*Math.max(5,Math.min(Z.la7,Z.ul7)) ? " (tidak merata)." : "."));
     const hb = (X.BM.hu || []).filter(lebat), ib = (X.BM.in || []).filter(lebat);
-    if (X.BM.hu || X.BM.in) L.push(`3 hari ke depan (BMKG): ` + (hb.length ? `<b>hujan deras di hulu</b> (${hb.map(d => hariN(d.k).toLowerCase()).join(", ")}), air baku bisa keruh.` : ib.length ? `hujan deras di sekitar intake (${ib.map(d => hariN(d.k).toLowerCase()).join(", ")}).` : `tanpa hujan deras.`));
+    if (X.BM.hu || X.BM.in) L.push(`3 hari ke depan (BMKG): ` + (hb.length ? `<b>hujan deras di hulu</b> (${hb.map(d => hariN(d.k).toLowerCase()).join(", ")}), air baku bisa keruh.` : ib.length ? `hujan deras di sekitar intake (${ib.map(d => hariN(d.k).toLowerCase()).join(", ")}).` : `(X.BM.in || []).concat(X.BM.hu || []).some(petir) ? `hujan ringan, ada potensi petir.` : `tanpa hujan deras.`));
     const DZ = window.__darurat && window.__darurat();
     if (DZ && DZ.st !== "normal") L.unshift(window.__daruratTxt(DZ));
     if (Z.gr != null) L.push(`Aliran sungai dari hulu 30 hari ke depan diperkirakan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? `: musim hujan mulai masuk.` : `.`));
@@ -3906,7 +3920,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     set(0, nf(Z.v) + " m", c ? lvStat(Z.v)[1].split(" –")[0] : "aman", c ? "w" : "");
     set(1, Z.dl == null ? "–" : Math.abs(Z.dl) < 0.005 ? "stabil" : (Z.dl > 0 ? "naik " : "turun ") + nf(Math.abs(Z.dl)*100,0) + " cm", "", "g");
     set(2, nf(Z.r7,0) + " mm", hujanKat(Z.r7), "g");
-    set(3, X.BM.in ? "±" + nf(b3,0) + " mm" : "–", bm.some(lebat) ? "ada hujan deras" : X.BM.in ? "tanpa hujan deras" : "", bm.some(lebat) ? "w" : "g");
+    set(3, X.BM.in ? "±" + nf(b3,0) + " mm" : "–", bm.some(lebat) ? "ada hujan deras" : bm.some(petir) ? "ada potensi petir" : X.BM.in ? "tanpa hujan deras" : "", bm.some(lebat) || bm.some(petir) ? "w" : "g");
   }
   function srcTable(X){
     const s = X.src, ok = o => o && o.ok, st = o => ok(o) ? `<span class="ok">● tersambung</span>` : `<span class="no">● gagal${o && o.e ? " (" + o.e + ")" : ""}</span>`;
@@ -4372,7 +4386,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     if (!parts.length) return;
     const head = lvl === "bad" ? I("warn") + " Perlu perhatian" : lvl === "warn" ? "Air baku aman · ada catatan" : I("check") + " Air baku aman";
     document.getElementById("iNowB").textContent = "Kondisi hari ini";
-    document.getElementById("iNowTx").innerHTML = `<b>${head}</b> — ` + parts.join(" · ") + ".";
+    document.getElementById("iNowTx").innerHTML = `<b>${head}</b> — ` + parts.join(" · ") + `.<small class="isrc">Sumber: AWLR BWS Kalimantan III · flowmeter BPAM (logger Onpoint)</small>`;
     box.className = lvl === "ok" ? "" : lvl; box.hidden = false;
   }
   abstraksi(); weather(); setTimeout(now, 3000); setTimeout(now, 8000); setInterval(now, 60000); setInterval(weather, 3*3600e3);
