@@ -26,8 +26,9 @@ const ITEM = {
 };
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const cache = {};
-let cur = +(lsGet("tab") ?? 0), rows = [], shown = 80, F = null, flash = new Set();
-if (!TABS.some(t => t[1] === cur)) cur = 0;
+const HOME = -1;
+let cur = HOME, rows = [], shown = 80, F = null, flash = new Set(), lastTab = +(lsGet("tab") ?? 0);
+if (!TABS.some(t => t[1] === lastTab)) lastTab = 0;
 
 function lsGet(k) { try { return localStorage.getItem("reg_" + k) } catch (e) { return null } }
 function lsSet(k, v) { try { localStorage.setItem("reg_" + k, v) } catch (e) {} }
@@ -58,20 +59,23 @@ async function fetchTab(gid, fresh) {
   const r = await fetch("/api/register?gid=" + gid + (fresh ? "&t=" + Date.now() : "")); if (!r.ok) throw new Error(await r.text());
   const t = await r.text(); const p = parse(t); cache[gid] = p; lsSet("d" + gid, t); if (p.hdr) lsSet("h" + gid, JSON.stringify(p.hdr)); return p }
 function fromLocal(gid) { if (cache[gid]) return cache[gid]; const c = lsGet("d" + gid); if (c) { const p = parse(c); cache[gid] = p; return p } return null }
-async function load(fresh, quiet) { const gid = cur; spin(1);
+async function load(fresh, quiet) { if (cur === HOME) return loadHome(fresh, quiet); const gid = cur; spin(1);
   const loc = fromLocal(gid); if (loc) { rows = loc; years(); render() } else $("#m").innerHTML = '<div class="sk"></div>'.repeat(6);
   try { const p = await fetchTab(gid, fresh); if (gid !== cur) return; rows = p; years(); render(); counts(); if (fresh && !quiet) toast("Data diperbarui") }
   catch (e) { if (gid === cur && !rows.length) $("#m").innerHTML = `<div class="err">Gagal memuat data.<br><small>${esc(e.message)}</small></div>`; else if (!quiet) toast("Offline – menampilkan data tersimpan") }
   finally { spin(0) } }
 function spin(on) { $$("#rf,#rf2").forEach(b => b.classList.toggle("spin", !!on)) }
-async function prefetch() { for (const t of TABS) if (t[1] !== cur && !cache[t[1]]) { try { await fetchTab(t[1]) } catch (_) {} } counts() }
+async function prefetch() { for (const t of TABS) if (t[1] !== cur && !cache[t[1]]) { try { await fetchTab(t[1]); if (cur === HOME) renderHome() } catch (_) {} } counts() }
+async function loadHome(fresh, quiet) { spin(1); TABS.forEach(t => fromLocal(t[1])); renderHome();
+  await Promise.all(TABS.map(t => (fresh || !cache[t[1]]) ? fetchTab(t[1], fresh).catch(() => {}) : 0));
+  spin(0); counts(); if (cur === HOME) renderHome(); if (fresh && !quiet) toast("Data diperbarui"); splashDone() }
 
 /* ---------- tampilan ---------- */
 const seqOf = o => { const m = o.no.match(/(\d{3,})/g); return m ? +m[m.length > 1 && /^900/.test(o.no) ? 1 : 0] : 0 };
 function lastOf(L) { const ly = L.reduce((a, o) => o.yr > a ? o.yr : a, ""); return L.filter(o => o.yr === ly).reduce((a, o) => !a || seqOf(o) >= seqOf(a) ? o : a, null) }
-function nextFor(o) { const c = CFG[cur], p = partsFrom(o.no); const Y = String(new Date().getFullYear());
-  return c.num(Object.fromEntries(c.parts.map(d => [d.k, p[d.k] || "…"])), nextSeq(rows.map(r => r.no), c, p, Y), Y) }
-function partsFrom(no) { const c = CFG[cur], p = {};
+function nextFor(o, g = cur, R = rows) { const c = CFG[g], p = partsFrom(o.no, g); const Y = String(new Date().getFullYear());
+  return c.num(Object.fromEntries(c.parts.map(d => [d.k, p[d.k] || "…"])), nextSeq(R.map(r => r.no), c, p, Y), Y) }
+function partsFrom(no, g = cur) { const c = CFG[g], p = {};
   c.parts.forEach(d => { if (d.opts) p[d.k] = d.opts.find(o => no.includes("/" + o + "/") || no.includes("/" + o + "-")) || d.opts[0];
     else { const m = no.match(d.kode); p[d.k] = m ? m[1] : "" } });
   if (p.T && /\/ST\/PPK/.test(no)) p.T = "ST PPK"; return p }
@@ -88,7 +92,7 @@ function card(o) { const f = o.f, tgl = pick(f, "TANGGAL"), keg = pick(f, "PAKET
   <div class="tags">${tgl ? `<span class="tg d">📅 ${esc(tgl)}</span>` : ""}${jn && jn !== keg ? `<span class="tg">${esc(jn)}</span>` : ""}${nil ? `<span class="tg v">Rp ${esc(nil)}</span>` : ""}
    <button class="dup only-m" data-dup="${esc(o.no)}" style="margin-left:auto">＋ Serupa</button></div>
   ${rel ? `<div class="nt r">${esc(rel)}</div>` : ""}${ct ? `<div class="nt">⚑ ${esc(ct)}</div>` : ""}</div>` }
-function render() { const q = $("#q").value.trim().toLowerCase(), y = $("#yr").value, t = tabOf(cur);
+function render() { if (cur === HOME) return renderHome(); const q = $("#q").value.trim().toLowerCase(), y = $("#yr").value, t = tabOf(cur);
   let L = rows.filter(o => (!y || o.yr === y) && (!q || (o.no + " " + Object.values(o.f).join(" ") + " " + o.yr).toLowerCase().includes(q))).slice().reverse();
   const last = lastOf(rows), m = $("#m"); let h = "";
   if (last && !q) { const tg = pick(last.f, "TANGGAL"), kg = pick(last.f, "PAKET", "KEGIATAN"), nx = nextFor(last);
@@ -102,13 +106,35 @@ function render() { const q = $("#q").value.trim().toLowerCase(), y = $("#yr").v
   if (L.length > shown) h += `<button class="more" id="more">Tampilkan ${Math.min(80, L.length - shown)} lagi</button>`;
   h += `<div class="foot">Data langsung dari Google Sheet register · <a href="${SHEET}#gid=${cur}" target="_blank" rel="noopener">Buka sheet ↗</a></div>`;
   m.innerHTML = h; $("#open").href = SHEET + "#gid=" + cur }
+function greet() { const h = new Date().getHours(); return h < 11 ? "Selamat pagi" : h < 15 ? "Selamat siang" : h < 18 ? "Selamat sore" : "Selamat malam" }
+function renderHome() { const q = $("#q").value.trim().toLowerCase(), m = $("#m");
+  const tgl = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  let h = "";
+  if (q) { let n = 0; h += `<div class="meta"><span>Hasil pencarian di semua register</span></div>`;
+    TABS.forEach(t => { const L = (cache[t[1]] || []).filter(o => (o.no + " " + Object.values(o.f).join(" ")).toLowerCase().includes(q)).slice().reverse();
+      if (!L.length) return; n += L.length; h += `<div class="yr" style="color:${t[3]}">${esc(t[2].toUpperCase())} · ${L.length}</div>`;
+      const sv = cur; cur = t[1]; L.slice(0, 15).forEach(o => h += `<div data-gid="${t[1]}">` + card(o) + `</div>`); cur = sv;
+      if (L.length > 15) h += `<button class="more" data-go="${t[1]}">Lihat ${L.length - 15} lainnya di ${esc(t[0])}</button>` });
+    if (!n) h += `<div class="empty">Tidak ditemukan di register mana pun.</div>`; m.innerHTML = h; return }
+  const tot = TABS.reduce((a, t) => a + (cache[t[1]] ? cache[t[1]].length : 0), 0);
+  h += `<div class="welcome"><div><div class="wl">${greet()} 👋</div><div class="wd">${esc(tgl)}</div></div>
+    <div class="wstat"><b>${tot ? tot.toLocaleString("id-ID") : "…"}</b><span>nomor tercatat</span></div></div>`;
+  h += `<div class="sec2">REGISTER</div><div class="tiles">`;
+  TABS.forEach((t, i) => { const R = cache[t[1]], last = R && lastOf(R);
+    h += `<div class="tile" style="--c:${t[3]}"><button class="tl-h" data-go="${t[1]}"><span class="dt"></span><b>${esc(t[0])}</b><small>${esc(t[2])}</small><span class="tl-n">${R ? R.length : "…"}</span></button>`;
+    if (last) h += `<div class="tl-k">Terakhir</div><code class="tl-no">${esc(last.no)}</code><div class="tl-d">${esc(pick(last.f, "TANGGAL") || "")}</div>
+      <div class="tl-k">Berikutnya</div><code class="tl-nx">${esc(nextFor(last, t[1], R))}</code>`;
+    else h += `<div class="sk" style="height:70px;margin:8px 0"></div>`;
+    h += `<div class="tl-a"><button class="btn" data-take="${t[1]}">＋ Ambil</button><button class="ghost" data-go="${t[1]}">Lihat daftar</button></div></div>` });
+  h += `</div><div class="foot">Data langsung dari Google Sheet register · <a href="${SHEET}" target="_blank" rel="noopener">Buka sheet ↗</a></div>`;
+  m.innerHTML = h; $("#open").href = SHEET }
 function years() { const ys = uniq(rows.map(o => o.yr)).sort().reverse(), s = $("#yr"), v = s.value;
   s.innerHTML = `<option value="">Semua tahun</option>` + ys.map(y => `<option${y === v ? " selected" : ""}>${y}</option>`).join("") }
-function tabsUI() { $("#tabs").innerHTML = TABS.map((t, i) => `<button class="tab${t[1] === cur ? " on" : ""}" data-g="${t[1]}" style="--c:${t[3]}" title="${esc(t[2])} (${i + 1})"><span class="dt"></span>${esc(t[0])}<span class="ct" data-ct="${t[1]}"></span></button>`).join("") }
+function tabsUI() { $("#tabs").innerHTML = `<button class="tab${cur === HOME ? " on" : ""}" data-g="${HOME}" style="--c:#fff" title="Beranda (0)"><span class="dt"></span>Beranda</button>` + TABS.map((t, i) => `<button class="tab${t[1] === cur ? " on" : ""}" data-g="${t[1]}" style="--c:${t[3]}" title="${esc(t[2])} (${i + 1})"><span class="dt"></span>${esc(t[0])}<span class="ct" data-ct="${t[1]}"></span></button>`).join("") }
 function counts() { TABS.forEach(t => { const c = cache[t[1]], el = $(`[data-ct="${t[1]}"]`); if (el && c) el.textContent = c.length }) }
-function goTab(g) { if (g === cur) return; cur = g; lsSet("tab", cur); shown = 80; $("#q").value = ""; $("#yr").value = "";
+function goTab(g) { if (g === cur) return; cur = g; if (g !== HOME) { lsSet("tab", g); lastTab = g } $("#yr").style.display = g === HOME ? "none" : ""; shown = 80; $("#q").value = ""; $("#yr").value = "";
   $$(".tab").forEach(x => x.classList.toggle("on", +x.dataset.g === g)); $(".tab.on")?.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
-  rows = []; load(!cache[g], true) }
+  rows = []; window.scrollTo(0, 0); load(!cache[g] && g !== HOME, true) }
 
 /* ---------- form ambil nomor ---------- */
 const BULAN_ = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -203,10 +229,12 @@ async function simpan() { const err = $("#ferr"), go = $("#go"); err.textContent
 $("#tabs").onclick = e => { const b = e.target.closest(".tab"); if (b) goTab(+b.dataset.g) };
 $("#q").oninput = () => { shown = 80; render() }; $("#yr").onchange = () => { shown = 80; render() };
 $$("#rf,#rf2").forEach(b => b.onclick = () => load(true));
-$$("#fab,#add2").forEach(b => b.onclick = () => openForm());
+$$("#fab,#add2").forEach(b => b.onclick = () => { if (cur === HOME) { goTab(lastTab); setTimeout(() => openForm(), 60) } else openForm() });
 $("#ov").onclick = closeForm;
 $("#m").onclick = e => { const c = e.target.closest("[data-c]"); if (c) return copy(c.dataset.c);
-  const d = e.target.closest("[data-dup]"); if (d) return openForm(rows.find(o => o.no === d.dataset.dup));
+  const gt = e.target.closest("[data-go]"); if (gt) return goTab(+gt.dataset.go);
+  const tk = e.target.closest("[data-take]"); if (tk) { goTab(+tk.dataset.take); return setTimeout(() => openForm(), 60) }
+  const d = e.target.closest("[data-dup]"); if (d) { if (cur === HOME) { const g = +d.closest("[data-gid]").dataset.gid; goTab(g); return setTimeout(() => openForm(cache[g].find(o => o.no === d.dataset.dup)), 60) } return openForm(rows.find(o => o.no === d.dataset.dup)) }
   if (e.target.id === "takeNext") return openForm(); if (e.target.id === "more") { shown += 80; render() } };
 $("#sh").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.c) return copy(b.dataset.c);
@@ -227,11 +255,18 @@ document.addEventListener("keydown", e => { const typing = /INPUT|TEXTAREA|SELEC
   if (e.key === "Escape") { if (F || $("#sh").classList.contains("on")) closeForm(); else if (typing) document.activeElement.blur(); return }
   if (F && (e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); return simpan() }
   if (typing || e.ctrlKey || e.metaKey || e.altKey || $("#sh").classList.contains("on")) return;
-  if (e.key === "n" || e.key === "N") { e.preventDefault(); openForm() }
+  if (e.key === "n" || e.key === "N") { e.preventDefault(); $("#add2").click() }
   else if (e.key === "/") { e.preventDefault(); $("#q").focus() }
   else if (e.key === "r" || e.key === "R") load(true);
-  else if (/^[1-8]$/.test(e.key)) goTab(TABS[+e.key - 1][1]) });
+  else if (/^[1-8]$/.test(e.key)) goTab(TABS[+e.key - 1][1]);
+  else if (e.key === "0" || e.key === "h" || e.key === "H") goTab(HOME) });
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !F) load(true, true) });
 
-tabsUI(); load(true, true).then(() => setTimeout(prefetch, 800));
+/* layar pembuka */
+let splashT0 = Date.now();
+function splashDone() { const s = $("#splash"); if (!s || s.dataset.done) return; s.dataset.done = 1;
+  setTimeout(() => { s.classList.add("out"); setTimeout(() => s.remove(), 600) }, Math.max(0, 1300 - (Date.now() - splashT0))) }
+$("#splash")?.addEventListener("click", splashDone); setTimeout(splashDone, 3500);
+$("#yr").style.display = "none";
+tabsUI(); load(true, true);
 $(".tab.on")?.scrollIntoView({ inline: "center", block: "nearest" });
