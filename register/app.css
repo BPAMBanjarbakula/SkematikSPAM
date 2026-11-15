@@ -283,3 +283,6 @@ html .add kbd{background:rgba(255,255,255,.22)!important;color:#fff!important;bo
 
 .it .no code,.hero .n,.hero .nx b,.tl-no,.tl-nx,.dl .row .nn{word-break:normal;overflow-wrap:anywhere}
 .tags .dup.only-m{padding:4px 12px;font-size:15px}
+
+html .seg button.on{background:linear-gradient(90deg,var(--cy),var(--vi))!important;color:#fff!important;border-color:transparent!important}
+.seg button{flex:1 1 0;min-width:0;padding:10px 6px;font-size:13.5px;line-height:1.25}

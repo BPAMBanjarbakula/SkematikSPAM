@@ -162,7 +162,7 @@ function openForm(pre) { const c = CFG[cur]; if (!c) return;
   const shared = c.parts.filter(d => d.k !== it.part);
   if (shared.length) { h += `<div class="sec">FORMAT NOMOR</div>`;
     shared.forEach(d => { h += `<label class="fl" data-part="${d.k}"><span>${esc(d.label)}</span>`;
-      if (d.opts) h += `<div class="seg">${d.opts.map(o => `<button type="button" data-k="${d.k}" data-v="${esc(o)}" class="${F.p[d.k] === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
+      if (d.opts) h += `<div class="seg">${d.opts.map(o => `<button type="button" data-k="${d.k}" data-v="${esc(o)}" class="${F.p[d.k] === o ? "on" : ""}">${esc(d.k === "M" ? ({ PL: "Pengadaan Langsung", PNT: "Penunjukan Langsung", EP: "E-Purchasing" }[o] || o) : o)}</button>`).join("")}</div>`;
       else { const sug = uniq(rows.slice().reverse().map(o => (o.no.match(d.kode) || [])[1]));
         h += `<input data-pk="${d.k}" value="${esc(F.p[d.k] || "")}" list="dl_${d.k}" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="mis. ${esc(sug[0] || "KODE-PAKET")}"><datalist id="dl_${d.k}">${sug.slice(0, 40).map(v => `<option value="${esc(v)}">`).join("")}</datalist>` }
       h += `</label>` }) }
@@ -196,7 +196,7 @@ function drawItems() { const it = F.it, c = F.c; let h = "";
   if (it.col && !opts) h += `<datalist id="dli">${colVals(it.col).map(v => `<option value="${esc(v)}">`).join("")}</datalist>`;
   $("#dl").innerHTML = h; preview() }
 function tahun() { const t = $("#sh [data-tgl]"); return t && t.value ? t.value.slice(0, 4) : String(new Date().getFullYear()) }
-function metode() { if (!F.p.M) return; const m = $$("#sh [data-h]").find(e => e.dataset.h.includes("METODE")); if (m && !m.dataset.manual) m.value = F.p.M === "PNT" ? "Penunjukan Langsung" : "Pengadaan Langsung" }
+function metode() { if (!F.p.M) return; const m = $$("#sh [data-h]").find(e => e.dataset.h.includes("METODE")); if (m && !m.dataset.manual) m.value = { PNT: "Penunjukan Langsung", EP: "E-Purchasing", PL: "Pengadaan Langsung" }[F.p.M] || "" }
 function partsFor(i) { const p = Object.assign({}, F.p); if (F.it.part) p[F.it.part] = F.items[i].v; return p }
 function preview() { if (!F) return; const c = F.c, Y = tahun(), n0 = +nextSeq(rows.map(o => o.no), c, partsFor(0), Y);
   c.parts.forEach(d => { const el = $(`#sh [data-part="${d.k}"]`); if (el) el.style.display = d.hide && d.hide(F.p) ? "none" : "" });
@@ -216,7 +216,7 @@ async function simpan() { const err = $("#ferr"), go = $("#go"); err.textContent
     if (it.col) f[it.col] = x.v.trim(); if (it.auto) f[it.auto.col] = it.auto.map[x.v] || x.v; return { parts: partsFor(i), fields: f } });
   go.disabled = true; go.textContent = "Menyimpan…";
   try { const r = await fetch("/api/register-add", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ gid: cur, pin, tahun: tahun(), items }) });
-    const j = await r.json(); if (!j.ok) { if (/PIN/.test(j.err || "")) lsSet("pin", ""); throw new Error(j.err || "Gagal menyimpan") }
+    const j = await r.json(); if (!j.ok) { if (/PIN/.test(j.err || "")) lsSet("pin", ""); if (/Metode tidak dikenal/.test(j.err || "")) j.err = "Pilihan EP belum aktif di skrip Google Sheet. Sementara minta Claude yang meregisterkan."; throw new Error(j.err || "Gagal menyimpan") }
     lsSet("pin", pin); const hasil = j.hasil || [{ nomor: j.nomor }];
     hasil.forEach((x, i) => { rows.push({ no: x.nomor, yr: tahun(), f: items[i].fields }); flash.add(x.nomor) }); render();
     $("#sh").innerHTML = `<div class="grab"></div><div class="ok"><div class="ck">✅</div><h2>${hasil.length > 1 ? hasil.length + " nomor" : "Nomor"} berhasil diambil</h2>

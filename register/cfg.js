@@ -16,7 +16,7 @@ var CFG={
  "1148303950":{nama:"Penunjukan Langsung",parts:[{k:"K",label:"Kode paket",kode:/^\d+\/PNT\/(.+)\/BPAM\/\d{4}$/}],
   num:function(p,n,Y){return n+"/PNT/"+p.K+"/BPAM/"+Y},
   re:function(p){return /^(\d+)\/PNT\/.+\/BPAM\/(\d{4})$/}},
- "1148304100":{nama:"FHO",parts:[{k:"M",label:"Metode",opts:["PL","PNT"]},{k:"K",label:"Kode paket",kode:/^\d+\/FHO\/[A-Z]+\/(.+)\/BPAM\/\d{4}$/}],
+ "1148304100":{nama:"FHO",parts:[{k:"M",label:"Metode",opts:["PL","PNT","EP"]},{k:"K",label:"Kode paket",kode:/^\d+\/FHO\/[A-Z]+\/(.+)\/BPAM\/\d{4}$/}],
   num:function(p,n,Y){return n+"/FHO/"+p.M+"/"+p.K+"/BPAM/"+Y},
   re:function(p){return /^(\d+)\/FHO\/.+\/BPAM\/(\d{4})$/}},
  "1148303899":{nama:"Surat Pejabat Pengadaan",parts:[],
