@@ -259,9 +259,16 @@ document.addEventListener("keydown", e => { const typing = /INPUT|TEXTAREA|SELEC
   else if (e.key === "/") { e.preventDefault(); $("#q").focus() }
   else if (e.key === "r" || e.key === "R") load(true);
   else if (/^[1-8]$/.test(e.key)) goTab(TABS[+e.key - 1][1]);
-  else if (e.key === "0" || e.key === "h" || e.key === "H") goTab(HOME) });
+  else if (e.key === "0" || e.key === "h" || e.key === "H") goTab(HOME);
+  else if (e.key === "t" || e.key === "T") toggleTheme() });
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !F) load(true, true) });
 
+/* tema terang / gelap */
+function isLight() { const t = document.documentElement.dataset.theme; return t ? t === "light" : matchMedia("(prefers-color-scheme: light)").matches }
+function themeUI() { const l = isLight(); $("#th").textContent = l ? "🌙" : "☀️"; $("#th").title = l ? "Ganti ke tema gelap (T)" : "Ganti ke tema terang (T)";
+  document.querySelector('meta[name="theme-color"]').content = l ? "#eef4fb" : "#05121f" }
+function toggleTheme() { const t = isLight() ? "dark" : "light"; document.documentElement.dataset.theme = t; lsSet("theme", t); themeUI() }
+$("#th").onclick = toggleTheme; matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", themeUI); themeUI();
 /* layar pembuka */
 let splashT0 = Date.now();
 function splashDone() { const s = $("#splash"); if (!s || s.dataset.done) return; s.dataset.done = 1;
