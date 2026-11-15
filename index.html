@@ -811,6 +811,14 @@ body.dark .pleg{color:#a9c4dc}
 body.dark .anlgo button{background:#122238;border-color:#1e3550}body.dark .anlgo b{color:#e7f5ff}body.dark .anlgo span:not(.ic),body.dark .anllead{color:#9fb3c8}
 @media (max-width:620px){.anlgo{grid-template-columns:1fr}.anltabs{overflow-x:auto!important;scrollbar-width:none;flex-wrap:nowrap!important}.anltabs::-webkit-scrollbar{display:none}.anltabs button{white-space:nowrap!important;flex:0 0 auto!important}#btnProf{display:none!important}}
 .hbtn.anlb{background:linear-gradient(135deg,rgba(28,126,214,.35),rgba(21,170,191,.35))}
+.srcg{margin:4px 0 14px}.srcg h4{margin:14px 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#5c6b7a}
+.srci{border:1px solid #e3e9ef;border-radius:12px;margin-bottom:8px;background:#fff}.srch{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:9px 11px}
+.srch b{font-size:13.5px;color:#0b2540}.srch small{display:block;font-size:11.5px;color:#7a8794;margin-top:2px}.srcb{display:flex;gap:6px;flex:0 0 auto}
+.srcb button{font:inherit;font-size:12px;font-weight:700;border-radius:999px;padding:5px 11px;cursor:pointer;border:1px solid #a5d8ff;background:#e7f5ff;color:#0b5cad}.srcb button[data-a="d"]{background:#fff;color:#495057;border-color:#dee2e6}
+.srct{padding:0 11px 10px}.srcw{overflow-x:auto;max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch}.srcw table{min-width:100%;white-space:nowrap}.srcw th{position:sticky;top:0;background:#f8fafc}
+.anllead .bd,.srch .bd{font-size:10px;font-weight:800;border-radius:999px;padding:1px 7px;color:#fff;background:#2f9e44;white-space:nowrap}.bd.lab{background:#0c8599}.bd.pub{background:#1971c2}.bd.es{background:#e8590c}
+body.dark .srci{background:#122238;border-color:#1e3550}body.dark .srch b{color:#e7f5ff}body.dark .srcg h4,body.dark .srch small{color:#9fb3c8}body.dark .srcw th{background:#16283f}body.dark .srcb button[data-a="d"]{background:#16283f;color:#c5d3e0;border-color:#2a3a4d}body.dark .srcb button[data-a="v"]{background:#0e2a44;border-color:#1e4a70;color:#74c0fc}
+@media (max-width:620px){.srch{flex-direction:column;align-items:flex-start}}
 /* ---- modal analisa ketersediaan air */
 .anl{position:fixed;inset:0;z-index:7000;background:rgba(3,10,20,.72);display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto}
 .anl[hidden]{display:none}
@@ -2650,6 +2658,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const fmtT = ms => new Date(ms).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
   const fmtJam = ms => new Date(ms).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"});
   let D = null;
+  window.__teleD = () => D;
   window.__flowEst = () => est(); window.__flowLast = id => D && D.stations[id] && D.stations[id].last;
   // ===== deteksi operasi intake darurat (pompa di pintu kiri bendung, rencana 3 × 150 L/dtk)
   // Aturan: debit DN900 tiba-tiba hilang (≈0 / logger putus / anjlok tajam) lalu masuk lagi ±350–450 L/dtk
@@ -3440,7 +3449,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     <button class="anlx" id="anlX" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
     <div class="anlhd"><span class="anlic"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><div><h2 id="anlT">Analisa Air Baku</h2><p>Intake Bendung Karang Intan · Sungai Riam Kanan</p></div></div>
     <div class="anlbd">
-      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="l">Analisa lainnya</button></div>
+      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="s">Sumber data</button><button role="tab" data-t="l">Analisa lainnya</button></div>
       <div class="anlpane" data-p="h">
         <div id="hyW"></div>
         <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div></div>
@@ -3484,9 +3493,15 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         <div id="kq4"></div>
         <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), Laporan Kualitas Air BPAM Mei 2026, LHU BBLKM air baku Jan–Jun 2026, Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
       </div>
+      <div class="anlpane" data-p="s" hidden>
+        <p class="anllead">Semua data yang dipakai GeoSPAM, dikelompokkan menurut instansi sumbernya. Tekan <b>Lihat data</b> untuk melihat angkanya, atau <b>CSV</b> untuk mengunduh (bisa dibuka di Excel). Label: <span class="bd">LIVE</span> = alat ukur otomatis, <span class="bd lab">LAB</span> = hasil laboratorium, <span class="bd pub">BMKG</span> = data resmi BMKG, <span class="bd es">ESTIMASI</span> = keluaran model.</p>
+        <div id="srcList"></div>
+        <p class="anlsrc">Data milik masing-masing instansi; ditampilkan untuk pemantauan operasional BPAM Banjarbakula. Laporan ketersediaan air baku triwulanan ada di tab Ketersediaan air baku.</p>
+      </div>
       <div class="anlpane" data-p="l" hidden>
         <p class="anllead">Analisa dan alat lain di GeoSPAM. Pilih salah satu; panel ini akan ditutup dan alat terbuka di peta.</p>
         <div class="anlgo">
+          <button data-go="src"><span class="ic" style="--c:#495057"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span><b>Sumber data</b><span>Lihat dan unduh semua data per instansi: BWS, BPAM, lab, BMKG, model</span></button>
           <button data-go="nrc"><span class="ic" style="--c:#e8590c"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Neraca debit &amp; kubikasi intake</b><span>Debit keluar intake per offtaker, harian, unduh Excel laporan BWS</span></button>
           <button data-go="tele"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg></span><b>Telemetri live</b><span>Flowmeter DN900, Pematang, Prased, AWLR, status intake darurat</span></button>
           <button data-go="prof"><span class="ic" style="--c:#1c7ed6"><svg class="i" aria-hidden="true"><use href="#i-trend"/></svg></span><b>Profil elevasi &amp; gravitasi</b><span>Penampang memanjang pipa, cek aliran gravitasi</span></button>
@@ -3541,11 +3556,11 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 </div>
 <script>
 window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden = false; m.scrollTop = 0; document.body.style.overflow = "hidden"; };
-(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|analisa-lain)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
+(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|analisa-lain|sumber-data)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
   window.anlClose = close;
   document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
-  const H2T = {hidrologi:"h", kualitas:"q", ketersediaan:"k", "analisa-lain":"l", analisa:"h"}, hm = /[#?&](hidrologi|kualitas|ketersediaan|analisa-lain|analisa)\b/.exec(location.href);
+  const H2T = {hidrologi:"h", kualitas:"q", ketersediaan:"k", "analisa-lain":"l", "sumber-data":"s", analisa:"h"}, hm = /[#?&](hidrologi|kualitas|ketersediaan|analisa-lain|sumber-data|analisa)\b/.exec(location.href);
   if (hm) setTimeout(() => window.anlOpen(H2T[hm[1]]), 800); })();
 </script>
 <script>/* BMKG & satelit: peringatan dini cuaca (nowcast), gempa terkini, lapisan awan hujan Himawari-9 */
@@ -3841,6 +3856,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     return ["","AMAN – pasokan air baku normal"];
   }
   window.__lvStat = lvStat;
+  window.__hyEnsure = async () => { if (!S) await init(); for (let i = 0; i < 80 && !S; i++) await new Promise(r => setTimeout(r, 500)); if (!S) throw new Error("data hidrologi"); return S; };
   window.__hyH = {svg, el, tip, axisY, ticksOf, Wd, nf, lab, legend, wd};
   const hujanKat = mm => mm >= 100 ? "sangat banyak" : mm >= 50 ? "cukup banyak" : mm >= 20 ? "sedang" : mm >= 5 ? "sedikit" : "hampir tidak ada";
   // ---------- angka turunan (semua dari data terbaru)
@@ -3923,9 +3939,9 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   // tab + buka panel
   const tabs = document.querySelectorAll(".anltabs button");
   tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle("on", x === b)); document.querySelectorAll(".anlpane").forEach(p => p.hidden = p.dataset.p !== b.dataset.t); if (b.dataset.t === "h") refresh(); if (b.dataset.t === "q" && window.kqOpen) window.kqOpen(); });
-  const T2H = {h:"hidrologi", q:"kualitas", k:"ketersediaan", l:"analisa-lain"};
-  tabs.forEach(b => b.addEventListener("click", () => { try{ history.replaceState(null, "", location.pathname + location.search + "#" + T2H[b.dataset.t]); if (b.dataset.t !== "l") localStorage.setItem("bpam_anl_tab", b.dataset.t); }catch(e){} }));
-  document.querySelectorAll(".anlgo [data-go]").forEach(b => b.onclick = () => { const g = b.dataset.go; window.anlClose();
+  const T2H = {h:"hidrologi", q:"kualitas", k:"ketersediaan", s:"sumber-data", l:"analisa-lain"};
+  tabs.forEach(b => b.addEventListener("click", () => { try{ history.replaceState(null, "", location.pathname + location.search + "#" + T2H[b.dataset.t]); if (b.dataset.t !== "l" && b.dataset.t !== "s") localStorage.setItem("bpam_anl_tab", b.dataset.t); }catch(e){} }));
+  document.querySelectorAll(".anlgo [data-go]").forEach(b => b.onclick = () => { const g = b.dataset.go; if (g === "src"){ document.querySelector('.anltabs [data-t="s"]').click(); return; } window.anlClose();
     setTimeout(() => { if (g === "nrc") window.nrcOpen && window.nrcOpen(); else if (g === "tele"){ const t = document.getElementById("tele"); t && t.classList.remove("min"); }
       else if (g === "prof") document.getElementById("btnProf").click(); else if (g === "awan") window.awanShow && window.awanShow(); else if (g === "3d") window.open3D && window.open3D(); else if (g === "rm") document.getElementById("btnRm").click(); }, 250); });
   const btnA = document.getElementById("btnAnl"); if (btnA) btnA.onclick = () => { let t = "h"; try{ t = localStorage.getItem("bpam_anl_tab") || "h"; }catch(e){} window.anlOpen(t); };
@@ -3933,7 +3949,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   // status hidrologi live di kartu tampilan awal
   let nI = 0; const iv = setInterval(() => { const a = window.__awlr && window.__awlr.last, e = document.getElementById("ianH"); if (++nI > 40) clearInterval(iv); if (!a || !e || !window.__lvStat) return;
     e.textContent = window.__lvStat(a.v)[1].split(" –")[0] + " · " + a.v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2}) + " m"; clearInterval(iv); }, 1500);
-  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = ["k","q","l"].includes(t) ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
+  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = ["k","q","l","s"].includes(t) ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
 })();
 </script>
 <script>/* Panel Kualitas air: rekap Lab BPAM (harian), offtaker (mingguan), lab eksternal BBLKM & Sucofindo — dibaca dari Google Sheet */
@@ -4118,6 +4134,62 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   m.on("popupopen", e => { const p = e.popup, el = p.getElement && p.getElement(); if (!el) return; let t = 0;
     const ro = new ResizeObserver(() => { clearTimeout(t); t = setTimeout(() => { try{ if (p.isOpen()) p._adjustPan(); }catch(_){} }, 120); });
     ro.observe(el); p.once("remove", () => ro.disconnect()); });
+})();
+</script>
+<script>/* Sumber data: daftar semua data yang dipakai GeoSPAM per instansi, bisa dilihat tabelnya dan diunduh CSV */
+(function(){
+  const $ = s => document.querySelector(s), box = $("#srcList"); if (!box) return;
+  const nf = (v,d=2) => v == null || v === "" || isNaN(v) ? (v ?? "–") : (+v).toLocaleString("id-ID",{minimumFractionDigits:d,maximumFractionDigits:d});
+  const W8 = ms => new Date(ms + 8*3600e3).toISOString().slice(0,16).replace("T"," ");
+  const T = () => new Date(Date.now() + 8*3600e3).toISOString().slice(0,10), addD = (k,n) => new Date(Date.parse(k+"T00:00:00Z") + n*864e5).toISOString().slice(0,10);
+  const post = (u,p) => fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(p)}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const hy = () => window.__hyEnsure ? window.__hyEnsure() : Promise.reject(new Error("modul hidrologi"));
+  const kq = async () => { if (window.kqOpen) await window.kqOpen(); for (let i = 0; i < 60 && !(window.kqSummary && window.kqSummary()); i++) await new Promise(r => setTimeout(r, 500)); const K = window.kqSummary && window.kqSummary(); if (!K) throw new Error("sheet kualitas air"); return K; };
+  const awlr = async (id, days) => { const g = await post("/api/awlr/GetDataGrafikAwlr", {deviceId:id, startDate:addD(T(), -days), endDate:T()}); return (g.dataGrafik || []).filter(p => p.value != null).map(p => [new Date(p.millis).toISOString().slice(0,16).replace("T"," "), nf(+p.value,2)]).reverse(); };
+  const daily = (X, f, d) => X.keys.filter(k => X.D[k] && X.D[k][f] != null).map(k => [k, nf(X.D[k][f], d)]).reverse();
+  const G = [
+    {g:"BWS Kalimantan III · alat telemetri", items:[
+      {n:"Muka air Bendung Karang Intan, data mentah", b:"LIVE", m:"AWLR HGT1486 · tiap 5 menit · 2 hari terakhir", cols:["Waktu (WITA)","Muka air (m)"], get:() => awlr("HGT1486", 1)},
+      {n:"Muka air Bendung Karang Intan, harian", b:"LIVE", m:"AWLR HGT1486 · rata-rata/min/maks harian sejak 6 Jun 2026", cols:["Tanggal","Rata-rata (m)","Min (m)","Maks (m)"], get:async () => { const X = await hy(); return X.keys.filter(k => X.D[k].mean != null).map(k => [k, nf(X.D[k].mean), nf(X.D[k].min), nf(X.D[k].max)]).reverse(); }},
+      {n:"Muka air pintu kiri bendung, data mentah", b:"LIVE", m:"AWLR HGT1485 · tiap 5 menit · 2 hari terakhir", cols:["Waktu (WITA)","Muka air (m)"], get:() => awlr("HGT1485", 1)},
+      {n:"Hujan pos PCH Liang Anggang", b:"LIVE", m:"ARR HGT645 · harian", cols:["Tanggal","Hujan (mm)"], get:async () => daily(await hy(), "pg", 1)},
+      {n:"Hujan pos ULM Banjarbaru", b:"LIVE", m:"ARR HGT205 · harian", cols:["Tanggal","Hujan (mm)"], get:async () => daily(await hy(), "pu", 1)}]},
+    {g:"BPAM Banjarbakula · flowmeter & laboratorium", items:[
+      {n:"Debit IPA Pinus (flowmeter DN900)", b:"LIVE", m:"Telemetri flowmeter · per jam · 7 hari", cols:["Waktu (WITA)","Debit (L/dtk)","Totalizer (m³)"], get:async () => { const D = window.__teleD && window.__teleD(); if (!D) throw new Error("telemetri belum dimuat"); return D.stations.dn900.series.slice().reverse().map(p => [W8(p.t), nf(p.flow,1), nf(p.cons,0)]); }},
+      {n:"Debit PTAM Bandarmasih (Pematang)", b:"LIVE", m:"Telemetri flowmeter · per jam · 7 hari", cols:["Waktu (WITA)","Debit (L/dtk)","Totalizer (m³)"], get:async () => { const D = window.__teleD && window.__teleD(); if (!D) throw new Error("telemetri belum dimuat"); return D.stations.pematang.series.slice().reverse().map(p => [W8(p.t), nf(p.flow,1), nf(p.cons,0)]); }},
+      {n:"Rekap debit harian intake", b:"LIVE", m:"Rata-rata harian DN900, Pematang, muka air bendung", cols:["Tanggal","DN900 (L/dtk)","Pematang (L/dtk)","Muka air (m)"], get:async () => { const D = window.__teleD && window.__teleD(); if (!D) throw new Error("telemetri belum dimuat"); return Object.entries(D.harian || {}).sort().reverse().map(([k,v]) => [k, nf(v.dn900 && v.dn900.q,1), nf(v.pematang && v.pematang.q,1), nf(v.lvl)]); }},
+      {n:"Kualitas air harian (Lab BPAM)", b:"LAB", m:"Air baku intake & Reservoir 1000/2000 · harian · Google Sheet lab + laporan Mei", cols:["Tanggal","Kekeruhan air baku (NTU)","Warna air baku (TCU)","Kekeruhan R1000","Kekeruhan R2000","Sisa klor R1000 (mg/L)","Sisa klor R2000 (mg/L)"], get:async () => (await kq()).H.rows.slice().reverse().map(r => [r.k, nf(r.b.tu), nf(r.b.wa,1), nf(r.r1.tu), nf(r.r2.tu), nf(r.r1.cl), nf(r.r2.cl)])},
+      {n:"Kualitas air curah di offtaker (mingguan)", b:"LAB", m:"PTAM Intan Banjar · pH, kekeruhan, sisa klor, Fe, Mn", cols:["Periode","Titik","pH","Kekeruhan (NTU)","Sisa klor (mg/L)","Besi (mg/L)","Mangan (mg/L)"], get:async () => (await kq()).M.flatMap(w => w.pts.map(p => [w.lbl, p.nm, nf(p.ph), nf(p.tu), nf(p.cl), nf(p.fe,3), nf(p.mn,3)]))}]},
+    {g:"Laboratorium eksternal terakreditasi", items:[
+      {n:"Air baku sungai, uji bulanan (BBLKM)", b:"LAB", m:"BB Labkesmas Banjarbaru · PP 22/2021 kelas 1 · Jan–Jun 2026", cols:["Bulan","Tgl sampel","Total coliform (MPN/100 mL)","Coli tinja","DO (mg/L)","Khlorin bebas (mg/L)","Amonia (mg/L)","Fosfat (mg/L)","COD (mg/L)"], get:async () => (await kq()).LHU.slice().reverse().map(x => [x.b, x.tgl, nf(x.tc,0), nf(x.fc,0), nf(x.do,1), nf(x.cl2), nf(x.nh3), nf(x.po4), x.cod])},
+      {n:"Air baku sungai, semua parameter bulan terakhir (BBLKM)", b:"LAB", m:"29+ parameter fisika, kimia, logam", cols:["Parameter","Satuan","Baku mutu","Hasil"], get:async () => { const B = (await kq()).B; if (!B) throw new Error("tidak ada"); return B.params.map(q => [q.p, q.u, q.std, q.v[0]]); }},
+      {n:"Air curah di offtaker, uji bulanan (Sucofindo)", b:"LAB", m:"Permenkes 2/2023 · 4 titik offtaker", cols:null, get:async () => { const C = (await kq()).C; if (!C) throw new Error("tidak ada"); return {cols:["Parameter","Satuan","Baku mutu"].concat(C.pts), rows:C.params.map(q => [q.p, q.u, q.std].concat(q.v))}; }}]},
+    {g:"BMKG (data resmi)", items:[
+      {n:"Prakiraan cuaca 3 hari per desa", b:"BMKG", m:"Desa Mandikapau Barat (intake) & Desa Aranio (hulu) · diperbarui 2× sehari", cols:["Lokasi","Tanggal","Cuaca terburuk","Hujan (mm)","Suhu (°C)"], get:async () => { const X = await hy(); return [["Intake", X.BM.in],["Hulu (Aranio)", X.BM.hu]].flatMap(([l,a]) => (a || []).map(d => [l, d.k, d.desc, nf(d.mm,1), d.tmin + "–" + d.tmax])); }},
+      {n:"Peringatan dini cuaca Kalimantan Selatan", b:"BMKG", m:"Nowcast · tiap kejadian", cols:["Peringatan","Kecamatan","Berlaku sampai (WITA)"], get:async () => { const w = await window.bmkgWarn(true); if (!w.list.length) return [["Tidak ada peringatan aktif","–","–"]]; return w.list.map(x => [x.judul, x.kec.join(", "), x.end ? W8(x.end) : "–"]); }},
+      {n:"Gempa terkini", b:"BMKG", m:"Gempa terbaru & terdekat 30 hari", cols:["Waktu (WITA)","Magnitudo","Wilayah","Jarak ke intake (km)"], get:async () => { const g = await window.gempaLoad(true); if (!g.ok) throw new Error(g.e); return [g.last, g.near].filter((x,i,a) => x && a.indexOf(x) === i).map(x => [W8(x.t), nf(x.m,1), x.wil, nf(x.km,0)]); }}]},
+    {g:"Model global (estimasi, bukan pengukuran)", items:[
+      {n:"Hujan model di titik intake", b:"ESTIMASI", m:"Open-Meteo / ERA5 · harian 60 hari + prakiraan 7 hari", cols:["Tanggal","Hujan (mm)","Peluang hujan (%)"], get:async () => { const X = await hy(); return X.F.map(f => [f.k + " (prakiraan)", nf(f.p,1), f.pr]).reverse().concat(X.keys.slice(-60).reverse().map(k => [k, nf(X.D[k].pm,1), ""])); }},
+      {n:"Debit Sungai Riam Kanan (GloFAS)", b:"ESTIMASI", m:"Copernicus GloFAS v4 · 60 hari + prakiraan 30 hari · tanpa pelepasan PLTA", cols:["Tanggal","Debit (m³/dtk)","Rentang bawah","Rentang atas","Jenis"], get:async () => (await hy()).G.slice().reverse().map(g => [g.k, nf(g.q), nf(g.lo), nf(g.hi), g.f ? "prakiraan" : "model"])}]}
+  ];
+  const BD = {LIVE:"", LAB:"lab", BMKG:"pub", ESTIMASI:"es"};
+  box.innerHTML = G.map((g,i) => `<div class="srcg"><h4>${g.g}</h4>${g.items.map((it,j) => `<div class="srci" data-i="${i}.${j}"><div class="srch"><div><b>${it.n}</b> <span class="bd ${BD[it.b]}">${it.b}</span><small>${it.m}</small></div><div class="srcb"><button data-a="v">Lihat data</button><button data-a="d">CSV</button></div></div><div class="srct" hidden></div></div>`).join("")}</div>`).join("");
+  const cache = {};
+  async function data(i){ if (cache[i]) return cache[i]; const [a,b] = i.split(".").map(Number), it = G[a].items[b]; let r = await it.get(); if (Array.isArray(r)) r = {cols:it.cols, rows:r}; r.n = it.n; cache[i] = r; setTimeout(() => delete cache[i], 5*60e3); return r; }
+  const esc = s => String(s ?? "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  box.addEventListener("click", async e => {
+    const btn = e.target.closest("button[data-a]"); if (!btn) return; const row = btn.closest(".srci"), i = row.dataset.i, t = row.querySelector(".srct");
+    if (btn.dataset.a === "v" && !t.hidden){ t.hidden = true; btn.textContent = "Lihat data"; return; }
+    const old = btn.textContent; btn.textContent = "Memuat…"; btn.disabled = true;
+    try{ const d = await data(i);
+      if (btn.dataset.a === "v"){ const R = d.rows.slice(0, 60);
+        t.innerHTML = `<div class="srcw"><table class="hysrc kqt"><tr>${d.cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr>${R.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div><p class="hynote">${d.rows.length > 60 ? `Menampilkan 60 dari ${d.rows.length} baris terbaru; unduh CSV untuk semua.` : `${d.rows.length} baris.`}</p>`;
+        t.hidden = false; btn.textContent = "Tutup"; btn.disabled = false; return; }
+      const csv = "﻿" + [d.cols].concat(d.rows).map(r => r.map(c => `"${String(c ?? "").replace(/"/g,'""')}"`).join(";")).join("\r\n");
+      const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"})); a.download = `GeoSPAM_${d.n.replace(/[^\w]+/g,"_")}_${T()}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }catch(err){ t.innerHTML = `<p class="hynote">Data belum dapat dimuat (${esc(err.message)}). Coba lagi sebentar.</p>`; t.hidden = false; }
+    btn.textContent = old; btn.disabled = false;
+  });
 })();
 </script>
 <script>/* Pos hidrologi BWS Kalimantan III di peta: ARR Liang Anggang & ULM, AWLR pintu kiri bendung (live) */
