@@ -3738,7 +3738,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     {id:"arrulm", dev:"HGT205", nama:"PCH ULM", ll:[-3.296589, 114.587092], dir:"ur", ket:"Pos hujan BWS di kampus ULM"}
   ];
   ARR.forEach(s => {
-    s.mk = L.marker(s.ll, {icon: liveIcon(s.id, "#4c6ef5", "Hujan " + s.nama.replace("PCH ",""), s.dir), pane:"live", zIndexOffset:820}).addTo(__map);
+    s.mk = L.marker(s.ll, {icon: liveIcon(s.id, "#4c6ef5", "Hujan " + s.nama.replace("PCH ",""), s.dir), pane:"live", zIndexOffset:820}); // pos hujan tidak ditampilkan di peta; datanya tetap dipakai popup AWLR & panel Analisa
     s.mk.bindPopup(() => arrPop(s), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
     s.mk.on("popupopen", () => arrDaily(s).then(() => { if (s.mk.isPopupOpen()) s.mk.setPopupContent(arrPop(s)); }));
   });
