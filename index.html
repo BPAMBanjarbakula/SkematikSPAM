@@ -795,6 +795,22 @@ body.dark .pleg{color:#a9c4dc}
 .fwSvg .dt{fill:#fff;stroke:var(--tc);stroke-width:1.6}
 .fwSvg .dt.now{fill:var(--tc)}
 
+
+/* ---- pusat analisa: kartu di tampilan awal, tombol header, tab Lainnya */
+.ianl{margin:18px 0 22px}.ianlh{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a5d8ff;font-weight:700;margin-bottom:8px}
+.ianlg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ianlg button,.anlgo button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:34px 1fr;column-gap:10px;align-items:center;padding:11px 12px;border-radius:14px;background:rgba(8,24,44,.72);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .15s,border-color .15s}
+.ianlg button:hover,.anlgo button:hover,.ianlg button:focus-visible,.anlgo button:focus-visible{transform:translateY(-2px);border-color:#74c0fc}
+.ianlg .ic,.anlgo .ic{grid-row:span 2;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--c);color:#fff}
+.ianlg .ic .i,.anlgo .ic .i{width:18px;height:18px}
+.ianlg b{font-size:14px;color:#fff;line-height:1.2}.ianlg span:not(.ic){font-size:11.5px;color:#a9c4dc;line-height:1.3;margin-top:2px}
+@media (max-width:900px){.ianlg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.anllead{font-size:13px;color:#5c6b7a;margin:2px 0 12px}
+.anlgo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.anlgo button{background:#f8fafc;border-color:#e3e9ef;backdrop-filter:none}.anlgo b{font-size:14px;color:#0b2540;line-height:1.25}.anlgo span:not(.ic){font-size:12px;color:#5c6b7a;line-height:1.35;margin-top:2px}
+body.dark .anlgo button{background:#122238;border-color:#1e3550}body.dark .anlgo b{color:#e7f5ff}body.dark .anlgo span:not(.ic),body.dark .anllead{color:#9fb3c8}
+@media (max-width:620px){.anlgo{grid-template-columns:1fr}.anltabs{overflow-x:auto!important;scrollbar-width:none;flex-wrap:nowrap!important}.anltabs::-webkit-scrollbar{display:none}.anltabs button{white-space:nowrap!important;flex:0 0 auto!important}#btnProf{display:none!important}}
+.hbtn.anlb{background:linear-gradient(135deg,rgba(28,126,214,.35),rgba(21,170,191,.35))}
 /* ---- modal analisa ketersediaan air */
 .anl{position:fixed;inset:0;z-index:7000;background:rgba(3,10,20,.72);display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto}
 .anl[hidden]{display:none}
@@ -1734,10 +1750,16 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
 </svg></span><div class="eyebrow">UPTD BPAM Banjarbakula · Dinas PUPR Prov. Kalimantan Selatan</div></div>
     <h2 id="iTitle" class="wm"><span class="wm1 w">GeoSPAM</span><span class="wm2row w"><span class="wm2">BAKULA</span><i></i></span></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Air baku dari Bendung Karang Intan disalurkan ke PTAM Bandarmasih dan PTAM Intan Banjar, serta diolah di IPA Pinus menjadi air curah untuk PTAM Intan Banjar dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
+    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg>Tur jaringan</button><button class="btn-tour b3" id="btn3dI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2l-8 4.6-8-4.6V7.4z"/><path d="m4 7.4 8 4.6 8-4.6M12 12v9.2"/></svg>Mode 3D<em>baru</em></button><button class="btn-tour" id="btnRmI"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg>Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg> baca KTI</a></span></div>
+    <div class="ianl"><div class="ianlh">Analisa air baku</div><div class="ianlg">
+      <button data-anl="h"><span class="ic" style="--c:#1c7ed6"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><b>Hidrologi</b><span id="ianH">Tinggi air bendung &amp; hujan · live</span></button>
+      <button data-anl="q"><span class="ic" style="--c:#0ca678"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span><b>Kualitas air baku</b><span>Kekeruhan, bakteri, sisa klor</span></button>
+      <button data-anl="k"><span class="ic" style="--c:#7048e8"><svg class="i" aria-hidden="true"><use href="#i-gauge"/></svg></span><b>Ketersediaan air baku</b><span>Hidrometri &amp; debit andalan</span></button>
+      <button data-anl="n"><span class="ic" style="--c:#e8590c"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Neraca debit intake</b><span>Debit &amp; kubikasi per offtaker</span></button>
+    </div></div>
     <div class="istats" id="istats"></div>
     <div id="iLive" hidden><span class="ilv"><i></i>LIVE</span><span id="iLiveTx"></span></div>
     <div id="iNow" hidden><span class="inb" id="iNowB">Kondisi hari ini</span><span id="iNowTx"></span></div>
-    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg>Tur jaringan</button><button class="btn-tour b3" id="btn3dI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2l-8 4.6-8-4.6V7.4z"/><path d="m4 7.4 8 4.6 8-4.6M12 12v9.2"/></svg>Mode 3D<em>baru</em></button><button class="btn-tour" id="btnRmI"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg>Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg> baca KTI</a></span></div>
   </div>
 </div>
 <div id="rmap" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
@@ -1861,6 +1883,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
     <button class="hbtn ic" id="btnTv" title="Mode layar TV / ruang kontrol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
     <button class="hbtn ic" id="btnFull" title="Layar penuh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
     <button class="hbtn b3d" id="btn3d" title="Mode 3D · relief DEMNAS &amp; jaringan pipa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2l-8 4.6-8-4.6V7.4z"/><path d="m4 7.4 8 4.6 8-4.6M12 12v9.2"/></svg><span>3D</span></button>
+    <button class="hbtn anlb" id="btnAnl" title="Analisa air baku: hidrologi, kualitas, ketersediaan, neraca"><svg class="i" aria-hidden="true"><use href="#i-trend"/></svg><span>Analisa</span></button>
     <button class="hbtn" id="btnRm" title="Peta jalan Tahap 2 & 3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19c4 0 4-6 8-6s4-6 8-6"/><circle cx="4" cy="19" r="2"/><circle cx="20" cy="7" r="2"/></svg><span>Peta Jalan</span></button>
     <button class="hbtn tourb" id="btnTour" title="Tur jaringan otomatis"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Tur</span></button>
     <button class="hbtn" id="btnProf" aria-pressed="false" title="Profil elevasi & analisis gravitasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18"/><path d="m3 16 5-6 4 3 4-7 5 6"/></svg><span>Profil</span></button>
@@ -2251,7 +2274,7 @@ function closeIntro(noFly){
   if (noFly !== true) setTimeout(() => map.flyToBounds(allBounds, Object.assign(viewPad(), {duration:2.2})), 250);
 }
 if (!introOn){ $("#intro").classList.add("hide", "gone"); document.body.classList.add("ready"); }
-$("#btnGo").onclick = closeIntro;
+$("#btnGo").onclick = closeIntro; window.closeIntro = closeIntro;
 document.addEventListener("keydown", e => { if (e.key === "Escape" || (e.key === "Enter" && !$("#intro").classList.contains("hide"))) closeIntro(); });
 
 function updLabels(){ const z = map.getZoom(), on = $("#chkLabel").checked;
@@ -3415,9 +3438,9 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 <div id="anl" class="anl" hidden role="dialog" aria-modal="true" aria-labelledby="anlT">
   <div class="anlbox">
     <button class="anlx" id="anlX" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
-    <div class="anlhd"><span class="anlic"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><div><h2 id="anlT">Analisa Hidrologi &amp; Ketersediaan Air Baku</h2><p>Bendung Karang Intan · Sungai Riam Kanan</p></div></div>
+    <div class="anlhd"><span class="anlic"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><div><h2 id="anlT">Analisa Air Baku</h2><p>Intake Bendung Karang Intan · Sungai Riam Kanan</p></div></div>
     <div class="anlbd">
-      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air</button><button role="tab" data-t="k">Ketersediaan air baku</button></div>
+      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="l">Analisa lainnya</button></div>
       <div class="anlpane" data-p="h">
         <div id="hyW"></div>
         <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div></div>
@@ -3460,6 +3483,17 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         <div class="hyart" id="kqA4"><b>Artinya:</b> memuat…</div>
         <div id="kq4"></div>
         <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), Laporan Kualitas Air BPAM Mei 2026, LHU BBLKM air baku Jan–Jun 2026, Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
+      </div>
+      <div class="anlpane" data-p="l" hidden>
+        <p class="anllead">Analisa dan alat lain di GeoSPAM. Pilih salah satu; panel ini akan ditutup dan alat terbuka di peta.</p>
+        <div class="anlgo">
+          <button data-go="nrc"><span class="ic" style="--c:#e8590c"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Neraca debit &amp; kubikasi intake</b><span>Debit keluar intake per offtaker, harian, unduh Excel laporan BWS</span></button>
+          <button data-go="tele"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg></span><b>Telemetri live</b><span>Flowmeter DN900, Pematang, Prased, AWLR, status intake darurat</span></button>
+          <button data-go="prof"><span class="ic" style="--c:#1c7ed6"><svg class="i" aria-hidden="true"><use href="#i-trend"/></svg></span><b>Profil elevasi &amp; gravitasi</b><span>Penampang memanjang pipa, cek aliran gravitasi</span></button>
+          <button data-go="awan"><span class="ic" style="--c:#15aabf"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><b>Awan hujan (satelit)</b><span>Citra Himawari-9 terbaru di atas DAS Riam Kanan</span></button>
+          <button data-go="3d"><span class="ic" style="--c:#7048e8"><svg class="i" aria-hidden="true"><use href="#i-cube"/></svg></span><b>Peta 3D</b><span>Relief DEMNAS dan jaringan pipa</span></button>
+          <button data-go="rm"><span class="ic" style="--c:#0ca678"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg></span><b>Peta jalan pengembangan</b><span>Tahap 2 &amp; 3: sensor, SCADA, jaringan pintar</span></button>
+        </div>
       </div>
       <div class="anlpane" data-p="k" hidden>
       <div class="anlkpi">
@@ -3507,10 +3541,12 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 </div>
 <script>
 window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden = false; m.scrollTop = 0; document.body.style.overflow = "hidden"; };
-(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; };
+(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|analisa-lain)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
+  window.anlClose = close;
   document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
-  if (/[?&#]analisa\b/.test(location.href)) setTimeout(() => window.anlOpen(), 800); })();
+  const H2T = {hidrologi:"h", kualitas:"q", ketersediaan:"k", "analisa-lain":"l", analisa:"h"}, hm = /[#?&](hidrologi|kualitas|ketersediaan|analisa-lain|analisa)\b/.exec(location.href);
+  if (hm) setTimeout(() => window.anlOpen(H2T[hm[1]]), 800); })();
 </script>
 <script>/* BMKG & satelit: peringatan dini cuaca (nowcast), gempa terkini, lapisan awan hujan Himawari-9 */
 (function(){
@@ -3887,7 +3923,17 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   // tab + buka panel
   const tabs = document.querySelectorAll(".anltabs button");
   tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle("on", x === b)); document.querySelectorAll(".anlpane").forEach(p => p.hidden = p.dataset.p !== b.dataset.t); if (b.dataset.t === "h") refresh(); if (b.dataset.t === "q" && window.kqOpen) window.kqOpen(); });
-  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = t === "k" || t === "q" ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
+  const T2H = {h:"hidrologi", q:"kualitas", k:"ketersediaan", l:"analisa-lain"};
+  tabs.forEach(b => b.addEventListener("click", () => { try{ history.replaceState(null, "", location.pathname + location.search + "#" + T2H[b.dataset.t]); if (b.dataset.t !== "l") localStorage.setItem("bpam_anl_tab", b.dataset.t); }catch(e){} }));
+  document.querySelectorAll(".anlgo [data-go]").forEach(b => b.onclick = () => { const g = b.dataset.go; window.anlClose();
+    setTimeout(() => { if (g === "nrc") window.nrcOpen && window.nrcOpen(); else if (g === "tele"){ const t = document.getElementById("tele"); t && t.classList.remove("min"); }
+      else if (g === "prof") document.getElementById("btnProf").click(); else if (g === "awan") window.awanShow && window.awanShow(); else if (g === "3d") window.open3D && window.open3D(); else if (g === "rm") document.getElementById("btnRm").click(); }, 250); });
+  const btnA = document.getElementById("btnAnl"); if (btnA) btnA.onclick = () => { let t = "h"; try{ t = localStorage.getItem("bpam_anl_tab") || "h"; }catch(e){} window.anlOpen(t); };
+  document.querySelectorAll(".ianl [data-anl]").forEach(b => b.onclick = () => { const t = b.dataset.anl; window.closeIntro && window.closeIntro(true); setTimeout(() => { if (t === "n") window.nrcOpen && window.nrcOpen(); else window.anlOpen(t); }, 450); });
+  // status hidrologi live di kartu tampilan awal
+  let nI = 0; const iv = setInterval(() => { const a = window.__awlr && window.__awlr.last, e = document.getElementById("ianH"); if (++nI > 40) clearInterval(iv); if (!a || !e || !window.__lvStat) return;
+    e.textContent = window.__lvStat(a.v)[1].split(" –")[0] + " · " + a.v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2}) + " m"; clearInterval(iv); }, 1500);
+  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = ["k","q","l"].includes(t) ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
 })();
 </script>
 <script>/* Panel Kualitas air: rekap Lab BPAM (harian), offtaker (mingguan), lab eksternal BBLKM & Sucofindo — dibaca dari Google Sheet */
