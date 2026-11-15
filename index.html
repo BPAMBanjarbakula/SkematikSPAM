@@ -3442,16 +3442,20 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         <h3>1. Kekeruhan: air sungai vs air curah</h3>
         <div class="hyart" id="kqA1"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p id="kqT1"></p></details>
         <div class="hyc" id="kq1"></div>
-        <h3>2. Sisa klor di reservoir</h3>
+        <h3>2. Kenapa air sungai keruh di hari kerja?</h3>
+        <div class="hyart" id="kqAW"><b>Artinya:</b> memuat…</div>
+        <div class="hyc" id="kqW"></div>
+        <details class="hytek"><summary>Penjelasan teknis</summary><p id="kqTW"></p></details>
+        <h3>3. Sisa klor di reservoir</h3>
         <div class="hyart" id="kqA2"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Sisa klor bebas Reservoir 1000 dan 2000 (rata-rata harian). Baku mutu Permenkes 2/2023: 0,2–0,5 mg/L. Di bawah 0,2 mg/L perlindungan terhadap kuman di jaringan berkurang; di atas 0,5 mg/L air dapat berbau/berasa kaporit.</p></details>
         <div class="hyc" id="kq2"></div>
-        <h3>3. Air curah di titik offtaker</h3>
+        <h3>4. Air curah di titik offtaker</h3>
         <div class="hyart" id="kqA3"><b>Artinya:</b> memuat…</div>
         <div id="kq3"></div>
-        <h3>4. Air sungai (lab eksternal)</h3>
+        <h3>5. Bakteri &amp; oksigen air sungai per bulan</h3>
         <div class="hyart" id="kqA4"><b>Artinya:</b> memuat…</div>
         <div id="kq4"></div>
-        <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), lab eksternal BBLKM &amp; Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
+        <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), Laporan Kualitas Air BPAM Mei 2026, LHU BBLKM air baku Jan–Jun 2026, Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
       </div>
       <div class="anlpane" data-p="k" hidden>
       <div class="anlkpi">
@@ -3647,7 +3651,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       .catch(e => src.gf = {ok:0, e:e.message}));
     // 7–8. prakiraan cuaca resmi BMKG (Desa Mandikapau Barat = intake; Desa Aranio = hulu Waduk Riam Kanan)
     const BM = {};
-    [["in","63.03.06.2025"],["hu","63.03.11.2011"]].forEach(([n,c]) => jobs.push(fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=" + c).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    [["in","63.03.06.2025"],["hu","63.03.11.2011"]].forEach(([n,c]) => jobs.push((() => { const g = () => fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=" + c).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }); return g().catch(() => new Promise(r => setTimeout(r, 2500)).then(g)); })()
       .then(o => { BM[n] = bmDays(o, T); src["bm" + n] = {ok:1, k: BM[n].length ? BM[n][BM[n].length-1].k : T, an: o.data[0].cuaca[0][0].analysis_date}; }).catch(e => src["bm" + n] = {ok:0, e:e.message})));
     // 9–10. peringatan dini cuaca & gempa BMKG
     let WR = {list:[]}, GQ = {};
@@ -3828,6 +3832,8 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     L.push(`Hujan seminggu terakhir: Liang Anggang ${nf(Z.la7,0)} mm, ULM ${nf(Z.ul7,0)} mm` + (Math.max(Z.la7,Z.ul7) > 2.5*Math.max(5,Math.min(Z.la7,Z.ul7)) ? " (tidak merata)." : "."));
     const hb = (X.BM.hu || []).filter(lebat), ib = (X.BM.in || []).filter(lebat);
     if (X.BM.hu || X.BM.in) L.push(`3 hari ke depan (BMKG): ` + (hb.length ? `<b>hujan deras di hulu</b> (${hb.map(d => hariN(d.k).toLowerCase()).join(", ")}), air baku bisa keruh.` : ib.length ? `hujan deras di sekitar intake (${ib.map(d => hariN(d.k).toLowerCase()).join(", ")}).` : `tanpa hujan deras.`));
+    const DZ = window.__darurat && window.__darurat();
+    if (DZ && DZ.st !== "normal") L.unshift(window.__daruratTxt(DZ));
     if (Z.gr != null) L.push(`Aliran sungai dari hulu 30 hari ke depan diperkirakan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? `: musim hujan mulai masuk.` : `.`));
     box.querySelector("ul").innerHTML = L.map(x => `<li>${x}</li>`).join("");
     const q = Z.q;
@@ -3937,8 +3943,11 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   }
   async function load(){
     const o = await fetch("/.netlify/functions/kualitas", {cache:"no-cache"}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
-    const c = o.csv || {};
-    return {t:o.t, err:o.err || {}, H: c.harian ? harian(csv(c.harian)) : null, M: c.mingguan ? mingguan(csv(c.mingguan)) : [], B: c.baku ? lab(csv(c.baku), 1) : null, C: c.curah ? lab(csv(c.curah), 4) : null};
+    const c = o.csv || {}, Hs = await fetch("data/kualitas_hist.json").then(r => r.json()).catch(() => ({mei:[], lhu:[]}));
+    const H = c.harian ? harian(csv(c.harian)) : {title:"", rows:[]}, have = new Set(H.rows.map(r => r.k));
+    (Hs.mei || []).forEach(m => { if (!have.has(m.k)) H.rows.push({k:m.k, b:{tu:m.tu, wa:m.wa}, r1:{tu:m.tu1, cl:m.cl1}, r2:{tu:m.tu2, cl:m.cl2}}); });
+    H.rows.sort((a,b) => a.k < b.k ? -1 : 1);
+    return {t:o.t, err:o.err || {}, LHU: Hs.lhu || [], H, M: c.mingguan ? mingguan(csv(c.mingguan)) : [], B: c.baku ? lab(csv(c.baku), 1) : null, C: c.curah ? lab(csv(c.curah), 4) : null};
   }
   // ---------- tampilan
   const h = () => window.__hyH;
@@ -3968,6 +3977,18 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     el(s,"text",{x:ml+4,y:mt+8,class:"ld"},"mg/L");
     box.innerHTML = ""; box.appendChild(s);
     legend(box, `<span style="color:#1971c2">━</span> Reservoir 1000 · <span style="color:#22b8cf">━</span> Reservoir 2000 · <span style="color:#e03131">●</span> di bawah 0,2 mg/L`);
+  }
+  const BLN = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+  const HARI = ["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+  function weekly(R){ const g = [[],[],[],[],[],[],[]]; R.forEach(r => { if (r.b.tu == null) return; const d = (new Date(r.k + "T00:00:00Z").getUTCDay() + 6) % 7; g[d].push(r.b.tu); }); return g.map(a => avg(a)); }
+  function cW(box, W7){
+    const {svg, el, tip, axisY, ticksOf, Wd} = h(), W = Wd(box), Hh = 190, ml = 40, mr = 12, mt = 18, mb = 26, s = svg(W,Hh), mx = Math.max(5, ...W7.filter(v => v != null))*1.15;
+    const bw = (W-ml-mr)/7, ys = v => mt + (mx-v)*(Hh-mt-mb)/mx;
+    axisY(s,ml,W-mr,ys,ticksOf(0,mx,4),v => v);
+    W7.forEach((v,i) => { if (v == null) return; const we = i >= 5; tip(el(s,"rect",{x:ml+i*bw+bw*.2,y:ys(v),width:bw*.6,height:Hh-mb-ys(v),fill:we ? "#1baf7a" : "#e8590c",rx:4}), `${HARI[i]}: rata-rata ${nf(v,1)} NTU`);
+      el(s,"text",{x:ml+i*bw+bw/2,y:ys(v)-4,"text-anchor":"middle",class:"ld","font-weight":700},nf(v,1)); el(s,"text",{x:ml+i*bw+bw/2,y:Hh-mb+14,"text-anchor":"middle",class:"gt"},HARI[i]); });
+    el(s,"text",{x:ml+4,y:10,class:"ld"},"NTU · kekeruhan air sungai rata-rata per hari");
+    box.innerHTML = ""; box.appendChild(s);
   }
   const dot = st => `<i class="kqd ${st}"></i>`;
   const STD = {ph:"6,5-8,5", tu:"3", su:"27 ± 3", cl:"0,2-0,5", wa:"10", mn:"0,1", fe:"0,2"};
@@ -4001,14 +4022,20 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     L.push(clLow.length ? `Sisa klor rata-rata ${nf(cl,2)} mg/L, tetapi <b>${clLow.length} hari di bawah 0,2 mg/L</b>; dosis klor perlu dijaga.` : `Sisa klor rata-rata ${nf(cl,2)} mg/L, dalam rentang aman.`);
     const cat = [...new Set(offIss.map(x => `${x.nm} (sisa klor ${x.s === "under" ? "rendah" : "tinggi"})`).concat(cI.map(x => `${x.pt} (${x.p.replace(/ Terlarut| \(.*\)/g, "").toLowerCase()} ${x.s === "under" ? "rendah" : "tinggi"})`)))];
     L.push(cat.length ? `Offtaker yang perlu perhatian: ${cat.join(", ")}.` : `Semua titik offtaker memenuhi baku mutu.`);
-    if (X.B) L.push(bI.length ? `Air sungai (lab BBLKM): ${bI.map(x => x.p.replace(/ \(.*\)/, "")).join(", ")} melebihi baku mutu; diatasi pengolahan dan klorinasi di IPA.` : `Air sungai (lab BBLKM) memenuhi baku mutu.`);
+    const W7 = weekly(R), wk = avg(W7.slice(0,5)), we = avg(W7.slice(5));
+    if (wk && we) L.splice(1, 0, `Air sungai <b>±${nf(wk/we,1)}× lebih keruh pada hari kerja</b> (${nf(wk,1)} NTU) dibanding akhir pekan (${nf(we,1)} NTU), akibat <b>kegiatan tambang di hulu intake</b>.`);
+    const LH = X.LHU || [], lhOver = LH.filter(x => x.tc > 1000), tmax = LH.length ? LH.reduce((a,x) => x.tc > a.tc ? x : a, LH[0]) : null;
+    if (LH.length) L.push(`Bakteri coliform air sungai melebihi batas pada <b>${lhOver.length} dari ${LH.length} bulan</b> (tertinggi ${nf(tmax.tc,0)} pada ${BLN[+tmax.b.slice(5)-1]}); oksigen terlarut selalu rendah (${nf(Math.min(...LH.map(x => x.do)),1)}–${nf(Math.max(...LH.map(x => x.do)),1)} mg/L). Klorinasi di IPA wajib dijaga.`);
     if (stale) L.unshift(`<b>Catatan:</b> data terakhir di sheet tanggal ${lb(last.k)} ${last.k.slice(0,4)}. Panel otomatis memakai data terbaru begitu sheet diisi.`);
     box.querySelector("ul").innerHTML = L.map(x => `<li>${x}</li>`).join("");
-    $("#kqU").innerHTML = `Data di sheet: <b>${per}</b> · dibaca ${new Date(X.t + 8*3600e3).toISOString().slice(11,16).replace(":",".")} WITA <button type="button" id="kqR">Perbarui</button>`;
+    $("#kqU").innerHTML = `Data harian: <b>${per}</b> · dibaca ${new Date(X.t + 8*3600e3).toISOString().slice(11,16).replace(":",".")} WITA <button type="button" id="kqR">Perbarui</button>`;
     $("#kqR").onclick = () => init(true);
     // grafik 1 & 2
     if (R.length){ c1($("#kq1"), H); c2($("#kq2"), H); }
     const hiDays = R.filter(r => (r.b.tu || 0) >= 15);
+    if (wk && we){ cW($("#kqW"), W7);
+      $("#kqAW").innerHTML = `<b>Artinya:</b> air sungai paling keruh Senin–Kamis dan paling jernih Sabtu–Minggu. Pola ini berulang setiap minggu dan tidak mengikuti hujan, sehingga sumbernya <b>kegiatan tambang di sepanjang Riam Kanan antara bendungan PLTA dan intake</b> pada hari kerja. Lumpurnya tiba di intake ±10–14 jam kemudian (paling keruh pukul 22.00–04.00).`;
+      $("#kqTW").innerHTML = `Rata-rata kekeruhan air baku harian (Lab BPAM) per hari dalam seminggu, ${R.length} hari data (${lb(R[0].k)} – ${lb(R[R.length-1].k)} ${R[R.length-1].k.slice(0,4)}). Hari kerja ${nf(wk,1)} NTU vs akhir pekan ${nf(we,1)} NTU. Pembanding: hujan deras 15–17 Mei 2026 (pos ULM 39–55 mm/hari, debit model naik ke ±197 m³/dtk) tidak menaikkan kekeruhan; muka air bendung dan pintu kiri tidak berkorelasi dengan kekeruhan (r ≈ 0,1); warna air berkorelasi kuat dengan kekeruhan (r ≈ 0,96), sumbernya lumpur/tanah halus; kekeruhan juga rendah saat libur Iduladha (28–31 Mei). Tindak lanjut: koordinasi pengawasan dengan Dinas ESDM, BWS Kalimantan III dan DLH; jadwal dosis koagulan mengikuti pola ini.`; }
     $("#kqA1").innerHTML = `<b>Artinya:</b> garis oranye = air sungai masuk, garis biru = air curah keluar. Garis biru di area hijau berarti air curah jernih. ` + (hiDays.length ? `Air sungai sempat ≥ 15 NTU pada ${hiDays.length} hari; IPA tetap menjernihkannya.` : "");
     $("#kqT1").innerHTML = `Rata-rata harian kekeruhan (NTU) air baku Intake Mandikapau dan air curah Reservoir 1000 &amp; 2000 dari laporan harian Lab BPAM (${H ? H.title.replace(/\s*\(LAB.*$/i, "").toLowerCase() : ""}). Skala logaritmik. Efisiensi penurunan kekeruhan rata-rata ±${nf(eff,0)}%. Baku mutu air minum Permenkes 2/2023: 3 NTU. Korelasi kekeruhan air baku dengan hujan hulu ditampilkan di tab Hidrologi.`;
     $("#kqA2").innerHTML = `<b>Artinya:</b> sisa klor menjaga air tetap bebas kuman sampai pelanggan; harus 0,2–0,5 mg/L. ` + (clLow.length ? `Titik merah = terlalu rendah (${clLow.length} hari).` : `Selama periode ini aman.`);
@@ -4018,10 +4045,10 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       (X.C ? `<details class="hytek"><summary>Hasil lab eksternal Sucofindo per offtaker (${X.C.params.length} parameter)</summary><table class="hysrc kqt"><tr><th>Parameter</th><th>Baku mutu</th>${X.C.pts.map(p => `<th>${p}</th>`).join("")}</tr>${X.C.params.map(q => `<tr><td>${q.p.replace(/ Terlarut/, "")}</td><td>${q.std} ${q.u && !/berbau/i.test(q.u) ? q.u : ""}</td>${q.v.map(v => `<td>${dot(judge(q.std, v, q.p).s)}${v}</td>`).join("")}</tr>`).join("")}</table></details>` : "");
     $("#kqA3").innerHTML = `<b>Artinya:</b> kualitas air yang diterima PTAM. Hijau = sesuai baku mutu, merah/oranye = perlu perhatian.`;
     // air baku lab
-    $("#kq4").innerHTML = X.B ? `<table class="hysrc kqt"><tr><th>Parameter</th><th>Hasil</th><th>Baku mutu</th><th>Keterangan</th></tr>${bI.map(q => `<tr><td>${q.p}</td><td>${dot(q.s)}<b>${String(q.v[0]).replace(".", ",")}</b> ${q.u}</td><td>${q.std ? (q.s === "under" ? "≥ " : "≤ ") + q.std : "–"}</td><td>${q.s === "under" ? "kurang dari batas" : "melebihi batas"}</td></tr>`).join("")}</table>
-      <details class="hytek"><summary>Semua ${X.B.params.length} parameter air baku</summary><table class="hysrc kqt"><tr><th>Parameter</th><th>Hasil</th><th>Baku mutu</th></tr>${X.B.params.map(q => `<tr><td>${q.p}</td><td>${dot(judge(q.std, q.v[0], q.p).s)}${q.v[0] || "–"} ${q.u}</td><td>${q.std || "–"}</td></tr>`).join("")}</table>${bNa.length ? `<p>Abu-abu = batas deteksi alat lab lebih tinggi dari baku mutu (${bNa.map(q => q.p.replace(/ \(.*\)/, "")).join(", ")}), sehingga belum bisa dinilai; minta lab memakai metode yang lebih peka.</p>` : ""}</details>` : `<p class="hynote">Data lab air baku belum tersedia.</p>`;
+    $("#kq4").innerHTML = (LH.length ? `<table class="hysrc kqt"><tr><th>Bulan</th><th>Total coliform</th><th>Coli tinja</th><th>Oksigen (DO)</th></tr>${LH.map(x => `<tr><td>${BLN[+x.b.slice(5)-1]}</td><td>${dot(x.tc > 1000 ? "over" : "ok")}${nf(x.tc,0)}</td><td>${dot(x.fc > 100 ? "over" : "ok")}${nf(x.fc,0)}</td><td>${dot(x.do < 6 ? "under" : "ok")}${nf(x.do,1)}</td></tr>`).join("")}<tr class="kqstd"><td>Baku mutu</td><td>≤ 1.000</td><td>≤ 100</td><td>≥ 6 mg/L</td></tr></table>` : "") +
+      (X.B ? `<details class="hytek"><summary>Semua ${X.B.params.length} parameter air sungai bulan terakhir</summary><table class="hysrc kqt"><tr><th>Parameter</th><th>Hasil</th><th>Baku mutu</th></tr>${X.B.params.map(q => `<tr><td>${q.p}</td><td>${dot(judge(q.std, q.v[0], q.p).s)}${q.v[0] || "–"} ${q.u}</td><td>${q.std || "–"}</td></tr>`).join("")}</table><p>Khlorin bebas di air sungai selalu tercatat 0,11–1,52 mg/L (Jan–Jun), tidak wajar untuk air sungai; parameter ini diukur "manual alat" dan tidak terakreditasi, perlu klarifikasi ke BBLKM. Abu-abu = batas deteksi lab lebih tinggi dari baku mutu.</p></details>` : "");
     const bact = bI.filter(q => /coli|tinja/i.test(q.p)), doL = bI.find(q => /^DO/.test(q.p));
-    $("#kqA4").innerHTML = X.B ? `<b>Artinya:</b> kondisi Sungai Riam Kanan sebelum diolah. ` + (bact.length ? `Bakteri coliform tinggi (tercemar limbah permukiman/ternak), sehingga klorinasi di IPA wajib dijaga.` : `Memenuhi baku mutu.`) : "";
+    $("#kqA4").innerHTML = LH.length ? `<b>Artinya:</b> bakteri dari kotoran (coliform) di Sungai Riam Kanan melonjak setelah hujan lebat (Januari ${nf(LH[0].tc,0)}) karena limpasan dari permukiman dan ternak di tepi sungai. Oksigen terlarut selalu rendah, kemungkinan karena air yang dilepas PLTA berasal dari lapisan dalam waduk. Air curah tetap aman karena diolah dan diklorinasi; klorinasi tidak boleh kendor.` : "";
   }
   async function init(force){
     if (busy) return; if (K && !force && Date.now() - K.t < 10*60e3) return; busy = true;
