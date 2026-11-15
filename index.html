@@ -774,6 +774,7 @@ body.dark .pleg{color:#a9c4dc}
 .awtr span{color:#6b7785}
 .awtr .up{color:#1971c2}.awtr .dn{color:#e8590c}.awtr .fl{color:#2b8a3e}
 #awSvg{width:100%;height:132px;display:block;overflow:visible}
+.posv{width:100%;height:auto;display:block;overflow:visible}.posv text{font-size:9px;fill:#7a8794;font-family:inherit}.posv .gl{stroke:#e3ebf2;stroke-width:1}body.dark .posv .gl{stroke:#24384f}body.dark .posv text{fill:#9fb3c8}
 #awSvg text{font-size:9px;fill:#7a8794;font-family:inherit}
 #awSvg .gl{stroke:#e3ebf2;stroke-width:1}
 #awSvg .bd{fill:rgba(21,170,191,.16)}
@@ -822,6 +823,20 @@ body.dark .pleg{color:#a9c4dc}
 .anltabs button.on{color:#0b5cad;border-bottom-color:#0b7285}
 .anltabs .lv{font-size:9.5px;background:#e03131;color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:2px;letter-spacing:.04em}
 .hyd{font-size:12.8px;color:#5c6b7a;margin:2px 0 6px}
+.hysum{border-radius:14px;padding:12px 14px;margin:0 0 12px;border:1px solid #b2f2bb;background:#ebfbee}
+.hysum.w{border-color:#ffe066;background:#fff9db}.hysum.s{border-color:#ffc078;background:#fff4e6}.hysum.a{border-color:#ffa8a8;background:#fff5f5}
+.hyst{display:flex;align-items:center;gap:8px;font-size:15.5px}.hyst b{color:#1c2b3a}
+.hydot{width:12px;height:12px;border-radius:50%;background:#2f9e44;box-shadow:0 0 0 4px rgba(47,158,68,.18);flex:none}
+.hysum.w .hydot{background:#f59f00;box-shadow:0 0 0 4px rgba(245,159,0,.2)}.hysum.s .hydot{background:#e8590c;box-shadow:0 0 0 4px rgba(232,89,12,.2)}.hysum.a .hydot{background:#e03131;box-shadow:0 0 0 4px rgba(224,49,49,.2)}
+.hysum ul{margin:8px 0 0;padding-left:18px;font-size:13.3px;line-height:1.5}.hysum li{margin:3px 0}
+.hyart{font-size:13.2px;background:#e7f5ff;border-left:4px solid #339af0;border-radius:8px;padding:8px 10px;margin:4px 0 6px;line-height:1.5}
+.hytek{margin:0 0 6px;font-size:12.6px;color:#5c6b7a}.hytek summary{cursor:pointer;font-weight:700;color:#0b7285;font-size:12px;list-style:none}.hytek summary::before{content:"▸ ";}.hytek[open] summary::before{content:"▾ "}.hytek p{margin:4px 0}
+.hysub{font-size:11px;font-weight:500;color:#7a8794;margin-left:6px}
+.pplain{font-size:12.6px;line-height:1.45;border-radius:9px;padding:7px 9px;margin:0 0 8px;background:#ebfbee;border:1px solid #b2f2bb;color:#1c2b3a}.pplain.w{background:#fff9db;border-color:#ffe066}.pplain.s{background:#fff4e6;border-color:#ffc078}.pplain.a{background:#fff5f5;border-color:#ffa8a8}
+body.dark .hysum{background:#0f2a1a;border-color:#2b6a3c}body.dark .hysum.w{background:#2b2410;border-color:#5c4a12}body.dark .hysum.s{background:#2e1d10;border-color:#7a4b16}body.dark .hysum.a{background:#2e1214;border-color:#7a2a2e}
+body.dark .hyst b{color:#e7f5ff}body.dark .hyart{background:#102a40;border-left-color:#4dabf7;color:#dbe8f5}body.dark .hytek{color:#9fb3c8}body.dark .hytek summary{color:#66d9e8}body.dark .hysub{color:#8aa0b6}
+body.dark .pplain{background:#0f2a1a;border-color:#2b6a3c;color:#dbe8f5}body.dark .pplain.w{background:#2b2410;border-color:#5c4a12}body.dark .pplain.s{background:#2e1d10;border-color:#7a4b16}body.dark .pplain.a{background:#2e1214;border-color:#7a2a2e}
+
 .hyc{width:100%;min-height:150px;margin:4px 0 6px}
 .hyc svg{width:100%;height:auto;display:block;font-family:inherit}
 .hyc .ax{stroke:#d5dee7;stroke-width:1}.hyc .gt{fill:#7a8794;font-size:10.5px}
@@ -2429,6 +2444,7 @@ function liveIcon(id, c, title, dir, est){
 map.on("zoomend", () => document.getElementById("map").classList.toggle("zlow", map.getZoom() < 13));
 document.getElementById("map").classList.toggle("zlow", true);
 function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); if (b) b.innerHTML = val + (sub ? `<em>${sub}</em>` : ""); }
+Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
 // ---------- telemetri muka air Bendung Karang Intan (AWLR BWS Kalimantan III, HGT1486)
 (function(){
   const DEV = "HGT1486", LL = [-3.456094, 114.961683];
@@ -2476,7 +2492,8 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
     if (!last) return `<div class="pp"><div class="pbd">Data telemetri belum tersedia.</div></div>`;
     const [st] = status(last.v);
     const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
-    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa ketersediaan air</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
+    const HY = window.__hyd || {}; if (HY.la7 != null) rows.splice(3, 0, ["Hujan 7 hari (pos BWS Liang Anggang)", nf(HY.la7,1) + " mm" + (HY.lamiss ? ` · ${HY.lamiss} hari tanpa data` : "")]); if (HY.f7 != null) rows.splice(4, 0, ["Prakiraan hujan 7 hari", "±" + nf(HY.f7,0) + " mm (model) · " + (HY.f7 >= 50 ? "muka air berpotensi naik" : HY.f7 >= 15 ? "stabil–naik pelan" : "stabil")]);
+    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
@@ -3339,21 +3356,22 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     <div class="anlbd">
       <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="k">Ketersediaan air baku</button></div>
       <div class="anlpane" data-p="h">
-        <div class="anlkpi" id="hyK"><div><b>–</b><span>Muka air sekarang</span></div><div><b>–</b><span>Perubahan 7 hari</span></div><div><b>–</b><span>Hujan 7 hari terakhir</span></div><div><b>–</b><span>Prakiraan hujan 7 hari</span></div></div>
-        <h3>1. Riwayat muka air semusim</h3>
-        <p class="hyd">Rata-rata harian (garis) dan rentang minimum–maksimum (pita) sejak AWLR terpasang 6 Juni 2026, bertambah otomatis setiap hari. Jalur warna = ambang kering BPAM dan ambang banjir BWS.</p>
+        <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul></div>
+        <div class="anlkpi" id="hyK"><div><b>–</b><span>Tinggi air di bendung sekarang</span></div><div><b>–</b><span>Naik/turun dalam seminggu</span></div><div><b>–</b><span>Hujan seminggu terakhir (pos BWS)</span></div><div><b>–</b><span>Perkiraan hujan seminggu ke depan</span></div></div>
+        <h3>1. Tinggi air di bendung sejak Juni <small class="hysub">riwayat muka air semusim</small></h3>
+        <div class="hyart" id="hyA1"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Rata-rata harian (garis) dan rentang minimum–maksimum (pita) sejak AWLR terpasang 6 Juni 2026, bertambah otomatis setiap hari. Jalur warna = ambang kering BPAM dan ambang banjir BWS.</p></details>
         <div class="hyc" id="hy1"></div>
-        <h3>2. Hujan vs muka air (60 hari terakhir)</h3>
-        <p class="hyd">Batang = hujan harian pos BWS PCH Liang Anggang (terdekat dengan intake); garis = muka air rata-rata harian. Muka air merespons hujan kumulatif dengan jeda <b>±3–7 hari</b> (korelasi ±0,6). Kenaikan muka air sejak akhir September terjadi <b>sebelum</b> hujan lokal turun, sehingga lebih dipengaruhi pelepasan air Waduk Riam Kanan/PLTA dan hujan di hulu DAS.</p>
+        <h3>2. Hujan dan tinggi air, 60 hari terakhir <small class="hysub">hujan vs muka air</small></h3>
+        <div class="hyart" id="hyA2"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Batang = hujan harian pos BWS PCH Liang Anggang (terdekat dengan intake); garis = muka air rata-rata harian. Muka air merespons hujan kumulatif dengan jeda <b>±3–7 hari</b> (korelasi ±0,6). Kenaikan muka air sejak akhir September terjadi <b>sebelum</b> hujan lokal turun, sehingga lebih dipengaruhi pelepasan air Waduk Riam Kanan/PLTA dan hujan di hulu DAS.</p></details>
         <div class="hyc" id="hy2"></div>
-        <h3>3. Prakiraan hujan 7 hari &amp; status musim</h3>
+        <h3>3. Perkiraan hujan seminggu ke depan <small class="hysub">prakiraan 7 hari &amp; status musim</small></h3>
         <div class="hyc" id="hy3"></div>
         <div class="hybmkg"><b>Status iklim (BMKG):</b> El Niño masih aktif dengan intensitas kuat dan diprediksi bertahan hingga awal 2027. Awal musim hujan 2026/2027 di Kalimantan Selatan mundur dari normal: sebagian wilayah November, sebagian besar Desember 2026. Awal dan puncak musim hujan berdekatan, sehingga perlu diwaspadai <b>lonjakan hujan, banjir dan kekeruhan air baku</b> pada Desember 2026–Februari 2027. <a href="https://staklim-kalsel.bmkg.go.id/" target="_blank" rel="noopener">Staklim Kalsel ↗</a></div>
-        <h3>4. Musim ini dibanding normal 1997–2025 <span class="hytag">indikatif</span></h3>
-        <p class="hyd">Debit bulanan Sungai Riam Kanan hulu bendung dari model global GloFAS: batang = rata-rata normal, garis putus = debit andalan Q80 normal, garis merah = 2026. Model <b>tidak memperhitungkan pelepasan PLTA</b>, sehingga angka musim kemarau jauh lebih kecil dari kenyataan; pakai untuk membandingkan pola musim saja.</p>
+        <h3>4. Tahun ini dibanding tahun-tahun biasa <span class="hytag">indikatif</span> <small class="hysub">debit bulanan vs normal 1997–2025</small></h3>
+        <div class="hyart" id="hyA4"><b>Artinya:</b> Grafik ini membandingkan tahun 2026 (garis merah) dengan rata-rata 29 tahun (batang biru). Garis merah jauh di bawah batang pada Juli–Oktober berarti kemarau 2026 lebih kering dari biasanya. Angkanya perkiraan model, hanya untuk melihat pola.</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Debit bulanan Sungai Riam Kanan hulu bendung dari model global GloFAS: batang = rata-rata normal, garis putus = debit andalan Q80 normal, garis merah = 2026. Model <b>tidak memperhitungkan pelepasan PLTA</b>, sehingga angka musim kemarau jauh lebih kecil dari kenyataan; pakai untuk membandingkan pola musim saja.</p></details>
         <div class="hyc" id="hy4"></div>
-        <h3>5. Pola harian muka air</h3>
-        <p class="hyd">Rata-rata simpangan muka air per jam terhadap rata-rata hariannya. Muka air naik siang (puncak ±13.00–14.00 WITA) dan turun dini hari, setiap hari termasuk hari libur; diduga jejak operasi turbin PLTA Ir. P.M. Noor, atau sebagian efek suhu harian pada sensor (perlu konfirmasi data PLN dan BWS).</p>
+        <h3>5. Naik-turun air dalam sehari <small class="hysub">pola harian muka air</small></h3>
+        <div class="hyart" id="hyA5"><b>Artinya:</b> Setiap hari air di bendung naik sedikit siang hari dan turun malam hari, hanya sekitar 10 cm. Ini normal dan tidak mempengaruhi pasokan air baku.</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Rata-rata simpangan muka air per jam terhadap rata-rata hariannya. Muka air naik siang (puncak ±13.00–14.00 WITA) dan turun dini hari, setiap hari termasuk hari libur; diduga jejak operasi turbin PLTA Ir. P.M. Noor, atau sebagian efek suhu harian pada sensor (perlu konfirmasi data PLN dan BWS).</p></details>
         <div class="hyc" id="hy5"></div>
         <p class="anlsrc">Sumber: AWLR HGT1486 BWS Kalimantan III (live); pos hujan ARR PCH Liang Anggang HGT645 jaringan hidrologi BWS Kalimantan III (live, hkakal3.higertech.com); hujan model ERA5 &amp; prakiraan Open-Meteo; debit model GloFAS v4 (Copernicus); informasi musim BMKG (Prediksi Musim Hujan 2026/2027). Prakiraan hujan adalah model global, bukan prakiraan resmi BMKG.</p>
       </div>
@@ -3461,6 +3479,8 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     el(s,"path",{d:k.map((q,i) => (i?"L":"M")+xs(i).toFixed(1)+","+ys(X.D[q].mean).toFixed(1)).join(""),fill:"none",stroke:"#1971c2","stroke-width":2});
     k.forEach((q,i) => { if (i % 3 === 0 || i === k.length-1) tip(el(s,"circle",{cx:xs(i),cy:ys(X.D[q].mean),r:5,fill:"transparent"}), `${lab(q)}: rata-rata ${nf(X.D[q].mean)} m (min ${nf(X.D[q].min)} · maks ${nf(X.D[q].max)})`); });
     k.forEach((q,i) => { if (q.slice(8) === "01") { el(s,"line",{x1:xs(i),x2:xs(i),y1:mt,y2:Hh-mb,class:"ax","stroke-dasharray":"2 3"}); el(s,"text",{x:xs(i)+3,y:Hh-mb+14,class:"gt"},BL[+q.slice(5,7)-1]); } });
+    el(s,"text",{x:W-mr+4,y:ys(9.8)+3.5,class:"ld","font-weight":700,fill:"#2f9e44"},"Normal");
+    const iN = k.length-1; el(s,"circle",{cx:xs(iN),cy:ys(X.D[k[iN]].mean),r:4.5,fill:"#1971c2",stroke:"#fff","stroke-width":1.5}); el(s,"text",{x:xs(iN)-6,y:ys(X.D[k[iN]].mean)-9,"text-anchor":"end",class:"ld","font-weight":700},`hari ini ${nf(X.D[k[iN]].mean)} m`);
     const iMin = k.reduce((b,q,i) => X.D[q].mean < X.D[k[b]].mean ? i : b, 0);
     el(s,"circle",{cx:xs(iMin),cy:ys(X.D[k[iMin]].mean),r:4,fill:"#e03131"}); el(s,"text",{x:xs(iMin)+6,y:ys(X.D[k[iMin]].mean)+14,class:"ld","font-weight":700},`terendah ${nf(X.D[k[iMin]].mean)} m (${lab(k[iMin])})`);
     box.innerHTML = ""; box.appendChild(s);
@@ -3487,7 +3507,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     const tot = X.F.reduce((a,f) => a + (f.p||0), 0), mx = Math.max(10, ...X.F.map(f => f.p||0));
     const hari = k => wd(k).toLocaleDateString("id-ID",{weekday:"short",day:"numeric",timeZone:"UTC"});
     box.innerHTML = `<div class="hyday">${X.F.map(f => `<div class="${f.p >= 20 ? "hx" : f.p >= 5 ? "hv" : ""}">${hari(f.k)}<b>${nf(f.p,0)} mm</b>${f.pr != null ? f.pr + "%" : ""}<i style="width:${Math.max(8, f.p/mx*100)}%"></i></div>`).join("")}</div>
-      <p class="hynote">Total ±<b>${nf(tot,0)} mm</b> dalam 7 hari di titik intake (model global, bukan prakiraan resmi BMKG). ${tot >= 50 ? "Dengan jeda respon 5–7 hari, muka air bendung diperkirakan <b>naik</b> pada pekan berikutnya; pantau ambang Siaga 3 banjir 10,60 m dan kekeruhan air baku." : tot >= 15 ? "Hujan sedang; muka air diperkirakan stabil hingga naik pelan." : "Hujan sedikit; muka air diperkirakan stabil atau turun pelan."}</p>`;
+      <p class="hynote"><b>Artinya:</b> dalam seminggu diperkirakan turun hujan total ±<b>${nf(tot,0)} mm</b> di sekitar intake; kotak oranye = hari dengan hujan cukup deras. (Perkiraan model cuaca global, bukan prakiraan resmi BMKG.) ${tot >= 50 ? "Dengan jeda respon 5–7 hari, muka air bendung diperkirakan <b>naik</b> pada pekan berikutnya; pantau ambang Siaga 3 banjir 10,60 m dan kekeruhan air baku." : tot >= 15 ? "Hujan sedang; muka air diperkirakan stabil hingga naik pelan." : "Hujan sedikit; muka air diperkirakan stabil atau turun pelan."}</p>`;
   }
   // ---------- 4. klimatologi debit
   function c4(box, X){
@@ -3514,18 +3534,46 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     el(s,"text",{x:ml+4,y:mt+8,class:"ld"},"cm terhadap rata-rata harian");
     box.innerHTML = ""; box.appendChild(s);
   }
+
+  const cm = v => nf(Math.abs(v)*100,0) + " cm";
+  function lvStat(v){
+    if (v >= 11.2) return ["a","SIAGA 1 BANJIR – air bendung sangat tinggi"]; if (v >= 10.9) return ["s","SIAGA 2 BANJIR – air bendung tinggi"]; if (v >= 10.6) return ["w","SIAGA 3 BANJIR – air bendung mulai tinggi"];
+    if (v >= 10.4) return ["w","WASPADA – air bendung tinggi, pantau kekeruhan"]; if (v < 8.7) return ["a","AWAS – air bendung sangat rendah"]; if (v < 8.85) return ["s","SIAGA – air bendung rendah"]; if (v < 9.0) return ["w","WASPADA – air bendung mulai rendah"];
+    return ["","AMAN – pasokan air baku normal"];
+  }
+  window.__lvStat = lvStat;
+  const hujanKat = mm => mm >= 100 ? "sangat banyak" : mm >= 50 ? "cukup banyak" : mm >= 20 ? "sedang" : mm >= 5 ? "sedikit" : "hampir tidak ada";
+  function plain(X){
+    const k = X.keys.filter(q => X.D[q].mean != null), q = k[k.length-1], q7 = k[k.length-8];
+    const v = window.__awlr && window.__awlr.last ? window.__awlr.last.v : (X.D[q].now != null ? X.D[q].now : X.D[q].mean);
+    const [c, head] = lvStat(v), dl = q7 ? X.D[q].mean - X.D[q7].mean : 0;
+    const r7 = X.keys.slice(-7).reduce((a,d) => a + (X.D[d].pg != null ? X.D[d].pg : (X.D[d].pm||0)), 0), f7 = X.F.reduce((a,f) => a + (f.p||0), 0);
+    const iMin = k.reduce((b,x,i) => X.D[x].mean < X.D[k[b]].mean ? i : b, 0), vmin = X.D[k[iMin]].mean;
+    const box = $("#hyS"); box.className = "hysum " + c; box.querySelector(".hyst b").textContent = head;
+    const L = [];
+    if (v >= 9 && v < 10.6) L.push(`Tinggi air di bendung <b>${nf(v)} m</b>: <b>${cm(v-9)}</b> di atas batas waspada kering dan ${cm(10.6-v)} di bawah batas siaga banjir. Intake dapat mengambil air seperti biasa.`);
+    else if (v < 9) L.push(`Tinggi air di bendung <b>${nf(v)} m</b>, di bawah batas waspada kering 9,00 m. Pada kemarau 2026 intake masih mengambil penuh di ±8,9 m; pantau harian.`);
+    else L.push(`Tinggi air di bendung <b>${nf(v)} m</b>, di atas batas siaga banjir 10,60 m. Waspadai air baku keruh dan sampah di intake.`);
+    L.push(Math.abs(dl) < 0.005 ? `Dalam seminggu tinggi air <b>stabil</b>.` : `Dalam seminggu tinggi air <b>${dl > 0 ? "naik" : "turun"} ${cm(dl)}</b>` + (Math.abs(dl) < 0.05 ? " (relatif stabil)." : "."));
+    L.push(`Hujan seminggu terakhir di pos BWS terdekat ${hujanKat(r7)} (<b>${nf(r7,0)} mm</b>).`);
+    if (X.F.length) L.push(`Seminggu ke depan diperkirakan hujan ${hujanKat(f7)} (±${nf(f7,0)} mm)` + (f7 >= 50 ? `; air bendung kemungkinan <b>naik dalam 3–7 hari</b>, waspadai air baku keruh.` : f7 >= 15 ? `; air bendung diperkirakan stabil hingga naik pelan.` : `; air bendung diperkirakan stabil.`));
+    L.push(`Menurut BMKG, musim hujan 2026/2027 datang terlambat dan puncaknya <b>Desember–Februari</b>; risiko berganti dari kekurangan air menjadi banjir dan air keruh.`);
+    box.querySelector("ul").innerHTML = L.map(x => `<li>${x}</li>`).join("");
+    $("#hyA1").innerHTML = `<b>Artinya:</b> garis biru adalah tinggi air setiap hari. Selama garis berada di area tengah yang tidak berwarna, kondisi normal. Titik terendah ${nf(vmin)} m pada ${lab(k[iMin])} masih aman karena intake tetap mengambil air penuh. Hari ini rata-rata ${nf(X.D[q].mean)} m, sudah ${X.D[q].mean >= vmin ? "naik" : "turun"} ${cm(X.D[q].mean - vmin)} dari titik terendah.`;
+    $("#hyA2").innerHTML = `<b>Artinya:</b> batang biru adalah hujan, garis oranye adalah tinggi air di bendung. Tinggi air <b>tidak langsung naik</b> saat hujan turun di sekitar Banjarbaru; kenaikannya lebih banyak ditentukan oleh air yang dilepas dari Waduk Riam Kanan dan hujan di hulu, dengan jeda beberapa hari.`;
+  }
   function kpi(X){
     const k = X.keys.filter(q => X.D[q].mean != null), q = k[k.length-1], q7 = k[k.length-8];
     const aw = window.__awlr && window.__awlr.last ? window.__awlr.last.v : (X.D[q].now != null ? X.D[q].now : X.D[q].mean);
     const r7 = X.keys.slice(-7).reduce((a,d) => a + (X.D[d].pg != null ? X.D[d].pg : (X.D[d].pm||0)), 0), f7 = X.F.reduce((a,f) => a + (f.p||0), 0), dl = q7 ? X.D[q].mean - X.D[q7].mean : null;
     const b = $("#hyK").querySelectorAll("b");
-    b[0].textContent = nf(aw) + " m"; b[1].textContent = dl == null ? "–" : (dl >= 0 ? "+" : "−") + nf(Math.abs(dl)*100,0) + " cm";
+    b[0].textContent = nf(aw) + " m"; b[1].textContent = dl == null ? "–" : Math.abs(dl) < 0.005 ? "stabil" : (dl > 0 ? "naik " : "turun ") + nf(Math.abs(dl)*100,0) + " cm";
     b[2].textContent = nf(r7,0) + " mm"; b[3].textContent = X.F.length ? "±" + nf(f7,0) + " mm" : "–";
   }
   async function init(){
     if (busy) return; busy = true;
     ["#hy1","#hy2","#hy3","#hy4","#hy5"].forEach(id => { if (!$(id).firstChild) $(id).innerHTML = `<p class="hynote">Memuat data…</p>`; });
-    try{ S = await load(); kpi(S); c1($("#hy1"),S); c2($("#hy2"),S); c3($("#hy3"),S); c4($("#hy4"),S); c5($("#hy5"),S); }
+    try{ S = await load(); kpi(S); plain(S); c1($("#hy1"),S); c2($("#hy2"),S); c3($("#hy3"),S); c4($("#hy4"),S); c5($("#hy5"),S); }
     catch(e){ $("#hy1").innerHTML = `<p class="hynote">Data hidrologi gagal dimuat (${e.message}).</p>`; }
     busy = false;
   }
@@ -3533,6 +3581,110 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   const tabs = document.querySelectorAll(".anltabs button");
   tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle("on", x === b)); document.querySelectorAll(".anlpane").forEach(p => p.hidden = p.dataset.p !== b.dataset.t); if (b.dataset.t === "h" && !S) init(); });
   const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = t === "k" ? "k" : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); if (want === "h" && (!S || Date.now() - (S.t||0) > 15*60e3)) { S = null; init().then(() => S && (S.t = Date.now())); } };
+})();
+</script>
+<script>/* Pos hidrologi BWS Kalimantan III di peta: ARR Liang Anggang & ULM, AWLR pintu kiri bendung (live) */
+(function(){
+  if (!window.__map || !window.liveIcon) return;
+  const {liveIcon, setLive, nf, I, esc, WIDE0} = window;
+  const LOC = location.hostname.endsWith("netlify.app") || location.hostname === "localhost";
+  if (!LOC) return;
+  const n1 = (v,d=1) => v == null || isNaN(v) ? "–" : nf(+v, d);
+  const W8 = () => new Date(Date.now() + 8*3600e3), tday = () => W8().toISOString().slice(0,10);
+  const ago = n => new Date(Date.now() + 8*3600e3 - n*864e5).toISOString().slice(0,10);
+  const fT = s => new Date(s.replace("Z","")).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) + " WITA";
+  const form = o => ({method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:new URLSearchParams(o)});
+  const kat = mm => mm >= 150 ? "Ekstrem" : mm >= 100 ? "Sangat lebat" : mm >= 50 ? "Lebat" : mm >= 20 ? "Sedang" : mm >= 0.5 ? "Ringan" : "Tidak hujan";
+  const HY = window.__hyd = window.__hyd || {};
+  // prakiraan 7 hari titik intake (dipakai di popup AWLR & ARR)
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=-3.4568&longitude=114.962&daily=precipitation_sum&forecast_days=8&timezone=Asia%2FMakassar")
+    .then(r => r.json()).then(o => { const t = tday(); HY.f = o.daily.time.map((k,i) => ({k, p:o.daily.precipitation_sum[i]})).filter(x => x.k > t).slice(0,7); HY.f7 = HY.f.reduce((a,x) => a + (x.p||0), 0); }).catch(()=>{});
+  function bars(D, c){ // D = [{k,v}] 14 hari
+    const W = 300, H = 104, ml = 24, mb = 16, mx = Math.max(10, ...D.map(d => d.v||0)), bw = (W-ml)/D.length;
+    let g = ""; [0, mx/2, mx].forEach(v => { const y = 6 + (1 - v/mx)*(H-mb-6); g += `<line x1="${ml}" x2="${W}" y1="${y}" y2="${y}" class="gl"/><text x="${ml-3}" y="${y+3}" text-anchor="end">${Math.round(v)}</text>`; });
+    D.forEach((d,i) => { const v = d.v||0, h = v/mx*(H-mb-6); g += `<rect x="${ml+i*bw+bw*.15}" y="${H-mb-h}" width="${bw*.7}" height="${Math.max(h, v > 0 ? 1.5 : 0)}" rx="1.5" fill="${d.v == null ? "#ced4da" : c}"><title>${d.k}: ${d.v == null ? "tidak ada data" : n1(v) + " mm"}</title></rect>`; if (i % 3 === 0 || i === D.length-1) g += `<text x="${ml+i*bw+bw/2}" y="${H-3}" text-anchor="middle">${+d.k.slice(8)}/${+d.k.slice(5,7)}</text>`; });
+    return `<svg class="posv" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+  }
+  function line(P, c){ // P = [{t,v}]
+    if (P.length < 2) return "";
+    const W = 300, H = 104, ml = 30, mb = 16, a = Math.min(...P.map(p => p.v)), b = Math.max(...P.map(p => p.v)), lo = a - .03, hi = b + .03, t0 = P[0].t, t1 = P[P.length-1].t;
+    const x = t => ml + (t-t0)/(t1-t0)*(W-ml), y = v => 6 + (hi-v)/(hi-lo)*(H-mb-6);
+    let g = ""; [lo, (lo+hi)/2, hi].forEach(v => g += `<line x1="${ml}" x2="${W}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${ml-3}" y="${y(v)+3}" text-anchor="end">${n1(v,2)}</text>`);
+    for (let d = 0; d < 8; d++){ const t = new Date(ago(d) + "T00:00:00Z").getTime(); if (t > t0 && t < t1) g += `<text x="${x(t)}" y="${H-3}" text-anchor="middle">${+ago(d).slice(8)}/${+ago(d).slice(5,7)}</text>`; }
+    g += `<path d="${P.map((p,i) => (i?"L":"M") + x(p.t).toFixed(1) + "," + y(p.v).toFixed(1)).join("")}" fill="none" stroke="${c}" stroke-width="1.6"/>`;
+    return `<svg class="posv" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+  }
+  // ---------- ARR (pos curah hujan)
+  const ARR = [
+    {id:"arrla", dev:"HGT645", nama:"PCH Liang Anggang", ll:[-3.5237, 114.7153], dir:"ul", ket:"Pos hujan terdekat dengan Intake Karang Intan (±27 km)"},
+    {id:"arrulm", dev:"HGT205", nama:"PCH ULM", ll:[-3.296589, 114.587092], dir:"ur", ket:"Pos hujan BWS di kampus ULM"}
+  ];
+  ARR.forEach(s => {
+    s.mk = L.marker(s.ll, {icon: liveIcon(s.id, "#4c6ef5", "Hujan " + s.nama.replace("PCH ",""), s.dir), pane:"live", zIndexOffset:820}).addTo(__map);
+    s.mk.bindPopup(() => arrPop(s), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+    s.mk.on("popupopen", () => arrDaily(s).then(() => { if (s.mk.isPopupOpen()) s.mk.setPopupContent(arrPop(s)); }));
+  });
+  async function arrNow(s){
+    try{
+      const g = await fetch("/api/hka/GetChartDataArr", form({deviceId:s.dev, selectedTime:"minute", filterDate:tday()})).then(r => r.json());
+      const d = (g.data || []).filter(x => x.rainfall != null).sort((a,b) => a.readingAt < b.readingAt ? -1 : 1);
+      if (!d.length) return;
+      const lastAt = d[d.length-1].readingAt, cut = new Date(new Date(lastAt.replace("Z","")).getTime() - 36e5);
+      s.today = d.reduce((a,x) => a + x.rainfall, 0); s.h1 = d.filter(x => new Date(x.readingAt.replace("Z","")) > cut).reduce((a,x) => a + x.rainfall, 0);
+      s.at = lastAt; s.bat = d[d.length-1].batteryVoltage; s.stale = (W8().getTime() - new Date(lastAt).getTime()) / 6e4 > 90;
+      setLive(s.id, n1(s.today) + " mm", s.stale ? "tertunda" : (s.h1 > 0 ? n1(s.h1) + " mm/jam" : "hari ini"));
+    }catch(e){ setLive(s.id, "–", "tidak terhubung"); }
+  }
+  async function arrDaily(s){
+    if (s.daily && Date.now() - s.dt < 10*60e3) return;
+    try{
+      const y = tday().slice(0,4), q = [fetch("/api/hka/GetChartDataArr", form({deviceId:s.dev, selectedTime:"day", filterDate:y})).then(r => r.json())];
+      if (ago(14).slice(0,4) !== y) q.push(fetch("/api/hka/GetChartDataArr", form({deviceId:s.dev, selectedTime:"day", filterDate:ago(14).slice(0,4)})).then(r => r.json()));
+      const M = {}; (await Promise.all(q)).forEach(g => (g.data || []).forEach(x => M[String(x.readingDate).slice(0,10)] = x.rainfall));
+      if (s.today != null) M[tday()] = s.today;
+      s.daily = Array.from({length:14}, (_,i) => ({k:ago(13-i), v:M[ago(13-i)]}));
+      s.d7 = s.daily.slice(-7).reduce((a,d) => a + (d.v||0), 0); s.dmiss = s.daily.slice(-7).filter(d => d.v == null).length; s.dt = Date.now();
+      if (s.id === "arrla"){ HY.la7 = s.d7; HY.lamiss = s.dmiss; }
+    }catch(e){}
+  }
+  function arrPop(s){
+    const rows = [["Hujan hari ini", `<b>${n1(s.today)} mm</b> · ${kat(s.today||0)}`], ["1 jam terakhir", s.h1 != null ? n1(s.h1) + " mm" : "–"], ["Total 7 hari", s.d7 != null ? n1(s.d7) + " mm" + (s.dmiss ? ` (${s.dmiss} hari tanpa data)` : "") : "memuat…"],
+      ["Prakiraan 7 hari (intake)", HY.f7 != null ? "±" + n1(HY.f7,0) + " mm · model, bukan BMKG" : "–"], ["Pembacaan terakhir", s.at ? fT(s.at) + (s.stale ? " · tertunda" : "") : "–"], ["Baterai", s.bat ? n1(s.bat) + " V" : "–"], ["Alat", "ARR Higertech " + s.dev], ["Pengelola", "BWS Kalimantan III"]];
+    return `<div class="pp"><div class="phd" style="--c:#4c6ef5"><span class="pic" style="background:#4c6ef5">CH</span><div><h3>Pos Curah Hujan ${esc(s.nama.replace("PCH ",""))}</h3><div class="sub">ARR · telemetri hujan · real time</div></div></div><div class="pbd"><div class="pplain ${(s.d7||0) >= 100 ? "w" : ""}"><b>Artinya:</b> ${s.today == null ? "data hujan hari ini belum masuk." : (s.today < 0.5 ? "hari ini tidak hujan" : "hari ini hujan " + kat(s.today).toLowerCase() + " (" + n1(s.today) + " mm)")}${s.d7 != null ? ", seminggu terakhir " + n1(s.d7,0) + " mm" : ""}. Hujan di sini baru berpengaruh ke tinggi air bendung beberapa hari kemudian.</div><div class="chips"><span class="chip">LIVE</span><span class="chip">${esc(s.ket)}</span></div>
+      <div class="awc"><div class="awtr">Hujan harian 14 hari terakhir (mm)</div>${s.daily ? bars(s.daily, "#4c6ef5") : '<div class="awtr">Memuat…</div>'}</div>
+      <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
+      <div class="note info">Kategori hujan harian BMKG: ringan &lt;20, sedang 20–50, lebat 50–100, sangat lebat 100–150 mm. Muka air Bendung Karang Intan umumnya merespons hujan kumulatif 3–7 hari kemudian.</div>
+      <div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="https://hkakal3.higertech.com/Station/Detail/${s.dev === "HGT645" ? "pch-liang-anggang" : "pch-ulm"}" target="_blank" rel="noopener">Buka sumber ↗</a></div>
+      <div class="src">Sumber: hkakal3.higertech.com (jaringan hidrologi BWS Kalimantan III), diperbarui tiap 10 menit</div></div></div>`;
+  }
+  // ---------- AWLR pintu kiri bendung (HGT1485)
+  const PK = {id:"pk", dev:"HGT1485", ll:[-3.455666, 114.961037]};
+  PK.mk = L.marker(PK.ll, {icon: liveIcon("pk", "#20c997", "Pintu kiri bendung", "ul"), pane:"live", zIndexOffset:880}).addTo(__map);
+  PK.mk.bindPopup(() => pkPop(), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+  async function pkLoad(){
+    try{
+      const g = await fetch("/api/awlr/GetDataGrafikAwlr", form({deviceId:PK.dev, startDate:ago(6), endDate:tday()})).then(r => r.json());
+      const P = (g.dataGrafik || []).filter(p => p.value != null && p.value > 0 && p.value < 8).map(p => ({t:p.millis, v:+p.value})).sort((a,b) => a.t - b.t);
+      if (!P.length) return; PK.P = P; PK.last = P[P.length-1];
+      const td = P.filter(p => new Date(p.t).toISOString().slice(0,10) === tday()).map(p => p.v); PK.tmin = td.length ? Math.min(...td) : null; PK.tmax = td.length ? Math.max(...td) : null;
+      PK.avg7 = P.reduce((a,p) => a + p.v, 0) / P.length; PK.stale = (W8().getTime() - PK.last.t) / 6e4 > 60;
+      setLive("pk", n1(PK.last.v,2) + " m", PK.stale ? "tertunda" : "pintu kiri");
+      if (PK.mk.isPopupOpen()) PK.mk.setPopupContent(pkPop());
+    }catch(e){ setLive("pk", "–", "tidak terhubung"); }
+  }
+  function pkPop(){
+    const bw = window.__awlr && window.__awlr.last ? window.__awlr.last.v : null;
+    const rows = [["Muka air pintu kiri", PK.last ? `<b>${n1(PK.last.v,2)} m</b>` : "memuat…"], ["Hari ini (min–maks)", PK.tmin != null ? n1(PK.tmin,2) + " – " + n1(PK.tmax,2) + " m" : "–"], ["Rata-rata 7 hari", PK.avg7 != null ? n1(PK.avg7,2) + " m" : "–"],
+      ["Muka air bendung (pembanding)", bw != null ? n1(bw,2) + " m" : "–"], ["Pembacaan terakhir", PK.last ? new Date(PK.last.t).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"UTC"}) + " WITA" : "–"], ["Alat", "AWLR Higertech " + PK.dev], ["Pengelola", "BWS Kalimantan III"]];
+    return `<div class="pp"><div class="phd" style="--c:#20c997"><span class="pic" style="background:#20c997">PK</span><div><h3>AWLR Pintu Kiri Bendung Karang Intan</h3><div class="sub">Muka air pintu pengambilan kiri · real time</div></div></div><div class="pbd"><div class="pplain"><b>Artinya:</b> ${PK.last ? (Math.abs(PK.last.v - PK.avg7) < 0.08 ? "air yang masuk lewat pintu kiri bendung stabil seperti biasa." : PK.last.v > PK.avg7 ? "air di pintu kiri sedang lebih tinggi dari biasanya minggu ini." : "air di pintu kiri sedang lebih rendah dari biasanya minggu ini.") : "data sedang dimuat."}</div><div class="chips"><span class="chip">LIVE</span><span class="chip">Bendung Karang Intan</span></div>
+      <div class="awc"><div class="awtr">Muka air 7 hari terakhir (m)</div>${PK.P ? line(PK.P, "#12b886") : '<div class="awtr">Memuat…</div>'}</div>
+      <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
+      <div class="note info">Sepanjang kemarau 2026 muka air pintu kiri stabil di ±2,4–2,5 m dan tidak ikut turun bersama muka air bendung, artinya pengambilan lewat pintu ini dijaga konstan oleh pengelola bendung. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div>
+      <div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="https://opsdabwskal3.higertech.com/Station/Detail/awlr-cctv-karang-intan-debit-pintu-kiri" target="_blank" rel="noopener">Buka sumber ↗</a></div>
+      <div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui tiap 10 menit</div></div></div>`;
+  }
+  const tick = () => { ARR.forEach(arrNow); pkLoad(); ARR[0].dt = 0; arrDaily(ARR[0]); };
+  tick(); setInterval(() => { if (!document.hidden) tick(); }, 10*60e3);
 })();
 </script>
 <script>/* cuaca DAS Riam Kanan + pengambilan air baku 2026 + kondisi hari ini */
