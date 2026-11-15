@@ -21,3 +21,10 @@
   to = "https://hkakal3.higertech.com/Station/:splat"
   status = 200
   force = true
+
+# Proxy peringatan dini cuaca BMKG (RSS nowcast tidak mengizinkan CORS)
+[[redirects]]
+  from = "/api/bmkg-nowcast"
+  to = "https://www.bmkg.go.id/alerts/nowcast/id/rss.xml"
+  status = 200
+  force = true
