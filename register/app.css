@@ -152,13 +152,5 @@ transform:translateY(105%);transition:transform .25s ease;visibility:hidden}
   .thead.only-d{display:grid!important}
   .it .acts.only-d{display:flex!important}
 }
-/* beri ruang untuk lencana "Powered by Netlify" (197×64 px, pojok kanan bawah) */
-.fab{bottom:calc(env(safe-area-inset-bottom) + 76px)}
-.main{padding-bottom:calc(env(safe-area-inset-bottom) + 170px)}
-.sheet{padding-bottom:calc(env(safe-area-inset-bottom) + 84px)}
-.toast{bottom:calc(env(safe-area-inset-bottom) + 150px)}
-@media (min-width:980px){
-  .main{padding-bottom:110px}
-  .sheet{padding-bottom:90px}
-  .toast{bottom:84px}
-}
+/* sembunyikan lencana "Powered by Netlify" */
+#nl-badge-frame,iframe[id^="nl-badge"]{display:none!important}
