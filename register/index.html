@@ -36,7 +36,7 @@ background:linear-gradient(#05121fee 70%,#05121f00);backdrop-filter:blur(12px);-
 .sr input{flex:1;min-width:0;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(3,15,28,.7);color:var(--tx);font-size:16px;outline:none}
 .sr input:focus{border-color:var(--cy)}
 .sr select{padding:0 10px;border-radius:14px;border:1px solid var(--line);background:rgba(3,15,28,.7);color:var(--tx);font-size:14px}
-main{padding:6px 16px calc(env(safe-area-inset-bottom) + 30px)}
+main{padding:6px 16px calc(env(safe-area-inset-bottom) + 96px)}
 /* hero: nomor terakhir */
 .hero{border-radius:20px;padding:16px;margin:6px 0 14px;position:relative;overflow:hidden;
 background:linear-gradient(135deg,rgba(249,115,22,.22),rgba(37,99,235,.25) 45%,rgba(139,92,246,.28));border:1px solid rgba(167,139,250,.35)}
@@ -67,6 +67,36 @@ background:#0b2440;border:1px solid var(--cy);color:#fff;padding:10px 16px;borde
 .toast.on{opacity:1;transform:translateX(-50%)}
 .sk{height:84px;border-radius:16px;margin-bottom:9px;background:linear-gradient(90deg,rgba(13,37,64,.5),rgba(30,70,110,.5),rgba(13,37,64,.5));background-size:200% 100%;animation:sh 1.2s infinite}
 @keyframes sh{to{background-position:-200% 0}}
+
+.fab{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom) + 20px);z-index:6;border:0;border-radius:18px;padding:15px 20px;font-size:15px;font-weight:700;color:#fff;
+background:linear-gradient(90deg,#f97316,#2563eb 45%,#06b6d4 75%,#8b5cf6);box-shadow:0 10px 30px rgba(37,99,235,.45)}
+.ov{position:fixed;inset:0;z-index:8;background:rgba(0,6,14,.6);opacity:0;pointer-events:none;transition:.2s}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;max-width:640px;margin:0 auto;max-height:92vh;overflow-y:auto;
+background:#071a2e;border:1px solid var(--line);border-bottom:0;border-radius:24px 24px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom) + 20px);
+transform:translateY(105%);transition:transform .25s ease}
+.sheet.on{transform:none}
+.grab{width:42px;height:5px;border-radius:3px;background:#2b4a6b;margin:4px auto 12px}
+.sheet h2{font-size:17px;margin-bottom:2px}.sheet .sub{font-size:12px;color:var(--mut);margin-bottom:14px}
+.lockno{border-radius:16px;padding:14px;margin-bottom:14px;background:rgba(3,15,28,.8);border:1px dashed rgba(34,211,238,.5)}
+.lockno .l{font-size:11px;letter-spacing:.14em;color:var(--mut);display:flex;gap:6px;align-items:center}
+.lockno .v{font:700 16px/1.4 ui-monospace,Menlo,monospace;margin-top:6px;word-break:break-all}
+.lockno .v i{font-style:normal;color:var(--cy)}
+.lockno .h{font-size:11.5px;color:var(--mut);margin-top:6px}
+.fl{display:block;margin-bottom:12px}.fl span{display:block;font-size:12px;color:var(--mut);margin:0 2px 5px}
+.fl input,.fl textarea,.fl select{width:100%;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:rgba(3,15,28,.75);color:var(--tx);font-size:16px;font-family:inherit;outline:none}
+.fl input:focus,.fl textarea:focus{border-color:var(--cy)}
+.fl input[readonly]{opacity:.7}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1 0 auto;min-width:56px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(3,15,28,.75);color:var(--mut);font-size:14px;font-weight:600}
+.seg button.on{color:#03111f;background:linear-gradient(90deg,var(--cy),var(--vi));border-color:transparent}
+.go{width:100%;padding:15px;border:0;border-radius:16px;font-size:16px;font-weight:700;color:#fff;margin-top:6px;
+background:linear-gradient(90deg,#f97316,#2563eb 45%,#06b6d4 75%,#8b5cf6)}
+.go:disabled{opacity:.5}
+.cancel{width:100%;padding:12px;border:0;background:none;color:var(--mut);font-size:14px;margin-top:4px}
+.ok{text-align:center;padding:10px 0}.ok .big{font:800 18px/1.4 ui-monospace,Menlo,monospace;margin:12px 0;word-break:break-all;color:#fff}
+.ok .ck{font-size:44px}
+.ferr{color:#fca5a5;font-size:13px;margin:4px 2px 8px;min-height:1px}
 </style></head><body><div class="wrap">
 <div class="top">
   <div class="brand"><img src="logo-bpam.png" alt=""><div><h1>REGISTER PBJ</h1><small>BPAM BANJARBAKULA</small></div>
@@ -76,7 +106,10 @@ background:#0b2440;border:1px solid var(--cy);color:#fff;padding:10px 16px;borde
 </div>
 <main id="m"></main>
 </div>
+<button class="fab" id="fab">＋ Ambil Nomor</button>
+<div class="ov" id="ov"></div><div class="sheet" id="sh"></div>
 <div class="toast" id="toast"></div>
+<script src="cfg.js"></script>
 <script>
 const SHEET="https://docs.google.com/spreadsheets/d/1B-pgWiwKd4OezpocJk3O063vaT7XblBA8ms8iX-5Xqg/edit";
 const TABS=[["Bon",0,"Bon Permintaan & Pesanan"],["Berita Acara",669272993,"BA Serah Terima / Penerimaan"],["E-Katalog",1146793795,"Surat Pesanan & Kontrak E-Katalog"],
@@ -92,16 +125,17 @@ function csv(t){const R=[];let r=[],f="",q=false;for(let i=0;i<t.length;i++){con
  else if(c=='"')q=true;else if(c==","){r.push(f);f=""}else if(c=="\n"){r.push(f);R.push(r);r=[];f=""}else if(c!="\r")f+=c}
  if(f||r.length){r.push(f);R.push(r)}return R}
 // ubah CSV register (judul, pita tahun, header, data, catatan) menjadi daftar entri
-function parse(t){const R=csv(t);let hdr=null,yr="",out=[];
+function parse(t){const R=csv(t);let hdr=null,yr="",out=[];out.hdr=null;
  for(const r0 of R){const r=r0.map(x=>x.trim()),a=r[0]||"",filled=r.filter(Boolean).length;
   if(!filled)continue;
   const ym=a.match(/TAHUN ANGGARAN\s+(\d{4})/i);if(ym&&filled<=2){yr=ym[1];continue}
   if(/^NOMOR/i.test(a)&&filled>=3){hdr=r.map(h=>h.toUpperCase());continue}
   if(!hdr||!a.includes("/")||a.length>80)continue;
-  const o={no:a,yr,f:{}};hdr.forEach((h,i)=>{if(i&&r[i])o.f[h]=r[i]});
+  out.hdr=hdr;const o={no:a,yr,f:{}};hdr.forEach((h,i)=>{if(i&&r[i])o.f[h]=r[i]});
   if(!o.yr){const y=a.match(/\/(20\d\d)\b/);o.yr=y?y[1]:""}
   out.push(o)}
  return out}
+let HDR={};
 const pick=(f,...ks)=>{for(const k of ks)for(const h in f)if(h.includes(k))return f[h];return ""};
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function nextNo(no){const m=no.match(/^(.*?)(\d{3,})(\/.*)?$/);if(!m)return"";const n=String(+m[2]+1).padStart(m[2].length,"0");return m[1]+n+(m[3]||"")}
@@ -125,7 +159,7 @@ function render(){const q=$("#q").value.trim().toLowerCase(),y=$("#yr").value;
  if(!L.length)h+=`<div class="empty">Tidak ada entri yang cocok.</div>`;
  let py=null;L.slice(0,shown).forEach(o=>{if(!y&&o.yr!==py){py=o.yr;h+=`<div class="yr">TAHUN ${esc(o.yr||"-")}</div>`}h+=card(o)});
  if(L.length>shown)h+=`<button class="more" id="more">Tampilkan ${Math.min(60,L.length-shown)} lagi</button>`;
- h+=`<div class="foot">Hanya-baca · data langsung dari register<br><a href="${SHEET}#gid=${cur}">Buka di Google Sheets untuk menambah nomor</a></div>`;
+ h+=`<div class="foot">Data langsung dari register<br><a href="${SHEET}#gid=${cur}">Buka di Google Sheets</a></div>`;
  m.innerHTML=h}
 function years(){const ys=[...new Set(rows.map(o=>o.yr).filter(Boolean))].sort().reverse(),s=$("#yr"),v=s.value;
  s.innerHTML=`<option value="">Semua</option>`+ys.map(y=>`<option${y===v?" selected":""}>${y}</option>`).join("")}
@@ -134,7 +168,7 @@ async function load(force,quiet){const gid=cur;$("#rf").classList.add("spin");
  else{rows=cache[gid];years();render()}
  if(cache[gid]&&!force){$("#rf").classList.remove("spin");return}
  try{const r=await fetch("/api/register?gid="+gid+(force?"&t="+Date.now():""));if(!r.ok)throw new Error(await r.text());
-  const t=await r.text();if(gid!==cur)return;cache[gid]=rows=parse(t);lsSet("d"+gid,t);years();render();if(force&&!quiet)toast("Data diperbarui")}
+  const t=await r.text();if(gid!==cur)return;cache[gid]=rows=parse(t);if(rows.hdr)lsSet("h"+gid,JSON.stringify(rows.hdr));lsSet("d"+gid,t);years();render();if(force&&!quiet)toast("Data diperbarui")}
  catch(e){if(gid===cur&&!rows.length)$("#m").innerHTML=`<div class="err">Gagal memuat data.<br><small>${esc(e.message)}</small></div>`;else toast("Offline – menampilkan data tersimpan")}
  finally{$("#rf").classList.remove("spin")}}
 $("#chips").innerHTML=TABS.map(t=>`<button class="chip${t[1]==cur?" on":""}" data-g="${t[1]}">${t[0]}</button>`).join("");
@@ -145,6 +179,66 @@ $("#rf").onclick=()=>load(true);
 $("#m").onclick=async e=>{const c=e.target.closest(".cp");if(c){try{await navigator.clipboard.writeText(c.dataset.c);toast("Nomor disalin")}catch(_){toast(c.dataset.c)}return}
  if(e.target.id==="more"){shown+=60;render()}};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)load(true,true)});
+
+// ===== Ambil nomor baru =====
+const fmtTgl=d=>{const [y,m,dd]=d.split("-");return +dd+" "+BULAN[+m-1]+" "+y};
+const today=()=>{const d=new Date(Date.now()-new Date().getTimezoneOffset()*6e4);return d.toISOString().slice(0,10)};
+const uniq=a=>[...new Set(a.filter(Boolean))];
+let F={};
+function colVals(h){return uniq(rows.map(o=>o.f[h]).reverse()).slice(0,40)}
+function openForm(){const c=CFG[cur];if(!c)return;const hdr=rows.hdr||JSON.parse(lsGet("h"+cur)||"null");
+ if(!hdr){toast("Tunggu data selesai dimuat");return}
+ const last=rows[rows.length-1]||{no:""};F={c,hdr,p:{}};
+ c.parts.forEach(d=>{if(d.opts){F.p[d.k]=d.opts.find(o=>last.no.includes("/"+o+"/")||last.no.includes("/"+o+"-"))||d.opts[0]}
+  else{const m=(rows.slice().reverse().map(o=>o.no.match(d.kode)).find(Boolean));F.p[d.k]=m?m[1]:""}});
+ const pin=lsGet("pin");
+ let h=`<div class="grab"></div><h2>Ambil Nomor Baru</h2><div class="sub">${esc(c.nama)} · nomor urut otomatis</div>
+ <div class="lockno"><div class="l">🔒 NOMOR (TERKUNCI)</div><div class="v" id="pv"></div><div class="h">Nomor urut final ditetapkan saat disimpan, jadi tidak bisa dobel.</div></div>`;
+ c.parts.forEach(d=>{h+=`<label class="fl" data-part="${d.k}"><span>${esc(d.label)}</span>`;
+  if(d.opts)h+=`<div class="seg">${d.opts.map(o=>`<button type="button" data-k="${d.k}" data-v="${esc(o)}" class="${F.p[d.k]===o?"on":""}">${esc(o)}</button>`).join("")}</div>`;
+  else{const sug=uniq(rows.slice().reverse().map(o=>(o.no.match(d.kode)||[])[1]));
+   h+=`<input data-pk="${d.k}" value="${esc(F.p[d.k])}" list="dl_${d.k}" autocapitalize="characters" autocomplete="off" placeholder="mis. ${esc(sug[0]||"KODE-PAKET")}"><datalist id="dl_${d.k}">${sug.slice(0,30).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`}
+  h+=`</label>`});
+ hdr.forEach((H,i)=>{if(!i||!H)return;const id="f"+i;
+  if(H.includes("TANGGAL"))h+=`<label class="fl"><span>Tanggal</span><input type="date" id="${id}" data-h="${esc(H)}" data-tgl="1" value="${today()}"></label>`;
+  else if(H.includes("CATATAN"))h+=`<label class="fl"><span>Catatan (opsional)</span><textarea id="${id}" data-h="${esc(H)}" rows="2"></textarea></label>`;
+  else if(/ANGGARAN|NILAI/.test(H))h+=`<label class="fl"><span>${esc(H[0]+H.slice(1).toLowerCase())} (opsional)</span><input id="${id}" data-h="${esc(H)}" data-rp="1" inputmode="numeric" placeholder="0"></label>`;
+  else{const v=colVals(H);h+=`<label class="fl"><span>${esc(H[0]+H.slice(1).toLowerCase())}</span><input id="${id}" data-h="${esc(H)}" list="dl${i}" autocomplete="off"><datalist id="dl${i}">${v.map(x=>`<option value="${esc(x)}">`).join("")}</datalist></label>`}});
+ h+=pin?"":`<label class="fl"><span>PIN register</span><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="6 digit"></label>`;
+ h+=`<div class="ferr" id="ferr"></div><button class="go" id="go">Simpan & Ambil Nomor</button><button class="cancel" id="cx">Batal</button>`;
+ $("#sh").innerHTML=h;metode();preview();$("#ov").classList.add("on");$("#sh").classList.add("on")}
+function closeForm(){$("#ov").classList.remove("on");$("#sh").classList.remove("on")}
+function tahun(){const t=$("#sh [data-tgl]");return t&&t.value?t.value.slice(0,4):String(new Date().getFullYear())}
+function metode(){if(F.p.M){const m=[...$("#sh").querySelectorAll("[data-h]")].find(e=>e.dataset.h.includes("METODE"));if(m&&!m.dataset.manual)m.value=F.p.M==="PNT"?"Penunjukan Langsung":"Pengadaan Langsung"}}
+function preview(){const c=F.c,Y=tahun(),n=nextSeq(rows.map(o=>o.no),c,F.p,Y);
+ c.parts.forEach(d=>{const el=$(`#sh [data-part="${d.k}"]`);if(el)el.style.display=d.hide&&d.hide(F.p)?"none":""});
+ const ph={};c.parts.forEach(d=>ph[d.k]=F.p[d.k]||"…");
+ const full=c.num(ph,"\u0001"+n+"\u0002",Y);$("#pv").innerHTML=esc(full).replace("\u0001","<i>").replace("\u0002","</i>")}
+$("#fab").onclick=openForm;$("#ov").onclick=closeForm;
+$("#sh").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;
+ if(b.dataset.k){F.p[b.dataset.k]=b.dataset.v;b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));metode();preview();return}
+ if(b.id==="cx"||b.id==="tutup"){closeForm();return}
+ if(b.dataset.c){try{await navigator.clipboard.writeText(b.dataset.c);toast("Nomor disalin")}catch(_){toast(b.dataset.c)}return}
+ if(b.id==="go")simpan()});
+$("#sh").addEventListener("input",e=>{const t=e.target;
+ if(t.dataset.pk){t.value=t.value.toUpperCase().replace(/[\/\s]+/g,"-");F.p[t.dataset.pk]=t.value.trim();preview()}
+ if(t.dataset.tgl)preview();
+ if(t.dataset.h&&t.dataset.h.includes("METODE"))t.dataset.manual=1;
+ if(t.dataset.rp){const d=t.value.replace(/\D/g,"");t.value=d?(+d).toLocaleString("id-ID"):""}});
+async function simpan(){const err=$("#ferr"),go=$("#go");err.textContent="";
+ const msg=cekParts(F.c,F.p);if(msg){err.textContent=msg;return}
+ const fields={};let tgl="";$("#sh").querySelectorAll("[data-h]").forEach(el=>{let v=el.value.trim();if(el.dataset.tgl&&v){v=fmtTgl(v);tgl=v}if(v)fields[el.dataset.h]=v});
+ const kg=Object.keys(fields).find(k=>/PAKET|KEGIATAN/.test(k));if(kg&&!fields[kg]){err.textContent="Kegiatan wajib diisi";return}
+ if(!kg&&!Object.keys(fields).some(k=>!k.includes("TANGGAL"))){err.textContent="Isi minimal satu keterangan";return}
+ const pin=lsGet("pin")||($("#pin")&&$("#pin").value.trim());if(!pin){err.textContent="Masukkan PIN register";return}
+ go.disabled=true;go.textContent="Menyimpan…";
+ try{const r=await fetch("/api/register-add",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({gid:cur,pin,tahun:tahun(),parts:F.p,fields})});
+  const j=await r.json();if(!j.ok){if(/PIN/.test(j.err||""))lsSet("pin","");throw new Error(j.err||"Gagal")}
+  lsSet("pin",pin);rows.push({no:j.nomor,yr:tahun(),f:fields});render();
+  $("#sh").innerHTML=`<div class="grab"></div><div class="ok"><div class="ck">✅</div><div class="sub">Nomor berhasil diambil & tercatat di register</div>
+  <div class="big">${esc(j.nomor)}</div><button class="go" data-c="${esc(j.nomor)}">Salin Nomor</button><button class="cancel" id="tutup">Tutup</button></div>`;
+  setTimeout(()=>load(true,true),1500)}
+ catch(x){err.textContent=x.message;go.disabled=false;go.textContent="Simpan & Ambil Nomor"}}
 load(true,true);
 document.querySelector(".chip.on")?.scrollIntoView({inline:"center",block:"nearest"});
 </script>
