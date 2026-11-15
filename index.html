@@ -2624,6 +2624,36 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const fmtJam = ms => new Date(ms).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"});
   let D = null;
   window.__flowEst = () => est(); window.__flowLast = id => D && D.stations[id] && D.stations[id].last;
+  // ===== deteksi operasi intake darurat (pompa di pintu kiri bendung, rencana 3 × 150 L/dtk)
+  // Aturan: debit DN900 tiba-tiba hilang (≈0 / logger putus / anjlok tajam) lalu masuk lagi ±350–450 L/dtk
+  // → intake utama berhenti dan suplai IPA Pinus dari pompa intake darurat.
+  const DAR = {q1:150, n:3, lo:100, hi:470, normal:480};
+  function darurat(){
+    const S0 = D && D.stations.dn900 && D.stations.dn900.series; if (!S0 || S0.length < 4) return null;
+    const P = S0.filter(p => p.flow != null).sort((a,b) => a.t - b.t), L = P[P.length-1], avg = a => a.reduce((x,y) => x+y, 0)/a.length;
+    let ev = null;
+    for (let i = 1; i < P.length; i++){
+      const prev = P.slice(Math.max(0, i-6), i).map(p => p.flow), base = avg(prev), f = P[i].flow;
+      const nol = f < 50 && base >= 300, putus = P[i].t - P[i-1].t > 3*36e5 && base >= 300 && f < DAR.normal, anjlok = base >= DAR.normal && f >= 300 && f <= DAR.hi && base - f >= 120;
+      if (nol || putus || anjlok) ev = {i, t: putus ? P[i-1].t : P[i].t, base, jenis: nol ? "debit 0" : putus ? "logger putus" : "debit anjlok"};
+    }
+    if (!ev || Date.now() - ev.t > 72*36e5) return {st:"normal", q:L.flow, t:L.t};
+    const after = P.slice(ev.i), em = after.filter(p => p.flow >= DAR.lo && p.flow < DAR.normal);
+    const nP = q => Math.min(DAR.n, Math.max(1, Math.round(q/DAR.q1)));
+    if (L.flow < 50) return {st:"henti", t0:ev.t, q:L.flow, t:L.t, jenis:ev.jenis};
+    if (L.flow >= DAR.normal){ const up = after.find(p => p.flow >= DAR.normal) || L;
+      if (Date.now() - up.t > 24*36e5) return {st:"normal", q:L.flow, t:L.t};
+      return {st:"pulih", t0:ev.t, t1:up.t, q:L.flow, t:L.t, emQ: em.length ? avg(em.map(p => p.flow)) : null, emN: em.length ? nP(avg(em.map(p => p.flow))) : 0}; }
+    if (L.flow >= DAR.lo){ const on = em.length ? em[0].t : L.t; return {st:"darurat", t0:ev.t, tOn:on, q:L.flow, t:L.t, n:nP(L.flow), jenis:ev.jenis}; }
+    return {st:"rendah", t0:ev.t, q:L.flow, t:L.t};
+  }
+  window.__darurat = darurat;
+  window.__daruratTxt = z => !z ? "Data debit DN900 belum tersedia." :
+    z.st === "darurat" ? `<b>Intake darurat beroperasi</b>: ±${nf(z.n,0)} pompa, debit masuk IPA ${nf(z.q,0)} L/dtk sejak ${fmtJam(z.tOn)} WITA (intake utama berhenti ${fmtT(z.t0)}).` :
+    z.st === "henti" ? `<b>Intake utama berhenti</b> sejak ${fmtT(z.t0)} dan belum ada aliran masuk ke IPA Pinus. Siapkan pompa intake darurat.` :
+    z.st === "pulih" ? `Intake utama sudah normal kembali (${nf(z.q,0)} L/dtk) sejak ${fmtT(z.t1)}` + (z.emQ ? `; selama gangguan IPA disuplai intake darurat ±${nf(z.emQ,0)} L/dtk (±${z.emN} pompa).` : `.`) :
+    z.st === "rendah" ? `Debit masuk IPA rendah (${nf(z.q,0)} L/dtk) setelah gangguan ${fmtT(z.t0)}; periksa intake utama dan pompa darurat.` :
+    `Intake darurat <b>siaga</b> (tidak beroperasi). Suplai IPA Pinus dari intake utama ${nf(z.q,0)} L/dtk.`;
   const mk = {};
   Object.entries(ST).forEach(([id, s]) => {
     mk[id] = L.marker(s.ll, {icon: liveIcon(id, id === "dn900" ? "#4dabf7" : "#9775fa", id === "dn900" ? "Debit ke IPA Pinus" : "Debit Offtake Pematang", "u"), pane:"live", zIndexOffset:880}).addTo(map);
@@ -2642,7 +2672,8 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     if (!l) return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Logger Onpoint</div></div></div><div class="pbd"><div class="note">Data belum tersedia. Sambungan Telegram sedang disiapkan.</div></div></div>`;
     const age = (Date.now() - l.t)/36e5;
     const sinyal = l.rssi == null ? "–" : `${nf(l.rssi,0)} dBm (${l.rssi >= -75 ? "baik" : l.rssi >= -85 ? "cukup" : "lemah"})`;
-    const rows = [["Debit", `<b>${nf(l.flow,1)} L/dtk</b>`], ["Total volume", l.cons != null ? nf(l.cons,0) + " m³" : "–"], ["Pembacaan", fmtT(l.t) + (age > 3 ? ' <span style="color:#f59f00">' + I("warn") + "</span>" : "")], ["Baterai logger", l.batt != null ? nf(l.batt,2) + " V" : "–"], ["Sinyal", sinyal], ["Suhu logger", l.temp != null ? nf(l.temp,1) + " °C" : "–"]];
+    const DZ = id === "dn900" ? darurat() : null;
+    const rows = [["Debit", `<b>${nf(l.flow,1)} L/dtk</b>`]].concat(DZ ? [["Intake darurat", DZ.st === "darurat" ? `<b style="color:#e8590c">BEROPERASI</b> ±${DZ.n} pompa` : DZ.st === "henti" ? `<b style="color:#e03131">intake utama berhenti</b>` : "siaga"]] : []).concat([["Total volume", l.cons != null ? nf(l.cons,0) + " m³" : "–"], ["Pembacaan", fmtT(l.t) + (age > 3 ? ' <span style="color:#f59f00">' + I("warn") + "</span>" : "")], ["Baterai logger", l.batt != null ? nf(l.batt,2) + " V" : "–"], ["Sinyal", sinyal], ["Suhu logger", l.temp != null ? nf(l.temp,1) + " °C" : "–"]]);
     return `<div class="pp"><div class="phd" style="--c:#1c7ed6"><span class="pic" style="background:#1c7ed6">FM</span><div><h3>${s.nama}</h3><div class="sub">Telemetri debit · per jam</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Onpoint</span></div><div class="awc fwc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr">Memuat tren…</div><svg class="fwSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><p style="font-size:12px;color:var(--muted);margin:8px 0 0">${s.ket}</p><div class="src">Sumber: logger Onpoint (laporan otomatis grup Telegram BPAM Banjarbakula), diperbarui tiap jam</div></div></div>`;
   }
   function render(){
@@ -2672,7 +2703,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   // ===== peringatan anomali
   window.alertsRefresh = function(){
     try{ window.Geo3D && window.Geo3D.refresh(); }catch(e){}
-    const al = [];
+    const al = [], DZ = darurat();
     const A = window.__awlr;
     if (A && A.last){
       if (A.stale) al.push(["warn","awlr","Data muka air bendung tertunda > 1 jam"]);
@@ -2684,11 +2715,14 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
       const ageH = (Date.now() - l.t)/36e5;
       if (ageH > 3){ const jm = new Date(l.t + 8*3600e3).toISOString().slice(11,16); al.push(["warn", id, `Logger ${nm} terputus sejak ${jm} WITA (${nf(ageH,0)} jam tidak mengirim)`]); return; }
       const ref = (st.series||[]).filter(p => p.t < l.t && p.t > l.t - 864e5).map(p => p.flow);
-      if (ref.length >= 6){ const avg = ref.reduce((a,b) => a+b, 0)/ref.length, d = (l.flow - avg)/avg;
+      if (ref.length >= 6 && !(id === "dn900" && DZ && /darurat|henti|rendah/.test(DZ.st))){ const avg = ref.reduce((a,b) => a+b, 0)/ref.length, d = (l.flow - avg)/avg;
         if (d <= -0.2) al.push(["bad", id, `Debit ${nm} turun ${nf(-d*100,0)}% dari rata-rata 24 jam`]);
         else if (d >= 0.25) al.push(["warn", id, `Debit ${nm} naik ${nf(d*100,0)}% dari rata-rata 24 jam`]); }
       if (l.rssi != null && l.rssi < -95) al.push(["warn", id, `Sinyal logger ${nm} sangat lemah (${nf(l.rssi,0)} dBm)`]);
     });
+    if (DZ && DZ.st === "darurat") al.push(["warn","dn900",`Intake darurat beroperasi ±${DZ.n} pompa · ${nf(DZ.q,0)} L/dtk masuk IPA sejak ${fmtJam(DZ.tOn)} WITA`]);
+    if (DZ && DZ.st === "henti") al.push(["bad","dn900",`Intake utama berhenti sejak ${fmtJam(DZ.t0)} WITA · belum ada aliran ke IPA Pinus`]);
+    if (DZ && DZ.st === "rendah") al.push(["bad","dn900",`Debit masuk IPA rendah ${nf(DZ.q,0)} L/dtk setelah gangguan intake`]);
     (window.__extAlerts || []).forEach(a => al.push(a));
     $("#tlAl").innerHTML = al.map(([k,id,t]) => `<div class="al ${k}" data-id="${id}">${I(k === "bad" ? "warn" : "info")}<span>${t}</span></div>`).join("");
     document.querySelectorAll(".lv").forEach(e => e.classList.remove("warn"));
@@ -2697,7 +2731,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     document.querySelectorAll("#tlAl .al").forEach(e => e.onclick = () => { const id = e.dataset.id; if (id === "bmkg" || id === "gempa"){ window.anlOpen && window.anlOpen(); return; } const ll = id === "awlr" ? [-3.456094,114.961683] : ST[id].ll; map.flyTo(ll, 15, {duration:1.2}); });
     window.__alerts = al;
     // pemberitahuan di atas peta (logger terputus / debit anjlok / muka air siaga)
-    const imp = al.filter(a => a[0] === "bad" || /tidak mengirim|tertunda/.test(a[2]));
+    const imp = al.filter(a => a[0] === "bad" || /tidak mengirim|tertunda|Intake darurat/.test(a[2]));
     const sb = $("#stbar"), key = imp.map(a => a[2].replace(/\d+ jam/, "")).join("|");
     let dis = ""; try{ dis = sessionStorage.getItem("bpam_stx") || ""; }catch(e){}
     if (!imp.length || dis === key){ sb.hidden = true; }
@@ -4086,18 +4120,30 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       if (!P.length) return; PK.P = P; PK.last = P[P.length-1];
       const td = P.filter(p => new Date(p.t).toISOString().slice(0,10) === tday()).map(p => p.v); PK.tmin = td.length ? Math.min(...td) : null; PK.tmax = td.length ? Math.max(...td) : null;
       PK.avg7 = P.reduce((a,p) => a + p.v, 0) / P.length; PK.stale = (W8().getTime() - PK.last.t) / 6e4 > 60;
-      setLive("pk", n1(PK.last.v,2) + " m", PK.stale ? "tertunda" : "pintu kiri");
+      const DZ = window.__darurat && window.__darurat();
+      setLive("pk", n1(PK.last.v,2) + " m", PK.stale ? "tertunda" : DZ && DZ.st === "darurat" ? "pompa darurat ON" : "pintu kiri");
       if (PK.mk.isPopupOpen()) PK.mk.setPopupContent(pkPop());
     }catch(e){ setLive("pk", "–", "tidak terhubung"); }
+  }
+  function pkDar(){
+    const z = window.__darurat && window.__darurat(); if (!z) return "";
+    let lv = "";
+    if (PK.P && z.t0 && (z.st === "darurat" || z.st === "pulih" || z.st === "henti")){
+      const b = PK.P.filter(p => p.t <= z.t0 + 0 && p.t > z.t0 - 3*36e5), a = PK.P.filter(p => p.t >= (z.tOn || z.t0));
+      if (b.length && a.length){ const d = a[a.length-1].v - b.reduce((x,p) => x + p.v, 0)/b.length; lv = ` Muka air pintu kiri ${Math.abs(d) < 0.03 ? "tetap" : (d < 0 ? "turun " : "naik ") + n1(Math.abs(d)*100,0) + " cm"} dibanding sebelum gangguan${d < -0.3 ? "; <b>pantau ketersediaan air untuk pompa</b>" : ""}.`; }
+    }
+    const c = z.st === "darurat" ? "w" : z.st === "henti" || z.st === "rendah" ? "w" : "";
+    return `<div class="pplain ${c}" style="margin-top:6px">${window.__daruratTxt(z)}${lv}</div>`;
   }
   function pkPop(){
     const bw = window.__awlr && window.__awlr.last ? window.__awlr.last.v : null;
     const rows = [["Muka air pintu kiri", PK.last ? `<b>${n1(PK.last.v,2)} m</b>` : "memuat…"], ["Hari ini (min–maks)", PK.tmin != null ? n1(PK.tmin,2) + " – " + n1(PK.tmax,2) + " m" : "–"], ["Rata-rata 7 hari", PK.avg7 != null ? n1(PK.avg7,2) + " m" : "–"],
       ["Muka air bendung (pembanding)", bw != null ? n1(bw,2) + " m" : "–"], ["Pembacaan terakhir", PK.last ? new Date(PK.last.t).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"UTC"}) + " WITA" : "–"], ["Alat", "AWLR Higertech " + PK.dev], ["Pengelola", "BWS Kalimantan III"]];
     return `<div class="pp"><div class="phd" style="--c:#20c997"><span class="pic" style="background:#20c997">PK</span><div><h3>AWLR Pintu Kiri Bendung Karang Intan</h3><div class="sub">Muka air pintu pengambilan kiri · real time</div></div></div><div class="pbd"><div class="pplain"><b>Artinya:</b> ${PK.last ? (Math.abs(PK.last.v - PK.avg7) < 0.08 ? "air yang masuk lewat pintu kiri bendung stabil seperti biasa." : PK.last.v > PK.avg7 ? "air di pintu kiri sedang lebih tinggi dari biasanya minggu ini." : "air di pintu kiri sedang lebih rendah dari biasanya minggu ini.") : "data sedang dimuat."}</div><div class="chips"><span class="chip">LIVE</span><span class="chip">Bendung Karang Intan</span></div>
+      ${pkDar()}
       <div class="awc"><div class="awtr">Muka air 7 hari terakhir (m)</div>${PK.P ? line(PK.P, "#12b886") : '<div class="awtr">Memuat…</div>'}</div>
       <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
-      <div class="note info">Sepanjang kemarau 2026 muka air pintu kiri stabil di ±2,4–2,5 m dan tidak ikut turun bersama muka air bendung, artinya pengambilan lewat pintu ini dijaga konstan oleh pengelola bendung. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div>
+      <div class="note info">Pintu kiri menjadi sumber <b>intake darurat</b> BPAM (rencana 3 pompa × 150 L/dtk = 450 L/dtk). Bila debit DN900 tiba-tiba hilang lalu masuk lagi ±350–450 L/dtk, sistem menandai intake darurat sedang beroperasi. Nilai muka air adalah bacaan sensor, bukan elevasi mdpl.</div>
       <div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="https://opsdabwskal3.higertech.com/Station/Detail/awlr-cctv-karang-intan-debit-pintu-kiri" target="_blank" rel="noopener">Buka sumber ↗</a></div>
       <div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui tiap 10 menit</div></div></div>`;
   }
