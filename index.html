@@ -840,7 +840,7 @@ body.dark .pplain{background:#0f2a1a;border-color:#2b6a3c;color:#dbe8f5}body.dar
 .hyupd{font-size:11.5px;color:#5c6b7a;margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.hyupd button{font:inherit;font-weight:700;color:#0b5cad;background:#fff;border:1px solid #a5d8ff;border-radius:999px;padding:2px 10px;cursor:pointer}
 .anlkpi.hyk6{grid-template-columns:repeat(3,1fr)}.anlkpi em{display:block;font-style:normal;font-size:11px;color:#2f9e44;margin-top:2px;font-weight:600}.anlkpi em.w{color:#e8590c}.anlkpi em.g{color:#7a8794;font-weight:500}
 .hysec{display:flex;align-items:center;gap:8px;margin:22px 0 2px;padding:7px 10px;border-radius:10px;background:#e6fcf5;color:#087f5b;font-weight:800;font-size:13.5px}.hysec.es{background:#fff4e6;color:#c2410c}.hysec.sr{background:#f1f3f5;color:#495057}
-.hyb{font-size:10px;font-weight:800;color:#fff;background:#2f9e44;border-radius:999px;padding:2px 8px;letter-spacing:.4px}.hyb.es{background:#e8590c}
+.hyb{font-size:10px;font-weight:800;color:#fff;background:#2f9e44;border-radius:999px;padding:2px 8px;letter-spacing:.4px}.hyb.es{background:#e8590c}.hyb.pub{background:#1971c2}.anlbd h3 .hyb{vertical-align:2px;margin-left:4px}.hysrcw{margin-top:16px}
 .hysrc{width:100%;border-collapse:collapse;font-size:12.3px;margin-top:6px}.hysrc td,.hysrc th{padding:6px 7px;border-bottom:1px solid #e9eef3;text-align:left;vertical-align:top}.hysrc th{font-size:11px;color:#7a8794;font-weight:700}
 .hysrc .bd{font-size:10px;font-weight:800;border-radius:999px;padding:1px 7px;color:#fff;background:#2f9e44;white-space:nowrap}.hysrc .bd.es{background:#e8590c}.hysrc .bd.pub{background:#1971c2}.hysrc .ok{color:#2f9e44;font-weight:700}.hysrc .no{color:#e03131;font-weight:700}
 body.dark .hyupd{color:#9fb3c8}body.dark .hyupd button{background:#122238;border-color:#1e3550;color:#66d9e8}body.dark .hysec{background:#0e2e26;color:#63e6be}body.dark .hysec.es{background:#2e1d10;color:#ffa94d}body.dark .hysec.sr{background:#1a2635;color:#adb5bd}body.dark .hysrc td,body.dark .hysrc th{border-bottom-color:#1e3048}
@@ -849,7 +849,7 @@ body.dark .hyupd{color:#9fb3c8}body.dark .hyupd button{background:#122238;border
 .hywarn{border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:13px;line-height:1.5;border:1px solid}.hywarn span{display:block;margin-top:3px}.hywarn a{color:#0b5cad;font-weight:700;text-decoration:none}
 .hywarn.a{background:#fff5f5;border-color:#ffa8a8;color:#7a1f1f}.hywarn.w{background:#fff9db;border-color:#ffe066;color:#5c4a12}.hywarn.i{background:#f1f3f5;border-color:#dee2e6;color:#495057}.hywarn.o{background:#ebfbee;border-color:#b2f2bb;color:#2b6a3c}
 .bmrow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;margin:6px 0}.bmnm{font-weight:800;font-size:13px;color:#0b3a63}.bmnm small{display:block;font-weight:500;font-size:11px;color:#7a8794}
-.bmd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.bmd div{background:#f1f8fd;border:1px solid #d0ebff;border-radius:10px;padding:6px 4px;text-align:center;font-size:11px;color:#5c6b7a}.bmd span{display:block;font-weight:700;color:#0b3a63}.bmd img{display:block;margin:2px auto;width:34px!important;height:34px!important;max-width:34px}.bmd b{display:block;font-size:12px;color:#1c2b3a}.bmd em{display:block;font-style:normal;font-size:10.5px}
+.bmd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.bmd div{background:#f1f8fd;border:1px solid #d0ebff;border-radius:10px;padding:6px 4px;text-align:center;font-size:11px;color:#5c6b7a}.bmd span{display:block;font-weight:700;color:#0b3a63}.bmd img{display:block;margin:2px auto;width:28px!important;height:28px!important;max-width:28px}.bmd b{display:block;font-size:12px;color:#1c2b3a}.bmd em{display:block;font-style:normal;font-size:10.5px}
 .bmd div.hv{background:#e7f5ff;border-color:#74c0fc}.bmd div.hx{background:#fff4e6;border-color:#ffa94d}
 .hybtn{font:inherit;font-size:12.5px;font-weight:700;color:#0b5cad;background:#e7f5ff;border:1px solid #a5d8ff;border-radius:999px;padding:6px 14px;cursor:pointer;margin:4px 0 6px}
 .hygq{font-size:12.8px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:10px;padding:9px 11px;margin:6px 0 4px;line-height:1.5}.hygq ul{margin:4px 0;padding-left:18px}.hygq p{margin:2px 0 0;color:#5c6b7a}
@@ -3383,55 +3383,41 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
       <div class="anlpane" data-p="h">
         <div id="hyW"></div>
         <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div></div>
-        <div class="anlkpi hyk6" id="hyK"><div><b>–</b><span>Tinggi air bendung sekarang</span><em></em></div><div><b>–</b><span>Naik/turun 7 hari</span><em></em></div><div><b>–</b><span>Air masuk pintu kiri</span><em></em></div><div><b>–</b><span>Hujan 7 hari terakhir (pos BWS)</span><em></em></div><div><b>–</b><span>Prakiraan hujan 7 hari</span><em></em></div><div><b>–</b><span>Estimasi aliran sungai 30 hari</span><em></em></div></div>
-
-        <div class="hysec"><span class="hyb">LIVE</span> A. Kondisi terukur</div>
-        <h3>1. Tinggi air di bendung sejak Juni <small class="hysub">riwayat muka air semusim</small></h3>
-        <div class="hyart" id="hyA1"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Rata-rata harian (garis) dan rentang minimum–maksimum (pita) AWLR HGT1486 sejak terpasang 6 Juni 2026, ditambah otomatis dari data live setiap 5 menit. Jalur warna = ambang kering BPAM (9,00/8,85/8,70 m) dan ambang banjir BWS (10,60/10,90/11,20 m).</p></details>
+        <div class="anlkpi" id="hyK"><div><b>–</b><span>Tinggi air bendung</span><em></em></div><div><b>–</b><span>Naik/turun 7 hari</span><em></em></div><div><b>–</b><span>Hujan 7 hari terakhir</span><em></em></div><div><b>–</b><span>Hujan 3 hari ke depan (BMKG)</span><em></em></div></div>
+        <h3>1. Tinggi air bendung sejak Juni <span class="hyb">LIVE</span></h3>
+        <div class="hyart" id="hyA1"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy1"></div>
-        <h3>2. Hujan dan tinggi air, 60 hari terakhir <small class="hysub">hujan vs muka air</small></h3>
-        <div class="hyart" id="hyA2"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p id="hyT2">Batang = hujan harian pos BWS PCH Liang Anggang; garis = muka air rata-rata harian.</p></details>
+        <details class="hytek"><summary>Penjelasan teknis</summary><p>Rata-rata harian (garis) dan rentang minimum–maksimum (pita) AWLR HGT1486 BWS Kalimantan III sejak 6 Juni 2026, data 5 menit. Jalur warna = ambang kering BPAM (9,00/8,85/8,70 m) dan ambang banjir BWS (10,60/10,90/11,20 m).</p></details>
+        <h3>2. Hujan dan tinggi air, 60 hari terakhir <span class="hyb">LIVE</span></h3>
+        <div class="hyart" id="hyA2"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy2"></div>
-        <h3>3. Naik-turun air dalam sehari <small class="hysub">pola harian muka air, 14 hari terakhir</small></h3>
-        <div class="hyart" id="hyA5"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p id="hyT5">Rata-rata simpangan muka air per jam terhadap rata-rata hariannya.</p></details>
-        <div class="hyc" id="hy5"></div>
-
-        <div class="hysec es"><span class="hyb es">ESTIMASI</span> B. Prakiraan &amp; estimasi</div>
-        <h3>4. Prakiraan cuaca resmi BMKG, 3 hari <small class="hysub">intake &amp; hulu Waduk Riam Kanan</small></h3>
+        <details class="hytek"><summary>Penjelasan teknis</summary><p id="hyT2"></p></details>
+        <h3>3. Cuaca 3 hari ke depan <span class="hyb pub">BMKG</span></h3>
         <div class="hyart" id="hyABM"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hyBM"></div>
-        <button type="button" class="hybtn" onclick="document.getElementById('anlX').click(); window.awanShow && window.awanShow()">Lihat awan hujan di peta (satelit) →</button>
-        <h3>5. Perkiraan hujan seminggu ke depan <small class="hysub">model global, titik intake</small></h3>
-        <div class="hyc" id="hy3"></div>
-        <div class="hybmkg"><b>Status iklim (BMKG):</b> El Niño masih aktif dengan intensitas kuat dan diprediksi bertahan hingga awal 2027. Awal musim hujan 2026/2027 di Kalimantan Selatan mundur dari normal: sebagian wilayah November, sebagian besar Desember 2026. Awal dan puncak musim hujan berdekatan, sehingga perlu diwaspadai <b>lonjakan hujan, banjir dan kekeruhan air baku</b> pada Desember 2026–Februari 2027. <a href="https://staklim-kalsel.bmkg.go.id/" target="_blank" rel="noopener">Staklim Kalsel ↗</a></div>
-        <h3>6. Perkiraan aliran sungai 30 hari ke depan <span class="hytag">indikatif</span> <small class="hysub">debit model GloFAS</small></h3>
-        <div class="hyart" id="hyA6"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Debit harian Sungai Riam Kanan hulu bendung dari model GloFAS v4 (Copernicus), diperbarui setiap hari: garis biru = 60 hari terakhir, garis putus = prakiraan 30 hari, pita = rentang kemungkinan (persentil 25–75 ansambel), garis abu-abu = debit andalan Q80 normal bulan itu. Model <b>tidak memperhitungkan pelepasan PLTA Riam Kanan</b>, sehingga angka mutlaknya jauh lebih kecil dari aliran sebenarnya; yang dipakai adalah arah naik/turunnya.</p></details>
+        <button type="button" class="hybtn" onclick="document.getElementById('anlX').click(); window.awanShow && window.awanShow()">Lihat awan hujan di peta →</button>
+        <h3>4. Aliran sungai 30 hari ke depan <span class="hyb es">ESTIMASI</span></h3>
+        <div class="hyart" id="hyA6"><b>Artinya:</b> memuat…</div>
         <div class="hyc" id="hy6"></div>
-        <h3>7. Tahun ini dibanding tahun-tahun biasa <span class="hytag">indikatif</span> <small class="hysub">debit bulanan vs normal 1997–2025</small></h3>
-        <div class="hyart" id="hyA4"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Debit bulanan model GloFAS: batang = rata-rata normal 1997–2025, garis putus = debit andalan Q80 normal, garis merah = 2026 (bulan berjalan dihitung ulang dari data model terbaru). Model tidak memperhitungkan pelepasan PLTA; pakai untuk membandingkan pola musim saja.</p></details>
-        <div class="hyc" id="hy4"></div>
-
-        <div class="hysec sr">C. Info BMKG lain &amp; sumber data</div>
-        <div id="hyG"></div>
-        <div id="hySrc"></div>
-        <p class="anlsrc">Panel ini menghitung ulang semua ringkasan dan grafik dari data terbaru setiap dibuka, dan otomatis setiap 10 menit selama terbuka. Data LIVE = hasil ukur alat BWS Kalimantan III; ESTIMASI = keluaran model (Open-Meteo, GloFAS); prakiraan cuaca, peringatan dini dan gempa bersumber resmi dari BMKG. Muka air bendung juga dipengaruhi pengaturan pintu dan pelepasan Waduk Riam Kanan/PLTA Ir. P.M. Noor yang datanya belum terhubung.</p>
+        <details class="hytek"><summary>Penjelasan teknis</summary><p>Debit harian Sungai Riam Kanan hulu bendung dari model GloFAS v4 (Copernicus): garis biru = 60 hari terakhir, garis putus = prakiraan 30 hari, pita = rentang kemungkinan (persentil 25–75), garis abu-abu = debit andalan Q80 normal. Model tidak memperhitungkan pelepasan PLTA Riam Kanan; yang dipakai arah naik/turunnya, bukan angka mutlaknya.</p></details>
+        <details class="hytek hysrcw"><summary id="hySrcS">Sumber data</summary><div id="hySrc"></div><p>LIVE = hasil ukur alat BWS Kalimantan III; BMKG = data resmi BMKG; ESTIMASI = model (Open-Meteo, GloFAS). Diperbarui otomatis tiap 10 menit selama panel terbuka.</p></details>
       </div>
       <div class="anlpane" data-p="q" hidden>
         <div class="hysum" id="kqS"><div class="hyst"><span class="hydot"></span><b>Memuat data kualitas air…</b></div><ul></ul><div class="hyupd" id="kqU"></div></div>
-        <div class="anlkpi hyk6" id="kqK"><div><b>–</b><span>Kekeruhan air baku (rata-rata)</span><em></em></div><div><b>–</b><span>Kekeruhan air curah (reservoir)</span><em></em></div><div><b>–</b><span>Sisa klor reservoir (rata-rata)</span><em></em></div><div><b>–</b><span>Air curah di offtaker</span><em></em></div><div><b>–</b><span>Air curah lab eksternal</span><em></em></div><div><b>–</b><span>Air baku lab eksternal</span><em></em></div></div>
-        <h3>1. Kekeruhan: air sungai masuk vs air curah keluar <small class="hysub">harian, Lab BPAM</small></h3>
+        <div class="anlkpi" id="kqK"><div><b>–</b><span>Kekeruhan air baku</span><em></em></div><div><b>–</b><span>Kekeruhan air curah</span><em></em></div><div><b>–</b><span>Sisa klor reservoir</span><em></em></div><div><b>–</b><span>Catatan di offtaker</span><em></em></div></div>
+        <h3>1. Kekeruhan: air sungai vs air curah</h3>
         <div class="hyart" id="kqA1"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p id="kqT1"></p></details>
         <div class="hyc" id="kq1"></div>
-        <h3>2. Sisa klor di reservoir <small class="hysub">disinfeksi, harian</small></h3>
+        <h3>2. Sisa klor di reservoir</h3>
         <div class="hyart" id="kqA2"><b>Artinya:</b> memuat…</div><details class="hytek"><summary>Penjelasan teknis</summary><p>Sisa klor bebas Reservoir 1000 dan 2000 (rata-rata harian). Baku mutu Permenkes 2/2023: 0,2–0,5 mg/L. Di bawah 0,2 mg/L perlindungan terhadap kuman di jaringan berkurang; di atas 0,5 mg/L air dapat berbau/berasa kaporit.</p></details>
         <div class="hyc" id="kq2"></div>
-        <h3>3. Air curah di titik offtaker <small class="hysub">rata-rata mingguan &amp; lab eksternal</small></h3>
+        <h3>3. Air curah di titik offtaker</h3>
         <div class="hyart" id="kqA3"><b>Artinya:</b> memuat…</div>
         <div id="kq3"></div>
-        <h3>4. Air baku sungai (lab eksternal) <small class="hysub">PP 22/2021 kelas 1</small></h3>
+        <h3>4. Air sungai (lab eksternal)</h3>
         <div class="hyart" id="kqA4"><b>Artinya:</b> memuat…</div>
         <div id="kq4"></div>
-        <p class="anlsrc">Sumber: rekap kualitas air BPAM Banjarbakula (Google Sheet): laporan harian Lab BPAM (air baku Intake Mandikapau, Reservoir 1000 &amp; 2000), rekap mingguan offtaker PTAM Intan Banjar, uji bulanan lab eksternal terakreditasi (BBLKM untuk air baku, Sucofindo untuk air curah). Baku mutu: Permenkes No. 2 Tahun 2023 (air minum) dan PP No. 22 Tahun 2021 kelas 1 (air baku). Panel membaca ulang sheet setiap dibuka. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
+        <p class="anlsrc">Sumber: rekap kualitas air Lab BPAM (Google Sheet), lab eksternal BBLKM &amp; Sucofindo. Baku mutu Permenkes 2/2023 dan PP 22/2021 kelas 1. <a href="https://docs.google.com/spreadsheets/d/1rXplhdV1Ltvoiaja1MLBJc3d5ONfdWf_U2JUIEZGQuA/htmlview" target="_blank" rel="noopener">Buka sheet ↗</a></p>
       </div>
       <div class="anlpane" data-p="k" hidden>
       <div class="anlkpi">
@@ -3748,10 +3734,10 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   const lebat = d => d.c >= 63 || d.mm >= 20, petir = d => d.c >= 95;
   function cBM(box, X){
     const row = (nm, sub, a) => !a || !a.length ? `<div class="bmrow"><div class="bmnm">${nm}<small>${sub}</small></div><p class="hynote">Prakiraan BMKG belum dapat dimuat.</p></div>` :
-      `<div class="bmrow"><div class="bmnm">${nm}<small>${sub}</small></div><div class="bmd">${a.map(d => `<div class="${lebat(d) ? "hx" : d.c >= 60 ? "hv" : ""}"><span>${hariN(d.k)}</span>${d.img ? `<img src="${d.img}" alt="" width="34" height="34" loading="lazy">` : ""}<b>${d.desc}</b><em>${nf(d.mm,1)} mm · ${d.tmin}–${d.tmax}°C</em></div>`).join("")}</div></div>`;
+      `<div class="bmrow"><div class="bmnm">${nm}<small>${sub}</small></div><div class="bmd">${a.map(d => `<div class="${lebat(d) ? "hx" : d.c >= 60 ? "hv" : ""}"><span>${hariN(d.k)}</span>${d.img ? `<img src="${d.img}" alt="" width="34" height="34" loading="lazy">` : ""}<b>${d.desc}</b><em>${nf(d.mm,0)} mm</em></div>`).join("")}</div></div>`;
     box.innerHTML = row("Intake Karang Intan", "Desa Mandikapau Barat", X.BM.in) + row("Hulu Waduk Riam Kanan", "Desa Aranio", X.BM.hu);
     const hu = X.BM.hu || [], ins = X.BM.in || [], hL = hu.filter(lebat), iL = ins.filter(lebat), hT = hu.concat(ins).some(petir), tot = a => a.reduce((x,d) => x + d.mm, 0);
-    $("#hyABM").innerHTML = !hu.length && !ins.length ? `<b>Artinya:</b> prakiraan BMKG belum dapat dimuat.` : `<b>Artinya:</b> ` + (hL.length ? `BMKG memperkirakan <b>hujan cukup deras di hulu</b> (${hL.map(d => hariN(d.k).toLowerCase()).join(", ")}). Air dari hulu masuk ke waduk dan sungai, sehingga <b>air baku bisa lebih keruh</b> 1–3 hari kemudian; siapkan penyesuaian pengolahan di IPA.` : iL.length ? `hujan cukup deras diperkirakan di sekitar intake (${iL.map(d => hariN(d.k).toLowerCase()).join(", ")}); kekeruhan air baku bisa naik sesaat.` : `3 hari ke depan cuaca di intake dan hulu diperkirakan tanpa hujan deras (total ±${nf(tot(ins),0)} mm di intake, ±${nf(tot(hu),0)} mm di hulu). Pasokan dan kualitas air baku diperkirakan stabil.`) + (hT ? ` Ada potensi <b>petir</b>: waspadai gangguan listrik di intake dan IPA.` : "") + ` <small>(Prakiraan resmi BMKG per desa, diperbarui 2× sehari.)</small>`;
+    $("#hyABM").innerHTML = !hu.length && !ins.length ? `<b>Artinya:</b> prakiraan BMKG belum dapat dimuat.` : `<b>Artinya:</b> ` + (hL.length ? `hujan deras di hulu (${hL.map(d => hariN(d.k).toLowerCase()).join(", ")}); <b>air baku bisa keruh</b> 1–3 hari kemudian.` : iL.length ? `hujan deras di sekitar intake (${iL.map(d => hariN(d.k).toLowerCase()).join(", ")}); kekeruhan bisa naik sesaat.` : `tanpa hujan deras; pasokan dan kualitas air baku diperkirakan stabil.`) + (hT ? ` Waspadai petir (gangguan listrik).` : "");
   }
   const jamW = ms => new Date(ms + 8*3600e3).toISOString().slice(11,16).replace(":",".");
   const capW = x => x.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
@@ -3760,8 +3746,8 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     if (!X.WR || !X.WR.ok){ box.innerHTML = ""; return; }
     const H = L.filter(x => x.hulu.length), Ly = L.filter(x => !x.hulu.length && x.layan.length);
     if (H.length || Ly.length){ const x = (H[0] || Ly[0]), hu = !!H.length;
-      box.innerHTML = `<div class="hywarn ${hu ? "a" : "w"}"><b>⚠ Peringatan dini BMKG: ${x.judul}</b> di ${hu ? "hulu Riam Kanan (" + x.hulu.map(capW).join(", ") + ")" : "wilayah layanan (" + x.layan.slice(0,4).map(capW).join(", ") + (x.layan.length > 4 ? ", dll." : "") + ")"}${x.end ? `, berlaku sampai pukul <b>${jamW(x.end)} WITA</b>` : ""}.<br><span>Artinya: ${hu ? "air sungai yang masuk intake bisa <b>lebih keruh</b> dalam beberapa jam sampai 2 hari; pantau kekeruhan air baku dan siapkan pengolahan." : "waspadai gangguan listrik dan perjalanan petugas lapangan; jaringan pipa tidak terpengaruh langsung."}${x.dampak ? ` Dampak menurut BMKG: ${x.dampak}.` : ""} <a href="${x.link}" target="_blank" rel="noopener">Detail BMKG ↗</a></span></div>`;
-    } else box.innerHTML = L.length ? `<div class="hywarn i">ℹ Ada ${L.length} peringatan dini cuaca BMKG di Kalimantan Selatan saat ini, tetapi <b>tidak mengenai hulu Riam Kanan maupun wilayah layanan</b> BPAM.</div>` : `<div class="hywarn o">✓ Tidak ada peringatan dini cuaca BMKG untuk Kalimantan Selatan saat ini.</div>`;
+      box.innerHTML = `<div class="hywarn ${hu ? "a" : "w"}"><b>⚠ BMKG: ${x.judul}</b> di ${hu ? "hulu (" + x.hulu.map(capW).join(", ") + ")" : "wilayah layanan (" + x.layan.slice(0,3).map(capW).join(", ") + (x.layan.length > 3 ? ", dll." : "") + ")"}${x.end ? ` sampai ${jamW(x.end)} WITA` : ""}. <span>${hu ? "Air baku bisa lebih keruh dalam beberapa jam–2 hari." : "Waspadai gangguan listrik dan perjalanan petugas."} <a href="${x.link}" target="_blank" rel="noopener">Detail ↗</a></span></div>`;
+    } else box.innerHTML = "";
   }
   function rG(X){
     const g = X.GQ || {}, box = $("#hyG"); if (!g.ok || !g.last){ box.innerHTML = ""; return; }
@@ -3801,42 +3787,29 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   function plain(X, Z){
     const [c, head] = lvStat(Z.v);
     const box = $("#hyS"); box.className = "hysum " + c; box.querySelector(".hyst b").textContent = head;
-    const L = [], WH = ((X.WR && X.WR.list) || []).filter(x => x.hulu.length);
-    if (WH.length){ L.push(`<span class="hyes" style="background:#e03131">BMKG</span> <b>Peringatan dini ${WH[0].judul.toLowerCase()} di hulu</b> (${WH[0].hulu.map(capW).join(", ")})${WH[0].end ? " sampai " + jamW(WH[0].end) + " WITA" : ""}: air baku bisa lebih keruh.`); if (!c){ box.className = "hysum w"; box.querySelector(".hyst b").textContent = "AMAN – pasokan normal, waspadai air baku keruh"; } }
-    if (Z.v >= 9 && Z.v < 10.6) L.push(`Tinggi air di bendung <b>${nf(Z.v)} m</b>: <b>${cm(Z.v-9)}</b> di atas batas waspada kering dan ${cm(10.6-Z.v)} di bawah batas siaga banjir. Intake dapat mengambil air seperti biasa.`);
-    else if (Z.v < 9) L.push(`Tinggi air di bendung <b>${nf(Z.v)} m</b>, di bawah batas waspada kering 9,00 m. Pada kemarau 2026 intake masih mengambil penuh di ±8,9 m; pantau harian.`);
-    else L.push(`Tinggi air di bendung <b>${nf(Z.v)} m</b>, di atas batas siaga banjir 10,60 m. Waspadai air baku keruh dan sampah di intake.`);
-    if (Z.dl != null) L.push(Math.abs(Z.dl) < 0.005 ? `Dalam seminggu tinggi air <b>stabil</b>.` : `Dalam seminggu tinggi air <b>${Z.dl > 0 ? "naik" : "turun"} ${cm(Z.dl)}</b>` + (Math.abs(Z.dl) < 0.05 ? " (relatif stabil)." : "."));
-    if (X.pk) L.push(`Air masuk lewat pintu kiri <b>${nf(X.pk.now)} m</b>; seminggu terakhir ${nf(X.pk.min7)}–${nf(X.pk.max7)} m, ${X.pk.max7 - X.pk.min7 < 0.1 ? "stabil" : X.pk.max7 - X.pk.min7 < 0.3 ? "relatif stabil" : "berubah-ubah, cek pengaturan pintu"}.`);
-    L.push(`Hujan seminggu terakhir: pos BWS Liang Anggang <b>${nf(Z.la7,0)} mm</b> (${hujanKat(Z.la7)})${Z.laN < 7 ? `, ${Z.laN} hari tercatat` : ""}; pos ULM <b>${nf(Z.ul7,0)} mm</b> (${hujanKat(Z.ul7)})` + (Math.max(Z.la7,Z.ul7) > 2.5*Math.max(5,Math.min(Z.la7,Z.ul7)) ? ". Hujan <b>tidak merata</b>, sudah mulai deras di sebagian wilayah." : "."));
+    const WH = ((X.WR && X.WR.list) || []).filter(x => x.hulu.length);
+    if (WH.length && !c){ box.className = "hysum w"; box.querySelector(".hyst b").textContent = "AMAN – pasokan normal, waspadai air baku keruh"; }
+    const L = [];
+    L.push(Z.v >= 9 && Z.v < 10.6 ? `Tinggi air <b>${nf(Z.v)} m</b>, ${cm(Z.v-9)} di atas batas waspada kering. Intake mengambil air seperti biasa.` : Z.v < 9 ? `Tinggi air <b>${nf(Z.v)} m</b>, di bawah batas waspada kering 9,00 m; pantau harian.` : `Tinggi air <b>${nf(Z.v)} m</b>, di atas batas siaga banjir 10,60 m; waspadai air keruh dan sampah di intake.`);
+    L.push(`Hujan seminggu terakhir: Liang Anggang ${nf(Z.la7,0)} mm, ULM ${nf(Z.ul7,0)} mm` + (Math.max(Z.la7,Z.ul7) > 2.5*Math.max(5,Math.min(Z.la7,Z.ul7)) ? " (tidak merata)." : "."));
     const hb = (X.BM.hu || []).filter(lebat), ib = (X.BM.in || []).filter(lebat);
-    if ((X.BM.hu || X.BM.in)) L.push(`<span class="hyes" style="background:#1971c2">BMKG</span> 3 hari ke depan: ` + (hb.length ? `hujan deras di hulu (${hb.map(d => hariN(d.k).toLowerCase()).join(", ")}), <b>air baku bisa keruh</b>.` : ib.length ? `hujan deras di sekitar intake (${ib.map(d => hariN(d.k).toLowerCase()).join(", ")}).` : `tanpa hujan deras di intake maupun hulu.`));
-    if (X.F.length) L.push(`<span class="hyes">Prakiraan</span> seminggu ke depan hujan ${hujanKat(Z.f7)} (±${nf(Z.f7,0)} mm)` + (Z.f7 >= 50 ? (Z.best && Z.best.r >= 0.3 ? `; air bendung kemungkinan <b>naik dalam ±${Math.max(1,Z.best.L)} hari</b>, waspadai air baku keruh.` : `; hujan lokal biasanya tidak langsung menaikkan air bendung, tetapi <b>air baku bisa lebih keruh</b> dan air bendung naik bila hujan juga turun di hulu.`) : Z.f7 >= 15 ? `; air bendung diperkirakan stabil hingga naik pelan.` : `; air bendung diperkirakan stabil.`));
-    if (Z.gr != null) L.push(`<span class="hyes">Estimasi</span> aliran sungai dari hulu 30 hari ke depan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? ` (±${nf(Z.gr,1)}× dari 30 hari terakhir)` : "") + (Z.gPk && Z.gr >= 1.25 ? (Z.gEnd ? `, terus naik hingga pertengahan ${BL[+Z.gPk.k.slice(5,7)-1]}` : `, tertinggi sekitar ${lab(Z.gPk.k)}`) : "") + `: tanda musim hujan ${Z.gr >= 1.25 ? "mulai masuk" : "belum kuat"}.`);
-    L.push(`Menurut BMKG, musim hujan 2026/2027 datang terlambat dan puncaknya <b>Desember–Februari</b>; risiko berganti dari kekurangan air menjadi banjir dan air keruh.`);
+    if (X.BM.hu || X.BM.in) L.push(`3 hari ke depan (BMKG): ` + (hb.length ? `<b>hujan deras di hulu</b> (${hb.map(d => hariN(d.k).toLowerCase()).join(", ")}), air baku bisa keruh.` : ib.length ? `hujan deras di sekitar intake (${ib.map(d => hariN(d.k).toLowerCase()).join(", ")}).` : `tanpa hujan deras.`));
+    if (Z.gr != null) L.push(`Aliran sungai dari hulu 30 hari ke depan diperkirakan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? `: musim hujan mulai masuk.` : `.`));
     box.querySelector("ul").innerHTML = L.map(x => `<li>${x}</li>`).join("");
-    // Artinya per grafik
     const q = Z.q;
-    $("#hyA1").innerHTML = `<b>Artinya:</b> garis biru adalah tinggi air setiap hari. Selama garis berada di area tengah yang tidak berwarna, kondisi normal. Titik terendah ${nf(Z.vmin)} m pada ${lab(Z.k[Z.iMin])} masih aman karena intake tetap mengambil air penuh. Hari ini rata-rata ${nf(X.D[q].mean)} m, ${X.D[q].mean >= Z.vmin ? "naik" : "turun"} ${cm(X.D[q].mean - Z.vmin)} dari titik terendah.`;
+    $("#hyA1").innerHTML = `<b>Artinya:</b> selama garis biru di area tanpa warna, kondisi normal. Terendah ${nf(Z.vmin)} m (${lab(Z.k[Z.iMin])}); hari ini ${nf(X.D[q].mean)} m.`;
     const B = Z.best, kuat = B && B.r >= 0.5, lemah = !B || B.r < 0.3;
-    $("#hyA2").innerHTML = `<b>Artinya:</b> batang biru adalah hujan, garis oranye adalah tinggi air di bendung. ` + (kuat ? `Dalam 60 hari terakhir tinggi air cukup mengikuti hujan, biasanya <b>naik sekitar ${B.L} hari setelah hujan</b>.` : lemah ? `Dalam 60 hari terakhir tinggi air <b>hampir tidak mengikuti hujan lokal</b>; naik-turunnya lebih ditentukan oleh air yang dilepas dari Waduk Riam Kanan dan hujan di hulu.` : `Tinggi air hanya sebagian mengikuti hujan lokal (jeda ±${B.L} hari); sisanya ditentukan pelepasan Waduk Riam Kanan dan hujan di hulu.`);
-    $("#hyT2").innerHTML = `Batang = hujan harian pos BWS PCH Liang Anggang (HGT645), diganti pos ULM (HGT205) atau model ERA5/Open-Meteo bila kosong; garis = muka air rata-rata harian. Korelasi hujan kumulatif 7 hari terhadap perubahan muka air 7 hari (tren musim dihilangkan), jeda 0–10 hari, dihitung ulang dari data terbaru: ` + (B ? `terbaik pada jeda <b>${B.L} hari, r = ${nf(B.r)}</b> (${B.n} pasang data).` : `data belum cukup.`) + ` Muka air juga dikendalikan pelepasan PLTA Riam Kanan dan pengaturan pintu bendung.`;
-    const hh = h => String(h).padStart(2,"0") + ".00";
-    $("#hyA5").innerHTML = `<b>Artinya:</b> setiap hari air di bendung naik-turun sekitar <b>${nf(Z.amp,0)} cm</b>: paling tinggi sekitar pukul ${hh(Z.hMax)} dan paling rendah sekitar pukul ${hh(Z.hMin)} WITA. ${Z.amp < 20 ? "Ini normal dan tidak mempengaruhi pasokan air baku." : "Naik-turunnya cukup besar; perhatikan saat tinggi air mendekati batas waspada."}`;
-    $("#hyT5").innerHTML = `Rata-rata simpangan muka air per jam terhadap rata-rata harian, ${X.diur.n ? `dihitung dari <b>${X.diur.n} hari terakhir</b> data AWLR 5 menit` : "data arsip Juni–November 2026 (data live belum cukup)"}. Puncak ±${hh(Z.hMax)}, terendah ±${hh(Z.hMin)} WITA, amplitudo ${nf(Z.amp,1)} cm; diduga jejak operasi turbin PLTA Ir. P.M. Noor atau sebagian efek suhu harian pada sensor (perlu konfirmasi PLN dan BWS).`;
-    const mo = +todayW().slice(5,7)-1, C = X.clim, kemarau = [6,7,8,9].filter(i => C.y2026[i] != null && C.y2026[i] < C.q80[i]).length, yb = C.y2026[mo];
-    $("#hyA4").innerHTML = `<b>Artinya:</b> garis merah (2026) dibanding batang biru (rata-rata 29 tahun). ${kemarau >= 3 ? "Juli–Oktober 2026 jauh di bawah normal, artinya kemarau tahun ini lebih kering dari biasanya. " : ""}` + (yb != null ? `Bulan ${BL[mo]} sejauh ini ${nf(yb,1)} m³/dtk, <b>${nf(yb/C.mean[mo]*100,0)}%</b> dari normal bulan ${BL[mo]}${yb < C.q80[mo] ? ", masih di bawah debit andalan" : ""}.` : "") + ` Angka perkiraan model, hanya untuk melihat pola.`;
-    $("#hyA6").innerHTML = Z.gr == null ? `<b>Artinya:</b> data debit model belum dapat dimuat.` : `<b>Artinya:</b> model memperkirakan aliran Sungai Riam Kanan dari hulu dalam 30 hari ke depan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? `, rata-rata ±${nf(Z.gr,1)} kali 30 hari terakhir, ${Z.gEnd ? "<b>terus naik sampai akhir prakiraan</b> (" + lab(Z.gPk.k) + ")" : "tertinggi sekitar <b>" + lab(Z.gPk.k) + "</b>"}. Artinya hujan musim mulai mengisi sungai; siapkan antisipasi air keruh dan muka air naik.` : Z.gr > 0.8 ? `. Belum ada tanda tambahan air yang berarti dari hulu.` : `. Pasokan dari hulu makin kecil; pasokan bendung bergantung pada pelepasan waduk.`) + ` Angka model, bukan pengukuran.`;
+    $("#hyA2").innerHTML = `<b>Artinya:</b> ` + (kuat ? `tinggi air naik sekitar ${B.L} hari setelah hujan.` : lemah ? `tinggi air <b>tidak mengikuti hujan lokal</b>; lebih ditentukan pelepasan Waduk Riam Kanan.` : `tinggi air hanya sebagian mengikuti hujan lokal; sisanya dari pelepasan Waduk Riam Kanan.`);
+    $("#hyT2").innerHTML = `Batang = hujan harian pos BWS Liang Anggang (HGT645), diganti pos ULM (HGT205) atau model bila kosong; garis = muka air rata-rata harian. Korelasi hujan 7 hari terhadap perubahan muka air 7 hari, jeda 0–10 hari: ` + (B ? `terbaik jeda ${B.L} hari, r = ${nf(B.r)} (${B.n} data).` : `data belum cukup.`);
+    $("#hyA6").innerHTML = Z.gr == null ? `<b>Artinya:</b> data model belum dapat dimuat.` : `<b>Artinya:</b> aliran dari hulu diperkirakan <b>${trendTxt(Z.gr)}</b>` + (Z.gr >= 1.25 ? ` (±${nf(Z.gr,1)}× 30 hari terakhir), ${Z.gEnd ? "terus naik sampai akhir prakiraan" : "tertinggi sekitar " + lab(Z.gPk.k)}. Siapkan antisipasi air keruh.` : `.`);
   }
   function kpi(X, Z){
     const B = $("#hyK").children, set = (i, b, em, cl) => { B[i].querySelector("b").textContent = b; const e = B[i].querySelector("em"); e.textContent = em || ""; e.className = cl || ""; };
-    const [c] = lvStat(Z.v);
+    const [c] = lvStat(Z.v), bm = (X.BM.in || []).concat(X.BM.hu || []), b3 = (X.BM.in || []).reduce((a,d) => a + d.mm, 0);
     set(0, nf(Z.v) + " m", c ? lvStat(Z.v)[1].split(" –")[0] : "aman", c ? "w" : "");
-    set(1, Z.dl == null ? "–" : Math.abs(Z.dl) < 0.005 ? "stabil" : (Z.dl > 0 ? "naik " : "turun ") + nf(Math.abs(Z.dl)*100,0) + " cm", "rata-rata harian", "g");
-    set(2, X.pk ? nf(X.pk.now) + " m" : "–", X.pk ? `7 hari ${nf(X.pk.min7)}–${nf(X.pk.max7)} m` : "tidak terhubung", "g");
-    set(3, nf(Z.r7,0) + " mm", `Liang Anggang ${nf(Z.la7,0)} · ULM ${nf(Z.ul7,0)}`, "g");
-    set(4, X.F.length ? "±" + nf(Z.f7,0) + " mm" : "–", X.F.length ? hujanKat(Z.f7) : "", Z.f7 >= 50 ? "w" : "g");
-    set(5, Z.gr == null ? "–" : trendTxt(Z.gr), Z.gr == null ? "" : `model ${nf(Z.gP,1)} → ${nf(Z.gF,1)} m³/dtk`, Z.gr >= 1.25 ? "w" : "g");
+    set(1, Z.dl == null ? "–" : Math.abs(Z.dl) < 0.005 ? "stabil" : (Z.dl > 0 ? "naik " : "turun ") + nf(Math.abs(Z.dl)*100,0) + " cm", "", "g");
+    set(2, nf(Z.r7,0) + " mm", hujanKat(Z.r7), "g");
+    set(3, X.BM.in ? "±" + nf(b3,0) + " mm" : "–", bm.some(lebat) ? "ada hujan deras" : X.BM.in ? "tanpa hujan deras" : "", bm.some(lebat) ? "w" : "g");
   }
   function srcTable(X){
     const s = X.src, ok = o => o && o.ok, st = o => ok(o) ? `<span class="ok">● tersambung</span>` : `<span class="no">● gagal${o && o.e ? " (" + o.e + ")" : ""}</span>`;
@@ -3845,22 +3818,21 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       ["Muka air pintu kiri bendung","AWLR BWS HGT1485, tiap 5 menit","",ok(s.pk) ? tgljam(s.pk.t) + " WITA" : "–", s.pk],
       ["Hujan pos Liang Anggang","ARR BWS HGT645, harian","",ok(s.la) ? lab(s.la.k) : "–", s.la],
       ["Hujan pos ULM Banjarbaru","ARR BWS HGT205, harian","",ok(s.ulm) ? lab(s.ulm.k) : "–", s.ulm],
-      ["Prakiraan hujan 7 hari","Open-Meteo (model global)","es",ok(s.om) ? "s.d. " + lab(X.F.length ? X.F[X.F.length-1].k : todayW()) : "–", s.om],
       ["Debit sungai & prakiraan 30 hari","GloFAS v4 Copernicus (model)","es",ok(s.gf) ? "s.d. " + lab(s.gf.k) : "–", s.gf],
       ["Prakiraan cuaca intake & hulu","BMKG per desa (Mandikapau Barat, Aranio)","pub",ok(s.bmin) ? "s.d. " + lab(s.bmin.k) : "–", ok(s.bmin) && ok(s.bmhu) ? {ok:1} : (s.bmin && !s.bmin.ok ? s.bmin : s.bmhu)],
-      ["Peringatan dini cuaca","BMKG nowcast (tiap kejadian)","pub",ok(s.nc) ? "dicek " + jam(s.nc.t + 8*3600e3) + " WITA" : "–", s.nc],
-      ["Gempa terkini","BMKG (TEWS)","pub",ok(s.gq) && s.gq.t ? lab(dkey(s.gq.t + 8*3600e3)) : "–", s.gq],
-      ["Status musim hujan","BMKG Staklim Kalsel (publikasi)","pub","Prediksi MH 2026/2027", {ok:1}]
+      ["Peringatan dini cuaca","BMKG nowcast (tiap kejadian)","pub",ok(s.nc) ? "dicek " + jam(s.nc.t + 8*3600e3) + " WITA" : "–", s.nc]
+
     ];
     $("#hySrc").innerHTML = `<table class="hysrc"><tr><th>Data</th><th>Jenis</th><th>Terakhir</th><th>Sumber</th><th>Status</th></tr>${R.map(r => `<tr><td>${r[0]}</td><td><span class="bd ${r[2]}">${r[2] === "es" ? "ESTIMASI" : r[2] === "pub" ? "BMKG" : "LIVE"}</span></td><td>${r[3]}</td><td>${r[1]}</td><td>${st(r[4])}</td></tr>`).join("")}</table>`;
     const nOk = R.filter(r => ok(r[4])).length;
-    $("#hyU").innerHTML = `Diperbarui ${jam(X.t + 8*3600e3)} WITA · ${nOk}/${R.length} sumber data tersambung · otomatis tiap 10 menit <button type="button" id="hyR">Perbarui</button>`;
+    $("#hySrcS").textContent = `Sumber data (${nOk}/${R.length} tersambung)`;
+    $("#hyU").innerHTML = `Diperbarui ${jam(X.t + 8*3600e3)} WITA <button type="button" id="hyR">Perbarui</button>`;
     $("#hyR").onclick = () => refresh(true);
   }
   async function init(){
     if (busy) return; busy = true;
-    ["#hy1","#hy2","#hy3","#hy4","#hy5","#hy6","#hyBM"].forEach(id => { if (!$(id).firstChild) $(id).innerHTML = `<p class="hynote">Memuat data…</p>`; });
-    try{ const X = await load(), Z = derive(X); S = X; window.__hyZ = Z; kpi(X,Z); plain(X,Z); c1($("#hy1"),X); c2($("#hy2"),X); c3($("#hy3"),X); c6($("#hy6"),X); c4($("#hy4"),X); c5($("#hy5"),X); cBM($("#hyBM"),X); rW(X); rG(X); srcTable(X); }
+    ["#hy1","#hy2","#hy6","#hyBM"].forEach(id => { if (!$(id).firstChild) $(id).innerHTML = `<p class="hynote">Memuat data…</p>`; });
+    try{ const X = await load(), Z = derive(X); S = X; window.__hyZ = Z; kpi(X,Z); plain(X,Z); c1($("#hy1"),X); c2($("#hy2"),X); c6($("#hy6"),X); cBM($("#hyBM"),X); rW(X); srcTable(X); }
     catch(e){ $("#hy1").innerHTML = `<p class="hynote">Data hidrologi gagal dimuat (${e.message}).</p>`; }
     busy = false;
   }
@@ -3980,24 +3952,22 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     if (X.B) X.B.params.forEach(q => { const j = judge(q.std, q.v[0], q.p); if (j.s === "over" || j.s === "under") bI.push(Object.assign({}, q, {s:j.s, lim:j.lim})); });
     const bNa = X.B ? X.B.params.filter(q => { const j = judge(q.std, q.v[0], q.p); return j.s === "na" && String(q.v[0]).startsWith("<"); }) : [];
     const set = (i, b, em, cl) => { const d = $("#kqK").children[i]; d.querySelector("b").textContent = b; const e = d.querySelector("em"); e.textContent = em || ""; e.className = cl || ""; };
-    set(0, nf(bt,1) + " NTU", `tertinggi ${nf(btMax,1)} NTU`, "g");
+    set(0, nf(bt,1) + " NTU", `air sungai, tertinggi ${nf(btMax,0)}`, "g");
     set(1, nf(ct,2) + " NTU", ctOver.length ? `${ctOver.length} hari > 3 NTU` : "memenuhi (≤ 3 NTU)", ctOver.length ? "w" : "");
     set(2, nf(cl,2) + " mg/L", clLow.length ? `${clLow.length} hari < 0,2 mg/L` : "dalam rentang 0,2–0,5", clLow.length ? "w" : "");
-    set(3, MA ? (offIss.length ? offIss.length + " catatan" : "memenuhi") : "–", MA ? `${MA.pts.length} titik, rata-rata bulanan` : "", offIss.length ? "w" : "");
-    set(4, X.C ? (cI.length ? cI.length + " catatan" : "memenuhi") : "–", X.C ? `${X.C.params.length} parameter × ${X.C.pts.length} titik` : "", cI.length ? "w" : "");
-    set(5, X.B ? bI.length + " melebihi" : "–", X.B ? `dari ${X.B.params.length} parameter` : "", bI.length ? "w" : "");
+    const nOff = new Set(offIss.map(x => x.nm).concat(cI.map(x => x.pt))).size;
+    set(3, nOff ? nOff + " titik" : "memenuhi", "pemeriksaan lab BPAM & Sucofindo", nOff ? "w" : "");
     // ringkasan
     const ok = !ctOver.length && !cI.length, box = $("#kqS");
     box.className = "hysum " + (ok && !clLow.length && !offIss.length ? "" : "w");
     const onlyCl = cI.every(x => /klor/i.test(x.p)) && offIss.every(x => x.k === "cl"), stale = last && (Date.now() - Date.parse(last.k)) / 864e5 > 20;
     box.querySelector(".hyst b").textContent = !ctOver.length && onlyCl ? (clLow.length || offIss.length || cI.length ? "AIR CURAH JERNIH – sisa klor perlu dijaga" : "AIR CURAH LAYAK – memenuhi baku mutu air minum") : "PERLU PERHATIAN – ada parameter air curah di luar baku mutu";
     const L = [];
-    L.push(`Air sungai yang masuk intake rata-rata <b>${nf(bt,1)} NTU</b> (paling keruh ${nf(btMax,1)} NTU). Setelah diolah di IPA, air curah tinggal <b>${nf(ct,2)} NTU</b>, ${ctOver.length ? `tetapi ${ctOver.length} hari melewati batas 3 NTU.` : "selalu di bawah batas air minum 3 NTU."}` + (eff ? ` Kekeruhan berkurang ±${nf(eff,0)}%.` : ""));
-    L.push(clLow.length ? `Sisa klor (pembunuh kuman) rata-rata ${nf(cl,2)} mg/L, tetapi <b>${clLow.length} hari di bawah 0,2 mg/L</b> (${clLow.slice(-3).map(r => lb(r.k)).join(", ")}${clLow.length > 3 ? ", dll." : ""}). Perlu dijaga agar air tetap aman sampai pelanggan.` : `Sisa klor rata-rata ${nf(cl,2)} mg/L, dalam rentang aman 0,2–0,5 mg/L.`);
-    if (offIss.length){ const g = {}; offIss.forEach(x => (g[x.k + "|" + x.s] = g[x.k + "|" + x.s] || []).push(x)); L.push(`Di titik offtaker (rata-rata bulanan): ` + Object.values(g).map(a => `${PN[a[0].k].toLowerCase()} ${a[0].s === "under" ? "terlalu rendah" : "terlalu tinggi"} di ${a.map(x => x.nm + " (" + nf(x.v) + ")").join(", ")}`).join("; ") + ".");
-    } else if (MA) L.push(`Di ${MA.pts.length} titik offtaker PTAM Intan Banjar, rata-rata bulanan pH, kekeruhan, sisa klor, besi dan mangan memenuhi baku mutu.`);
-    if (X.C) L.push(cI.length ? `Uji lab eksternal (Sucofindo) di offtaker: ${cI.map(x => `${x.p.replace(/ Terlarut| \(.*\)/g, "").toLowerCase()} di ${x.pt} ${String(x.v).replace(".", ",")} ${x.u}`).join("; ")} di luar rentang 0,2–0,5 mg/L.` : `Uji lab eksternal (Sucofindo): semua parameter air curah di offtaker memenuhi baku mutu${cSuhu ? " (suhu sedikit di atas 30 °C karena suhu udara; tidak berbahaya)" : ""}.`);
-    if (X.B) L.push(bI.length ? `Air baku sungai (BBLKM): <b>${bI.map(x => x.p.replace(/ \(.*\)/, "")).join(", ")}</b> melebihi baku mutu air sungai. Ini kondisi sungai, bukan air curah; diatasi oleh pengolahan dan klorinasi di IPA.` : `Air baku sungai (BBLKM) memenuhi baku mutu kelas 1.`);
+    L.push(`Air sungai rata-rata <b>${nf(bt,1)} NTU</b>, setelah diolah IPA tinggal <b>${nf(ct,2)} NTU</b> ` + (ctOver.length ? `(${ctOver.length} hari di atas 3 NTU).` : `(selalu di bawah batas 3 NTU).`));
+    L.push(clLow.length ? `Sisa klor rata-rata ${nf(cl,2)} mg/L, tetapi <b>${clLow.length} hari di bawah 0,2 mg/L</b>; dosis klor perlu dijaga.` : `Sisa klor rata-rata ${nf(cl,2)} mg/L, dalam rentang aman.`);
+    const cat = [...new Set(offIss.map(x => `${x.nm} (sisa klor ${x.s === "under" ? "rendah" : "tinggi"})`).concat(cI.map(x => `${x.pt} (${x.p.replace(/ Terlarut| \(.*\)/g, "").toLowerCase()} ${x.s === "under" ? "rendah" : "tinggi"})`)))];
+    L.push(cat.length ? `Offtaker yang perlu perhatian: ${cat.join(", ")}.` : `Semua titik offtaker memenuhi baku mutu.`);
+    if (X.B) L.push(bI.length ? `Air sungai (lab BBLKM): ${bI.map(x => x.p.replace(/ \(.*\)/, "")).join(", ")} melebihi baku mutu; diatasi pengolahan dan klorinasi di IPA.` : `Air sungai (lab BBLKM) memenuhi baku mutu.`);
     if (stale) L.unshift(`<b>Catatan:</b> data terakhir di sheet tanggal ${lb(last.k)} ${last.k.slice(0,4)}. Panel otomatis memakai data terbaru begitu sheet diisi.`);
     box.querySelector("ul").innerHTML = L.map(x => `<li>${x}</li>`).join("");
     $("#kqU").innerHTML = `Data di sheet: <b>${per}</b> · dibaca ${new Date(X.t + 8*3600e3).toISOString().slice(11,16).replace(":",".")} WITA <button type="button" id="kqR">Perbarui</button>`;
@@ -4005,19 +3975,19 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
     // grafik 1 & 2
     if (R.length){ c1($("#kq1"), H); c2($("#kq2"), H); }
     const hiDays = R.filter(r => (r.b.tu || 0) >= 15);
-    $("#kqA1").innerHTML = `<b>Artinya:</b> garis oranye adalah air sungai yang masuk, garis biru adalah air curah yang keluar dari IPA. Selama garis biru di area hijau (≤ 3 NTU), air curah jernih sesuai baku mutu. ` + (hiDays.length ? `Air sungai sempat keruh (≥ 15 NTU) pada ${hiDays.length} hari, biasanya setelah hujan di hulu; IPA tetap menjernihkannya.` : `Air sungai relatif jernih sepanjang periode.`);
+    $("#kqA1").innerHTML = `<b>Artinya:</b> garis oranye = air sungai masuk, garis biru = air curah keluar. Garis biru di area hijau berarti air curah jernih. ` + (hiDays.length ? `Air sungai sempat ≥ 15 NTU pada ${hiDays.length} hari; IPA tetap menjernihkannya.` : "");
     $("#kqT1").innerHTML = `Rata-rata harian kekeruhan (NTU) air baku Intake Mandikapau dan air curah Reservoir 1000 &amp; 2000 dari laporan harian Lab BPAM (${H ? H.title.replace(/\s*\(LAB.*$/i, "").toLowerCase() : ""}). Skala logaritmik. Efisiensi penurunan kekeruhan rata-rata ±${nf(eff,0)}%. Baku mutu air minum Permenkes 2/2023: 3 NTU. Korelasi kekeruhan air baku dengan hujan hulu ditampilkan di tab Hidrologi.`;
-    $("#kqA2").innerHTML = `<b>Artinya:</b> klor dipakai untuk membunuh kuman; sisanya (sisa klor) harus 0,2–0,5 mg/L agar air tetap aman selama mengalir di pipa. ` + (clLow.length ? `Titik merah = hari dengan sisa klor terlalu rendah (${clLow.length} hari), perlu penyesuaian dosis klor.` : `Selama periode ini sisa klor berada di rentang aman.`);
+    $("#kqA2").innerHTML = `<b>Artinya:</b> sisa klor menjaga air tetap bebas kuman sampai pelanggan; harus 0,2–0,5 mg/L. ` + (clLow.length ? `Titik merah = terlalu rendah (${clLow.length} hari).` : `Selama periode ini aman.`);
     // offtaker
     const MAp = MA ? MA.pts : [];
-    $("#kq3").innerHTML = (MAp.length ? `<table class="hysrc kqt"><tr><th>Titik offtaker</th>${["ph","tu","cl","fe","mn"].map(k => `<th>${PN[k]}</th>`).join("")}</tr>${MAp.map(p => `<tr><td>${p.nm}</td>${["ph","tu","cl","fe","mn"].map(k => `<td>${dot(judge(STD[k], p[k], PN[k]).s)}${nf(p[k], k === "fe" || k === "mn" ? 3 : 2)}</td>`).join("")}</tr>`).join("")}<tr class="kqstd"><td>Baku mutu</td><td>6,5–8,5</td><td>≤ 3 NTU</td><td>0,2–0,5 mg/L</td><td>≤ 0,2 mg/L</td><td>≤ 0,1 mg/L</td></tr></table><p class="hynote">Rata-rata ${MW.length} pengukuran mingguan, rekap offtaker PTAM Intan Banjar.</p>` : "") +
+    $("#kq3").innerHTML = (MAp.length ? `<table class="hysrc kqt"><tr><th>Titik offtaker</th>${["ph","tu","cl","fe","mn"].map(k => `<th>${PN[k]}</th>`).join("")}</tr>${MAp.map(p => `<tr><td>${p.nm}</td>${["ph","tu","cl","fe","mn"].map(k => `<td>${dot(judge(STD[k], p[k], PN[k]).s)}${nf(p[k], k === "fe" || k === "mn" ? 3 : 2)}</td>`).join("")}</tr>`).join("")}<tr class="kqstd"><td>Baku mutu</td><td>6,5–8,5</td><td>≤ 3 NTU</td><td>0,2–0,5 mg/L</td><td>≤ 0,2 mg/L</td><td>≤ 0,1 mg/L</td></tr></table>` : "") +
       (X.C ? `<details class="hytek"><summary>Hasil lab eksternal Sucofindo per offtaker (${X.C.params.length} parameter)</summary><table class="hysrc kqt"><tr><th>Parameter</th><th>Baku mutu</th>${X.C.pts.map(p => `<th>${p}</th>`).join("")}</tr>${X.C.params.map(q => `<tr><td>${q.p.replace(/ Terlarut/, "")}</td><td>${q.std} ${q.u && !/berbau/i.test(q.u) ? q.u : ""}</td>${q.v.map(v => `<td>${dot(judge(q.std, v, q.p).s)}${v}</td>`).join("")}</tr>`).join("")}</table></details>` : "");
-    $("#kqA3").innerHTML = `<b>Artinya:</b> ini kualitas air yang diterima PTAM di titik serah. ` + (offIss.length || cI.length ? `Titik hijau = sesuai baku mutu, merah/oranye = perlu perhatian. Catatan utama: ${[...new Set(offIss.map(x => PN[x.k].toLowerCase() + " di " + x.nm).concat(cI.map(x => x.p.replace(/ Terlarut| \(.*\)/g, "").toLowerCase() + " di " + x.pt)))].slice(0,4).join("; ")}.` : `Semua titik memenuhi baku mutu.`);
+    $("#kqA3").innerHTML = `<b>Artinya:</b> kualitas air yang diterima PTAM. Hijau = sesuai baku mutu, merah/oranye = perlu perhatian.`;
     // air baku lab
     $("#kq4").innerHTML = X.B ? `<table class="hysrc kqt"><tr><th>Parameter</th><th>Hasil</th><th>Baku mutu</th><th>Keterangan</th></tr>${bI.map(q => `<tr><td>${q.p}</td><td>${dot(q.s)}<b>${String(q.v[0]).replace(".", ",")}</b> ${q.u}</td><td>${q.std ? (q.s === "under" ? "≥ " : "≤ ") + q.std : "–"}</td><td>${q.s === "under" ? "kurang dari batas" : "melebihi batas"}</td></tr>`).join("")}</table>
       <details class="hytek"><summary>Semua ${X.B.params.length} parameter air baku</summary><table class="hysrc kqt"><tr><th>Parameter</th><th>Hasil</th><th>Baku mutu</th></tr>${X.B.params.map(q => `<tr><td>${q.p}</td><td>${dot(judge(q.std, q.v[0], q.p).s)}${q.v[0] || "–"} ${q.u}</td><td>${q.std || "–"}</td></tr>`).join("")}</table>${bNa.length ? `<p>Abu-abu = batas deteksi alat lab lebih tinggi dari baku mutu (${bNa.map(q => q.p.replace(/ \(.*\)/, "")).join(", ")}), sehingga belum bisa dinilai; minta lab memakai metode yang lebih peka.</p>` : ""}</details>` : `<p class="hynote">Data lab air baku belum tersedia.</p>`;
     const bact = bI.filter(q => /coli|tinja/i.test(q.p)), doL = bI.find(q => /^DO/.test(q.p));
-    $("#kqA4").innerHTML = X.B ? `<b>Artinya:</b> ini kondisi air Sungai Riam Kanan sebelum diolah. ` + (bact.length ? `<b>Bakteri dari kotoran (coliform)</b> melebihi batas, tanda sungai tercemar limbah permukiman/ternak; karena itu klorinasi di IPA wajib dijaga. ` : "") + (doL ? `Oksigen terlarut (DO) ${String(doL.v[0]).replace(".", ",")} mg/L, di bawah 6 mg/L. ` : "") + (bI.length ? `Parameter lain umumnya memenuhi baku mutu.` : `Semua parameter memenuhi baku mutu.`) : "";
+    $("#kqA4").innerHTML = X.B ? `<b>Artinya:</b> kondisi Sungai Riam Kanan sebelum diolah. ` + (bact.length ? `Bakteri coliform tinggi (tercemar limbah permukiman/ternak), sehingga klorinasi di IPA wajib dijaga.` : `Memenuhi baku mutu.`) : "";
   }
   async function init(force){
     if (busy) return; if (K && !force && Date.now() - K.t < 10*60e3) return; busy = true;
