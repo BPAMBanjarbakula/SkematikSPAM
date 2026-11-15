@@ -1479,7 +1479,11 @@ body.touring #hud,body.touring #rcard{opacity:0;visibility:hidden}
 .pic{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:10.5px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .pic.sm{width:18px;height:18px}
 .pic.ln{width:28px;height:8px;border-radius:4px;border:0;box-shadow:none}
-.pp .pbd{padding:10px 14px 12px}
+.pp .pbd{padding:10px 14px 12px;max-height:min(62vh,calc(100dvh - 230px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.pp .pbd *{touch-action:pan-y}
+.leaflet-popup-content{max-height:calc(100dvh - 150px);overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+.pp .pbd::-webkit-scrollbar{width:6px}.pp .pbd::-webkit-scrollbar-thumb{background:rgba(120,140,160,.45);border-radius:3px}
+@media (max-width:620px){.leaflet-popup-content{max-width:min(310px,calc(100vw - 40px))!important;min-width:0!important}.pp .pbd{max-height:calc(100dvh - 360px)}}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 .chip{font-size:11px;font-weight:600;background:#eef4fb;color:#0b3a63;border-radius:999px;padding:3px 9px}
 .pp .src{margin-top:8px;font-size:11px;color:#8a96a3;line-height:1.4}
@@ -2158,7 +2162,7 @@ function markerFor(f, latlng){
 function pointLayer(gj){
   return L.geoJSON(gj,{pointToLayer:(f,ll) => {
       const m = markerFor(f, ll);
-      m.bindPopup(() => pointPopup(f, ll), {maxWidth:330, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[20,20]});
+      m.bindPopup(() => pointPopup(f, ll), {maxWidth:330, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[20, WIDE0 ? 20 : 110]});
       const c = CAT[f.properties.kategori] || CAT.lainnya;
       if (c.key){ m._lbl = [lblHTML(f.properties),{permanent:true,direction:"right",offset:[c.size/2,0],className:"lbl"}]; m._lblMin = /BGT 1|Offtake Pinus|Offtake Muslimin|Pergantian|Reducer|tapping/.test(f.properties.nama) ? 14 : 10; labelLayers.push(m); }
       else m.bindTooltip(f.properties.nama,{direction:"top",offset:[0,-6]});
@@ -2519,7 +2523,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     const HY = window.__hyd || {}; if (HY.la7 != null) rows.splice(3, 0, ["Hujan 7 hari (pos BWS Liang Anggang)", nf(HY.la7,1) + " mm" + (HY.lamiss ? ` · ${HY.lamiss} hari tanpa data` : "")]); if (HY.f7 != null) rows.splice(4, 0, ["Prakiraan hujan 7 hari", "±" + nf(HY.f7,0) + " mm (model) · " + (HY.f7 >= 50 ? "muka air berpotensi naik" : HY.f7 >= 15 ? "stabil–naik pelan" : "stabil")]);
     return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
-  mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+  mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
   const HIST = {}; let rng = 7;
   const dkey = ms => new Date(ms + 8*3600e3).toISOString().slice(0,10);
@@ -2657,7 +2661,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const mk = {};
   Object.entries(ST).forEach(([id, s]) => {
     mk[id] = L.marker(s.ll, {icon: liveIcon(id, id === "dn900" ? "#4dabf7" : "#9775fa", id === "dn900" ? "Debit ke IPA Pinus" : "Debit Offtake Pematang", "u"), pane:"live", zIndexOffset:880}).addTo(map);
-    mk[id].bindPopup(() => popup(id), {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+    mk[id].bindPopup(() => popup(id), {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   });
   function sparkSVG(series){
     if (!series || series.length < 2) return "";
@@ -2746,7 +2750,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   };
   mkIn.bindPopup(() => { const e = est();
     const rows = e ? [["Total keluar intake", `<b>≈ ${nf(e.tot,0)} L/dtk</b>`], ["Kubikasi", `≈ ${nf(e.tot*86.4,0)} m³/hari`], ["IPA Pinus (DN900)", nf(e.dn,0) + " L/dtk"], ["Pematang", nf(e.pm,0) + " L/dtk"], ["Prased", `±${PRASED} L/dtk <span style="color:#e8590c">(estimasi)</span>`], ["Kuota SIPA", `${nf(e.tot/1500*100,1)}% dari 1.500 L/dtk`], ["Kapasitas pompa", `${nf(e.tot/1200*100,0)}% dari 1.200 L/dtk <span style="color:var(--muted)">(3 operasi + 1 cadangan)</span>`], ["Pembacaan", fmtT(e.t)]] : [["Status", "Data logger belum tersedia"]];
-    return `<div class="pp"><div class="phd" style="--c:#0ca678"><span class="pic" style="background:#0ca678">Σ</span><div><h3>Keluar Intake Karang Intan</h3><div class="sub">Neraca debit · IPA Pinus + Pematang + Prased</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Estimasi neraca</span></div><div class="awc fwc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr">Memuat tren…</div><svg class="fwSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="pbtns"><button class="gbtn" style="background:#0ca678;color:#fff;border:0;cursor:pointer" onclick="window.nrcOpen()">Buka neraca lengkap &amp; laporan BWS →</button></div><div class="src">Total = DN900 + Pematang (logger Onpoint) + Prased ±${PRASED} L/dtk (belum ada logger).</div></div></div>`; }, {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+    return `<div class="pp"><div class="phd" style="--c:#0ca678"><span class="pic" style="background:#0ca678">Σ</span><div><h3>Keluar Intake Karang Intan</h3><div class="sub">Neraca debit · IPA Pinus + Pematang + Prased</div></div></div><div class="pbd"><div class="chips"><span class="chip">LIVE</span><span class="chip">Estimasi neraca</span></div><div class="awc fwc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr">Memuat tren…</div><svg class="fwSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="pbtns"><button class="gbtn" style="background:#0ca678;color:#fff;border:0;cursor:pointer" onclick="window.nrcOpen()">Buka neraca lengkap &amp; laporan BWS →</button></div><div class="src">Total = DN900 + Pematang (logger Onpoint) + Prased ±${PRASED} L/dtk (belum ada logger).</div></div></div>`; }, {maxWidth:340, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   // ---- grafik tren debit (24 jam / 7 hari / 30 hari)
   const dkey = ms => new Date(ms + 8*3600e3).toISOString().slice(0,10);
   const dlab = k => new Date(k + "T00:00:00Z").toLocaleDateString("id-ID",{day:"numeric",month:"short",timeZone:"UTC"});
@@ -3651,8 +3655,9 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
       .catch(e => src.gf = {ok:0, e:e.message}));
     // 7–8. prakiraan cuaca resmi BMKG (Desa Mandikapau Barat = intake; Desa Aranio = hulu Waduk Riam Kanan)
     const BM = {};
-    [["in","63.03.06.2025"],["hu","63.03.11.2011"]].forEach(([n,c]) => jobs.push((() => { const g = () => fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=" + c).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }); return g().catch(() => new Promise(r => setTimeout(r, 2500)).then(g)); })()
-      .then(o => { BM[n] = bmDays(o, T); src["bm" + n] = {ok:1, k: BM[n].length ? BM[n][BM[n].length-1].k : T, an: o.data[0].cuaca[0][0].analysis_date}; }).catch(e => src["bm" + n] = {ok:0, e:e.message})));
+    const bmOne = (n,c) => { const g = q => fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=" + c + "&_=" + q).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+      return g(Math.floor(Date.now()/36e5)).catch(() => new Promise(r => setTimeout(r, 2000)).then(() => g(Date.now()))).then(o => { BM[n] = bmDays(o, T); src["bm" + n] = {ok:1, k: BM[n].length ? BM[n][BM[n].length-1].k : T}; }).catch(e => src["bm" + n] = {ok:0, e:e.message}); };
+    jobs.push(bmOne("in","63.03.06.2025").then(() => new Promise(r => setTimeout(r, 1200))).then(() => bmOne("hu","63.03.11.2011")));
     // 9–10. peringatan dini cuaca & gempa BMKG
     let WR = {list:[]}, GQ = {};
     if (window.bmkgWarn) jobs.push(window.bmkgWarn().then(w => { WR = w; src.nc = w.ok ? {ok:1, t:w.t} : {ok:0, e:w.e}; }));
@@ -4062,6 +4067,13 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   window.kqSummary = () => K;
 })();
 </script>
+<script>/* Popup: geser peta lagi bila isi popup bertambah tinggi (grafik/data dimuat belakangan), agar judul tidak tertutup header */
+(function(){ const m = window.__map; if (!m || !window.ResizeObserver) return;
+  m.on("popupopen", e => { const p = e.popup, el = p.getElement && p.getElement(); if (!el) return; let t = 0;
+    const ro = new ResizeObserver(() => { clearTimeout(t); t = setTimeout(() => { try{ if (p.isOpen()) p._adjustPan(); }catch(_){} }, 120); });
+    ro.observe(el); p.once("remove", () => ro.disconnect()); });
+})();
+</script>
 <script>/* Pos hidrologi BWS Kalimantan III di peta: ARR Liang Anggang & ULM, AWLR pintu kiri bendung (live) */
 (function(){
   if (!window.__map || !window.liveIcon) return;
@@ -4100,7 +4112,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   ];
   ARR.forEach(s => {
     s.mk = L.marker(s.ll, {icon: liveIcon(s.id, "#4c6ef5", "Hujan " + s.nama.replace("PCH ",""), s.dir), pane:"live", zIndexOffset:820}); // pos hujan tidak ditampilkan di peta; datanya tetap dipakai popup AWLR & panel Analisa
-    s.mk.bindPopup(() => arrPop(s), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+    s.mk.bindPopup(() => arrPop(s), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
     s.mk.on("popupopen", () => arrDaily(s).then(() => { if (s.mk.isPopupOpen()) s.mk.setPopupContent(arrPop(s)); }));
   });
   async function arrNow(s){
@@ -4139,7 +4151,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   // ---------- AWLR pintu kiri bendung (HGT1485)
   const PK = {id:"pk", dev:"HGT1485", ll:[-3.455666, 114.961037]};
   PK.mk = L.marker(PK.ll, {icon: liveIcon("pk", "#20c997", "Pintu kiri bendung", "ul"), pane:"live", zIndexOffset:880}).addTo(__map);
-  PK.mk.bindPopup(() => pkPop(), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, 40]});
+  PK.mk.bindPopup(() => pkPop(), {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   async function pkLoad(){
     try{
       const g = await fetch("/api/awlr/GetDataGrafikAwlr", form({deviceId:PK.dev, startDate:ago(6), endDate:tday()})).then(r => r.json());
