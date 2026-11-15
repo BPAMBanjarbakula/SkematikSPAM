@@ -14,3 +14,10 @@
   to = "https://opsdabwskal3.higertech.com/Station/:splat"
   status = 200
   force = true
+
+# Proxy pos hujan (ARR) jaringan hidrologi BWS Kalimantan III
+[[redirects]]
+  from = "/api/hka/*"
+  to = "https://hkakal3.higertech.com/Station/:splat"
+  status = 200
+  force = true
