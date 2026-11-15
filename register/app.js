@@ -33,6 +33,7 @@ if (!TABS.some(t => t[1] === lastTab)) lastTab = 0;
 function lsGet(k) { try { return localStorage.getItem("reg_" + k) } catch (e) { return null } }
 function lsSet(k, v) { try { localStorage.setItem("reg_" + k, v) } catch (e) {} }
 function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("on"); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove("on"), 1800) }
+const brk = s => esc(s).replace(/\//g, "/<wbr>").replace(/-/g, "-<wbr>");
 function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])) }
 const uniq = a => [...new Set(a.filter(Boolean))];
 const tabOf = g => TABS.find(t => t[1] === g);
@@ -83,22 +84,22 @@ function jenisOf(f) { return pick(f, "JENIS", "SURAT", "METODE") }
 function card(o) { const f = o.f, tgl = pick(f, "TANGGAL"), keg = pick(f, "PAKET", "KEGIATAN"), jn = jenisOf(f), nil = pick(f, "NILAI", "ANGGARAN"),
   py = pick(f, "PENYEDIA"), ct = pick(f, "CATATAN"), rel = pick(f, "SPK DAN"), mati = /TIDAK DIPAKAI|BATAL/i.test(ct);
   return `<div class="it${flash.has(o.no) ? " new" : ""}"${mati ? ' style="opacity:.62"' : ""}>
-  <div class="no"><code>${esc(o.no)}</code><button class="cp only-m" data-c="${esc(o.no)}">Salin</button></div>
+  <div class="no"><code>${brk(o.no)}</code><button class="cp only-m" data-c="${esc(o.no)}">Salin</button></div>
   <div class="c-tg">${esc(tgl)}</div>
   <div class="k">${esc(keg)}${py ? ` <span style="color:var(--mut)">· ${esc(py)}</span>` : ""}</div>
   <div class="c-jn">${esc(jn !== keg ? jn : "")}</div>
   <div class="c-nl">${nil ? esc(nil) : ""}</div>
   <div class="acts only-d"><button class="cp" data-c="${esc(o.no)}" title="Salin nomor">Salin</button><button class="dup" data-dup="${esc(o.no)}" title="Ambil nomor baru dengan isian seperti ini">＋ Serupa</button></div>
   <div class="tags">${tgl ? `<span class="tg d">📅 ${esc(tgl)}</span>` : ""}${jn && jn !== keg ? `<span class="tg">${esc(jn)}</span>` : ""}${nil ? `<span class="tg v">Rp ${esc(nil)}</span>` : ""}
-   <button class="dup only-m" data-dup="${esc(o.no)}" style="margin-left:auto">＋ Serupa</button></div>
+   <button class="dup only-m" data-dup="${esc(o.no)}" style="margin-left:auto" title="Ambil nomor baru dengan isian seperti ini">＋</button></div>
   ${rel ? `<div class="nt r">${esc(rel)}</div>` : ""}${ct ? `<div class="nt">⚑ ${esc(ct)}</div>` : ""}</div>` }
 function render() { if (cur === HOME) return renderHome(); const q = $("#q").value.trim().toLowerCase(), y = $("#yr").value, t = tabOf(cur);
   let L = rows.filter(o => (!y || o.yr === y) && (!q || (o.no + " " + Object.values(o.f).join(" ") + " " + o.yr).toLowerCase().includes(q))).slice().reverse();
   const last = lastOf(rows), m = $("#m"); let h = "";
   if (last && !q) { const tg = pick(last.f, "TANGGAL"), kg = pick(last.f, "PAKET", "KEGIATAN"), nx = nextFor(last);
     h += `<div class="hero"><div class="hx"><div class="l">NOMOR TERAKHIR · ${esc(t[2].toUpperCase())}</div>
-    <div class="n">${esc(last.no)}</div><div class="d">${esc([tg, kg].filter(Boolean).join(" · "))}</div></div>
-    <div class="nx">Nomor berikutnya<b>${esc(nx)}</b><button class="btn" id="takeNext">＋ Ambil nomor ini</button></div></div>` }
+    <div class="n">${brk(last.no)}</div><div class="d">${esc([tg, kg].filter(Boolean).join(" · "))}</div></div>
+    <div class="nx">Nomor berikutnya<b>${brk(nx)}</b><button class="btn" id="takeNext">＋ Ambil nomor ini</button></div></div>` }
   h += `<div class="meta"><span>${L.length} entri${q || y ? " ditemukan" : ""}</span><span>terbaru di atas</span></div>`;
   h += `<div class="thead only-d"><span>NOMOR</span><span>TANGGAL</span><span>KEGIATAN / PAKET</span><span>JENIS</span><span style="text-align:right">NILAI (Rp)</span><span></span></div>`;
   if (!L.length) h += `<div class="empty">Tidak ada entri yang cocok.</div>`;
@@ -122,15 +123,15 @@ function renderHome() { const q = $("#q").value.trim().toLowerCase(), m = $("#m"
   h += `<div class="sec2">REGISTER</div><div class="tiles">`;
   TABS.forEach((t, i) => { const R = cache[t[1]], last = R && lastOf(R);
     h += `<div class="tile" style="--c:${t[3]}"><button class="tl-h" data-go="${t[1]}"><span class="dt"></span><b>${esc(t[0])}</b><small>${esc(t[2])}</small><span class="tl-n">${R ? R.length : "…"}</span></button>`;
-    if (last) h += `<div class="tl-k">Terakhir</div><code class="tl-no">${esc(last.no)}</code><div class="tl-d">${esc(pick(last.f, "TANGGAL") || "")}</div>
-      <div class="tl-k">Berikutnya</div><code class="tl-nx">${esc(nextFor(last, t[1], R))}</code>`;
+    if (last) h += `<div class="tl-k">Terakhir</div><code class="tl-no">${brk(last.no)}</code><div class="tl-d">${esc(pick(last.f, "TANGGAL") || "")}</div>
+      <div class="tl-k">Berikutnya</div><code class="tl-nx">${brk(nextFor(last, t[1], R))}</code>`;
     else h += `<div class="sk" style="height:70px;margin:8px 0"></div>`;
     h += `<div class="tl-a"><button class="btn" data-take="${t[1]}">＋ Ambil</button><button class="ghost" data-go="${t[1]}">Lihat daftar</button></div></div>` });
   h += `</div><div class="foot">Data langsung dari Google Sheet register · <a href="${SHEET}" target="_blank" rel="noopener">Buka sheet ↗</a></div>`;
   m.innerHTML = h; $("#open").href = SHEET }
 function years() { const ys = uniq(rows.map(o => o.yr)).sort().reverse(), s = $("#yr"), v = s.value;
   s.innerHTML = `<option value="">Semua tahun</option>` + ys.map(y => `<option${y === v ? " selected" : ""}>${y}</option>`).join("") }
-function tabsUI() { $("#tabs").innerHTML = `<button class="tab${cur === HOME ? " on" : ""}" data-g="${HOME}" style="--c:#fff" title="Beranda (0)"><span class="dt"></span>Beranda</button>` + TABS.map((t, i) => `<button class="tab${t[1] === cur ? " on" : ""}" data-g="${t[1]}" style="--c:${t[3]}" title="${esc(t[2])} (${i + 1})"><span class="dt"></span>${esc(t[0])}<span class="ct" data-ct="${t[1]}"></span></button>`).join("") }
+function tabsUI() { $("#tabs").innerHTML = `<button class="tab${cur === HOME ? " on" : ""}" data-g="${HOME}" style="--c:var(--cy)" title="Beranda (0)"><span class="dt"></span>Beranda</button>` + TABS.map((t, i) => `<button class="tab${t[1] === cur ? " on" : ""}" data-g="${t[1]}" style="--c:${t[3]}" title="${esc(t[2])} (${i + 1})"><span class="dt"></span>${esc(t[0])}<span class="ct" data-ct="${t[1]}"></span></button>`).join("") }
 function counts() { TABS.forEach(t => { const c = cache[t[1]], el = $(`[data-ct="${t[1]}"]`); if (el && c) el.textContent = c.length }) }
 function goTab(g) { if (g === cur) return; cur = g; if (g !== HOME) { lsSet("tab", g); lastTab = g } $("#yr").style.display = g === HOME ? "none" : ""; shown = 80; $("#q").value = ""; $("#yr").value = "";
   $$(".tab").forEach(x => x.classList.toggle("on", +x.dataset.g === g)); $(".tab.on")?.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
@@ -265,10 +266,10 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden && !F
 
 /* tema terang / gelap */
 function isLight() { const t = document.documentElement.dataset.theme; return t ? t === "light" : matchMedia("(prefers-color-scheme: light)").matches }
-function themeUI() { const l = isLight(); $("#th").textContent = l ? "🌙" : "☀️"; $("#th").title = l ? "Ganti ke tema gelap (T)" : "Ganti ke tema terang (T)";
+function themeUI() { const l = isLight(); $("#th").textContent = l ? "🌙" : "☀️"; $("#th").title = l ? "Ganti ke tema gelap (T)" : "Ganti ke tema terang (T)"; $("#th2").textContent = l ? "🌙 Gelap" : "☀️ Terang";
   document.querySelector('meta[name="theme-color"]').content = l ? "#eef4fb" : "#05121f" }
 function toggleTheme() { const t = isLight() ? "dark" : "light"; document.documentElement.dataset.theme = t; lsSet("theme", t); themeUI() }
-$("#th").onclick = toggleTheme; matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", themeUI); themeUI();
+$("#th").onclick = $("#th2").onclick = toggleTheme; matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", themeUI); themeUI();
 /* layar pembuka */
 let splashT0 = Date.now();
 function splashDone() { const s = $("#splash"); if (!s || s.dataset.done) return; s.dataset.done = 1;

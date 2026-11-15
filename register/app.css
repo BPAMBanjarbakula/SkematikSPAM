@@ -266,3 +266,20 @@ html:not([data-theme=dark]) .ferr,html:not([data-theme=dark]) .dl .row .x{color:
 }
 html .tab.on,html .tab.on:hover{background:linear-gradient(90deg,var(--cy),var(--vi))!important}
 html .add kbd{background:rgba(255,255,255,.22)!important;color:#fff!important;border-color:transparent!important}
+/* rapikan: judul sidebar PC satu baris, tombol tema di pojok */
+@media (min-width:980px){
+  .side .brand h1{font-size:19px;white-space:nowrap}
+  .side .brand small{white-space:nowrap;font-size:10px;letter-spacing:.14em}
+  .row2{display:flex;gap:8px}.row2 .ib{flex:1;min-width:0;font-size:13.5px;white-space:nowrap}
+  html .tab{box-shadow:none!important}
+  html .tab:not(.on){background:none}
+}
+/* rapikan: kartu nomor terakhir di HP lebih ringkas */
+@media (max-width:979px){
+  .hero{padding:14px;gap:10px}
+  .hero .nx{padding:10px 12px}
+  .hero .nx .btn{width:100%}
+}
+
+.it .no code,.hero .n,.hero .nx b,.tl-no,.tl-nx,.dl .row .nn{word-break:normal;overflow-wrap:anywhere}
+.tags .dup.only-m{padding:4px 12px;font-size:15px}
