@@ -1,7 +1,7 @@
 // Ambil nomor baru Register PBJ: diteruskan ke Apps Script yang terpasang di Google Sheet register.
 // Nomor urut dihitung & dikunci di Apps Script (LockService), PIN juga diperiksa di sana.
 // URL Apps Script: isi konstanta di bawah, atau env REGISTER_SCRIPT_URL di Netlify.
-const SCRIPT_URL = "";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzupSpbuTJqCSCihlHwlj3Jwc-W0-aB7GrM6EGXmRw9yZQehPb5N1iMFRqqwT3Ashx9Sg/exec";
 
 export default async (req) => {
   if (req.method !== "POST") return Response.json({ ok: false, err: "POST saja" }, { status: 405 });
