@@ -34,4 +34,7 @@ jobs:
           git config user.name "geospam-bot"; git config user.email "geospam-bot@users.noreply.github.com"
           git add flow.json harian.csv
           git diff --cached --quiet && exit 0
-          git commit -m "Data flowmeter $(date -u +%FT%TZ)" && git push origin telemetri
+          git commit -m "Data flowmeter $(date -u +%FT%TZ)"
+          # coba ulang bila server GitHub sedang gangguan sesaat (mis. galat 503)
+          for i in 1 2 3 4 5; do git push origin telemetri && exit 0; echo "push gagal, coba lagi ($i)"; sleep $((i*15)); git pull --rebase origin telemetri || true; done
+          exit 1
