@@ -5,7 +5,6 @@ const TABS = [
   ["Berita Acara", 669272993, "BA Serah Terima / Pemeriksaan", "#22d3ee"],
   ["E-Katalog", 1146793795, "Surat Pesanan & Kontrak E-Katalog", "#38bdf8"],
   ["PL", 1148303820, "Pengadaan Langsung & ST PPK", "#60a5fa"],
-  ["Penunjukan", 1148303950, "Penunjukan Langsung", "#818cf8"],
   ["FHO", 1148304100, "Serah Terima Akhir (FHO)", "#a78bfa"],
   ["Surat PP", 1148303899, "Surat Pejabat Pengadaan", "#c084fc"],
   ["< 50 Jt", 555000111, "Berkas Kuitansi < Rp50 Jt", "#e879f9"],
@@ -18,7 +17,6 @@ const ITEM = {
   669272993: { col: "KEGIATAN", label: "Uraian berita acara", tpl: [["BA Pemeriksaan + Serah Terima", ["Berita Acara Pemeriksaan Barang Belanja ", "Berita Acara Serah Terima Barang Belanja "]]] },
   1146793795: { part: "J", tpl: [["SP + SPJ", ["SP", "SPJ"]], ["Paket lengkap (7)", ["SP", "SPJ", "BAPB", "BAST", "BAPP", "BAP", "BAPAHP"]]] },
   1148303820: { col: "SURAT", label: "Jenis surat", dyn: true },
-  1148303950: { col: "SURAT", label: "Jenis surat", dyn: true },
   1148304100: {},
   1148303899: { col: "SURAT", label: "Jenis surat" },
   555000111: { part: "J", auto: { col: "JENIS DOKUMEN", map: J50 }, first: ["PAKET", "PENYEDIA", "NILAI"],
@@ -162,7 +160,7 @@ function openForm(pre) { const c = CFG[cur]; if (!c) return;
   const shared = c.parts.filter(d => d.k !== it.part);
   if (shared.length) { h += `<div class="sec">FORMAT NOMOR</div>`;
     shared.forEach(d => { h += `<label class="fl" data-part="${d.k}"><span>${esc(d.label)}</span>`;
-      if (d.opts) h += `<div class="seg">${d.opts.map(o => `<button type="button" data-k="${d.k}" data-v="${esc(o)}" class="${F.p[d.k] === o ? "on" : ""}">${esc(d.k === "M" ? ({ PL: "Pengadaan Langsung", PNT: "Penunjukan Langsung", EP: "E-Purchasing" }[o] || o) : o)}</button>`).join("")}</div>`;
+      if (d.opts) h += `<div class="seg">${d.opts.map(o => `<button type="button" data-k="${d.k}" data-v="${esc(o)}" class="${F.p[d.k] === o ? "on" : ""}">${esc(d.k === "M" ? ({ PL: "Pengadaan Langsung", EP: "E-Purchasing" }[o] || o) : o)}</button>`).join("")}</div>`;
       else { const sug = uniq(rows.slice().reverse().map(o => (o.no.match(d.kode) || [])[1]));
         h += `<input data-pk="${d.k}" value="${esc(F.p[d.k] || "")}" list="dl_${d.k}" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="mis. ${esc(sug[0] || "KODE-PAKET")}"><datalist id="dl_${d.k}">${sug.slice(0, 40).map(v => `<option value="${esc(v)}">`).join("")}</datalist>` }
       h += `</label>` }) }
@@ -259,7 +257,7 @@ document.addEventListener("keydown", e => { const typing = /INPUT|TEXTAREA|SELEC
   if (e.key === "n" || e.key === "N") { e.preventDefault(); $("#add2").click() }
   else if (e.key === "/") { e.preventDefault(); $("#q").focus() }
   else if (e.key === "r" || e.key === "R") load(true);
-  else if (/^[1-8]$/.test(e.key)) goTab(TABS[+e.key - 1][1]);
+  else if (/^[1-7]$/.test(e.key)) goTab(TABS[+e.key - 1][1]);
   else if (e.key === "0" || e.key === "h" || e.key === "H") goTab(HOME);
   else if (e.key === "t" || e.key === "T") toggleTheme() });
 document.addEventListener("visibilitychange", () => { if (!document.hidden && !F) load(true, true) });

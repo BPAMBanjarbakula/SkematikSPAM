@@ -1,7 +1,7 @@
 // Data Register Nomor Dokumen PBJ BPAM Banjarbakula untuk aplikasi /register (hanya baca).
 // Mengambil CSV tiap tab dari Google Sheet register, di-cache 60 detik di CDN Netlify.
 const SHEET = "1B-pgWiwKd4OezpocJk3O063vaT7XblBA8ms8iX-5Xqg";
-const GIDS = new Set(["0", "669272993", "1146793795", "1148303820", "1148303950", "1148304100", "1148303899", "555000111"]);
+const GIDS = new Set(["0", "669272993", "1146793795", "1148303820", "1148304100", "1148303899", "555000111"]);
 
 export default async (req) => {
   const gid = new URL(req.url).searchParams.get("gid") || "0";
