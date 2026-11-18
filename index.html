@@ -837,6 +837,11 @@ body.dark .srci{background:#122238;border-color:#1e3550}body.dark .srch b{color:
 .srcx{font-size:11.5px;color:#7a8794;margin:4px 0 12px;line-height:1.45}.srcx b{color:#5c6b7a;font-weight:700}body.dark .srcx{color:#8fa7bd}body.dark .srcx b{color:#adc3d6}
 .isrc{display:block;font-size:11px;color:#86a5c2;margin-top:3px;font-weight:400}
 /* ---- modal analisa ketersediaan air */
+.skem{position:fixed;inset:0;z-index:7100;background:#0b1626;display:flex;flex-direction:column;color:#e6eef7}.skem[hidden]{display:none}
+.skhd{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:10px 14px;background:linear-gradient(120deg,#0b3a63,#0b7285)}.skhd h2{margin:0;font-size:16px;line-height:1.25}.skhd p{margin:2px 0 0;font-size:12px;opacity:.85}
+.skbt{display:flex;gap:6px;align-items:center;flex:none}.skbt a,.skbt button{all:unset;cursor:pointer;font:600 12.5px system-ui,sans-serif;padding:7px 11px;border-radius:9px;background:rgba(255,255,255,.14);color:#fff}.skbt a:hover,.skbt button:hover{background:rgba(255,255,255,.26)}.skbt .skx{display:grid;place-items:center;padding:7px}
+#skMap{flex:1;background:#eef3f8}.skft{font-size:11.5px;line-height:1.4;padding:7px 14px;background:#0b1626;color:#a9c3dc}
+@media(max-width:820px){.skhd{flex-wrap:wrap;padding:10px 12px}.skhd p{display:none}.skhd h2{font-size:14px}.skbt{width:100%;justify-content:flex-end}.skft{font-size:10.5px}.skft .sks,.skl{display:none}}
 .anl{position:fixed;inset:0;z-index:7000;background:rgba(3,10,20,.72);display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto}
 .anl[hidden]{display:none}
 .anlbox{position:relative;width:min(860px,100%);background:#fff;color:#1c2b3a;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden}
@@ -1776,7 +1781,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
 </svg></span><div class="eyebrow">UPTD BPAM Banjarbakula · Dinas PUPR Prov. Kalimantan Selatan</div></div>
     <h2 id="iTitle" class="wm"><span class="wm1 w">GeoSPAM</span><span class="wm2row w"><span class="wm2">BAKULA</span><i></i></span></h2>
     <p class="lead"><b style="color:#fff">WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula.</b> Air baku dari Bendung Karang Intan disalurkan ke PTAM Bandarmasih dan PTAM Intan Banjar, serta diolah di IPA Pinus menjadi air curah untuk PTAM Intan Banjar dan PTAM Berkah Banua. Dalam satu peta interaktif.</p>
-    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg>Tur jaringan</button><button class="btn-tour b3" id="btn3dI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2l-8 4.6-8-4.6V7.4z"/><path d="m4 7.4 8 4.6 8-4.6M12 12v9.2"/></svg>Mode 3D<em>baru</em></button><button class="btn-tour" id="btnRmI"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg>Peta jalan</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg> baca KTI</a></span></div>
+    <div class="icta"><button class="btn-go" id="btnGo">Jelajahi peta →</button><button class="btn-tour" id="btnTourI"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg>Tur jaringan</button><button class="btn-tour b3" id="btn3dI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.8 20 7.4v9.2l-8 4.6-8-4.6V7.4z"/><path d="m4 7.4 8 4.6 8-4.6M12 12v9.2"/></svg>Mode 3D<em>baru</em></button><button class="btn-tour" id="btnRmI"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg>Peta jalan</button><button class="btn-tour" id="btnSkI"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg>Skematik</button><span class="ifoot">WebGIS Tahap 1 · data jaringan BPAM 2023–2026 · elevasi DEMNAS BIG · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener" style="color:#99e9f2"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg> baca KTI</a></span></div>
     <div class="ianl"><div class="ianlh">Analisa air baku</div><div class="ianlg">
       <button data-anl="h"><span class="ic" style="--c:#1c7ed6"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><b>Hidrologi</b><span id="ianH">Tinggi air bendung &amp; hujan · live</span></button>
       <button data-anl="q"><span class="ic" style="--c:#0ca678"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span><b>Kualitas air baku</b><span>Kekeruhan, bakteri, sisa klor</span></button>
@@ -3531,6 +3536,12 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 })();
 </script>
 
+<div id="skem" class="skem" hidden role="dialog" aria-modal="true" aria-labelledby="skemT">
+  <div class="skhd"><div><h2 id="skemT">Skematik Sistem SPAM <span class="skl">Regional </span>Banjarbakula</h2><p>Alur air dari Intake Karang Intan sampai titik serah · dengan perkiraan SR · Nov 2026</p></div>
+    <div class="skbt"><button id="skFit" title="Tampilkan utuh">Utuh</button><a href="img/Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.pdf" download>PDF</a><a href="img/skematik_sr.webp" download="Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.webp">Gambar</a><button id="skX" class="skx" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button></div></div>
+  <div id="skMap"></div>
+  <div class="skft">Cubit/scroll untuk memperbesar, geser untuk berpindah. <b>SR</b> per offtake adalah perkiraan (±80 SR per L/dtk, dasar NK SPAM Regional 2025); data resmi: 60.353 SR terlayani (SPM Kemendagri TW II 2026).<span class="sks"> Sumber: RPAM 2024, Sekilas BPAM, Audit Teknis IPA II (2025), SIPA, NK 2025, PKS offtaker, data operasional BPAM.</span></div>
+</div>
 <div id="anl" class="anl" hidden role="dialog" aria-modal="true" aria-labelledby="anlT">
   <div class="anlbox">
     <button class="anlx" id="anlX" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
@@ -3598,6 +3609,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         <p class="anllead">Analisa dan alat lain di GeoSPAM. Pilih salah satu; panel ini akan ditutup dan alat terbuka di peta.</p>
         <div class="anlgo">
           <button data-go="src"><span class="ic" style="--c:#495057"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span><b>Sumber data</b><span>Lihat dan unduh semua data per instansi: BWS, BPAM, lab, BMKG, model</span></button>
+          <button data-go="skem"><span class="ic" style="--c:#0b7285"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg></span><b>Skematik sistem</b><span>Alur intake → IPA → titik serah, kapasitas, pompa &amp; perkiraan SR</span></button>
           <button data-go="bocor"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-warn"/></svg></span><b>Riwayat kebocoran pipa</b><span>5 kejadian 2021–2026 di sambungan GRP DN 1.200, bentang rawan, foto &amp; penanganan</span></button>
           <button data-go="nrc"><span class="ic" style="--c:#e8590c"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Neraca debit &amp; kubikasi intake</b><span>Debit keluar intake per offtaker, harian, unduh Excel laporan BWS</span></button>
           <button data-go="tele"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg></span><b>Telemetri live</b><span>Flowmeter DN900, Pematang, Prased, AWLR, status intake darurat</span></button>
@@ -3655,6 +3667,20 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 </div>
 <script>
 window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden = false; m.scrollTop = 0; document.body.style.overflow = "hidden"; };
+// Skematik sistem (gambar statis, bisa zoom/geser)
+(function(){ const m = document.getElementById("skem"); if (!m) return; let sm = null; const W = 4160, H = 2720, B = [[0,0],[H,W]];
+  const fit = () => { if (!sm) return; if (innerWidth > 820) return sm.fitBounds(B, {animate:false}); const z = Math.log2(sm.getSize().y / H) + 0.1; sm.setView([H/2, sm.getSize().x / 2 / Math.pow(2, z)], z, {animate:false}); };
+  window.skemOpen = () => { m.hidden = false; document.body.style.overflow = "hidden"; try{ if (location.hash !== "#skematik") history.replaceState(null, "", "#skematik"); }catch(e){}
+    if (!sm){ sm = L.map("skMap", {crs:L.CRS.Simple, minZoom:-4, maxZoom:2, zoomSnap:.25, zoomDelta:.5, attributionControl:false, maxBounds:L.latLngBounds(B).pad(.15), maxBoundsViscosity:.8});
+      L.imageOverlay("img/skematik_sr.webp", B).addTo(sm); }
+    setTimeout(() => { sm.invalidateSize(); fit(); }, 60); };
+  const close = () => { m.hidden = true; document.body.style.overflow = ""; if (location.hash === "#skematik") try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
+  document.getElementById("skX").onclick = close; document.getElementById("skFit").onclick = fit;
+  const bi = document.getElementById("btnSkI"); if (bi) bi.onclick = e => { e.stopPropagation(); window.closeIntro && window.closeIntro(true); setTimeout(window.skemOpen, 300); };
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
+  addEventListener("resize", () => { if (!m.hidden && sm) sm.invalidateSize(); });
+  if (location.hash === "#skematik") setTimeout(() => { window.closeIntro && window.closeIntro(true); window.skemOpen(); }, 400);
+})();
 (function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|analisa-lain|sumber-data)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
   window.anlClose = close;
   document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
@@ -4042,7 +4068,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   tabs.forEach(b => b.addEventListener("click", () => { try{ history.replaceState(null, "", location.pathname + location.search + "#" + T2H[b.dataset.t]); if (b.dataset.t !== "l" && b.dataset.t !== "s") localStorage.setItem("bpam_anl_tab", b.dataset.t); }catch(e){} }));
   document.querySelectorAll(".anlgo [data-go]").forEach(b => b.onclick = () => { const g = b.dataset.go; if (g === "src"){ document.querySelector('.anltabs [data-t="s"]').click(); return; } window.anlClose();
     setTimeout(() => { if (g === "nrc") window.nrcOpen && window.nrcOpen(); else if (g === "tele"){ const t = document.getElementById("tele"); t && t.classList.remove("min"); }
-      else if (g === "prof") document.getElementById("btnProf").click(); else if (g === "awan") window.awanShow && window.awanShow(); else if (g === "3d") window.open3D && window.open3D(); else if (g === "rm") document.getElementById("btnRm").click(); else if (g === "bocor") window.bocorRingkas && window.bocorRingkas(); }, 250); });
+      else if (g === "prof") document.getElementById("btnProf").click(); else if (g === "awan") window.awanShow && window.awanShow(); else if (g === "3d") window.open3D && window.open3D(); else if (g === "rm") document.getElementById("btnRm").click(); else if (g === "bocor") window.bocorRingkas && window.bocorRingkas(); else if (g === "skem") window.skemOpen && window.skemOpen(); }, 250); });
   const btnA = document.getElementById("btnAnl"); if (btnA) btnA.onclick = () => { let t = "h"; try{ t = localStorage.getItem("bpam_anl_tab") || "h"; }catch(e){} window.anlOpen(t); };
   document.querySelectorAll(".ianl [data-anl]").forEach(b => b.onclick = () => { const t = b.dataset.anl; window.closeIntro && window.closeIntro(true); setTimeout(() => { if (t === "n") window.nrcOpen && window.nrcOpen(); else window.anlOpen(t); }, 450); });
   // status hidrologi live di kartu tampilan awal
