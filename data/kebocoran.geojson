@@ -1,0 +1,342 @@
+{
+ "type": "FeatureCollection",
+ "name": "kebocoran",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     114.944752,
+     -3.457072
+    ]
+   },
+   "properties": {
+    "no": 1,
+    "sta": 2075,
+    "tgl": "2021-09-23",
+    "hari": "Kamis",
+    "jam": "±19.00",
+    "lokasi": "Area jembatan Sei Landas, Desa Mandikapau, Kec. Karang Intan",
+    "kerusakan": "Sambungan pipa GRP DN 1.200 mm bergeser (dislokasi)",
+    "langkah": [
+     [
+      "23–26 Sep",
+      "Bongkar dengan alat berat, keringkan sisa air dalam pipa"
+     ],
+     [
+      "27 Sep–3 Okt",
+      "Siapkan alat berat lebih besar, datangkan teknisi ahli pipa GRP dari luar daerah"
+     ],
+     [
+      "4–5 Okt",
+      "Potong dan luruskan (alignment) pipa GRP"
+     ],
+     [
+      "6–9 Okt",
+      "Sambung pipa, pasang coupling, klem dan packing"
+     ],
+     [
+      "10 Okt",
+      "Cor beton pengunci sambungan"
+     ],
+     [
+      "13 Okt",
+      "Timbun kembali"
+     ]
+    ],
+    "selesai": "2021-10-13",
+    "lama": "20 hari",
+    "pengganti": "Air baku dari PTAM Intan Banjar 150 L/dtk lewat pipa HDPE Ø300 mm ke IPA 250 (24 Sep–13 Okt 2021)",
+    "dampak": "Produksi air curah turun ke 150 L/dtk (Muslimin 100, IPA Pinus PTAM 50) = 60% kebutuhan PTAM Intan Banjar",
+    "laporan": "Laporan Kegiatan BPAM No. 600.1.16/031/BPAM-BANJARBAKULA, 13 Okt 2021",
+    "foto": [
+     [
+      "bocor1a",
+      "Pemasangan coupling dan klem pada sambungan GRP DN 1.200 (2021)"
+     ],
+     [
+      "bocor1b",
+      "Pembesian beton pengunci sambungan (2021)"
+     ],
+     [
+      "bocor1c",
+      "Bekisting beton pengunci sambungan (2021)"
+     ]
+    ],
+    "nama": "Kebocoran 1",
+    "pipa": "Transmisi air baku GRP DN 1.200 mm (Intake Karang Intan – Titik Pergantian Pipa)",
+    "sumber": "Laporan Kegiatan BPAM No. 600.1.16/031/BPAM-BANJARBAKULA, 13 Okt 2021; koordinat dari penanda Google Earth Ade (Nov 2026)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     114.939542,
+     -3.450725
+    ]
+   },
+   "properties": {
+    "no": 2,
+    "sta": 3115,
+    "tgl": "2024-01-07",
+    "hari": "Minggu",
+    "jam": "±22.00",
+    "lokasi": "Area jembatan Sei Landas, Desa Mandikapau (persilangan jalan)",
+    "kerusakan": "Sambungan pipa GRP DN 1.200 mm bergeser (dislokasi)",
+    "langkah": [
+     [
+      "8–9 Jan",
+      "Bongkar dengan alat berat, keringkan sisa air dalam pipa"
+     ],
+     [
+      "9–11 Jan",
+      "Siapkan lokasi dan alat berat lebih besar"
+     ],
+     [
+      "11–12 Jan",
+      "Potong dan luruskan pipa GRP"
+     ],
+     [
+      "12–14 Jan",
+      "Sambung pipa, pasang coupling, klem dan packing"
+     ],
+     [
+      "14 Jan",
+      "Cor beton pengunci sambungan"
+     ],
+     [
+      "15 Jan",
+      "Timbun kembali"
+     ]
+    ],
+    "selesai": "2024-01-15",
+    "lama": "±8 hari",
+    "pengganti": "Intake PTAM Intan Banjar di Pinus (irigasi Riam Kanan, izin BWS Kalimantan III) ±200 L/dtk, 160 L/dtk untuk BPAM (9–22 Jan 2024)",
+    "dampak": "Produksi air curah 150 L/dtk (Muslimin 100, Guntung Manggis 50) = 35% kebutuhan PTAM Intan Banjar",
+    "laporan": "Laporan Kegiatan BPAM No. 600.1.16/031/BPAM-BANJARBAKULA, 22 Jan 2024",
+    "foto": [
+     [
+      "bocor2a",
+      "Sambungan GRP DN 1.200 yang bergeser (Jan 2024)"
+     ],
+     [
+      "bocor2b",
+      "Galian dan pemasangan klem sambungan (Jan 2024)"
+     ],
+     [
+      "bocor2c",
+      "Pembesian beton pengunci sambungan (Jan 2024)"
+     ]
+    ],
+    "nama": "Kebocoran 2",
+    "pipa": "Transmisi air baku GRP DN 1.200 mm (Intake Karang Intan – Titik Pergantian Pipa)",
+    "sumber": "Laporan Kegiatan BPAM No. 600.1.16/031/BPAM-BANJARBAKULA, 22 Jan 2024; koordinat dari penanda Google Earth Ade (Nov 2026)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     114.946203,
+     -3.457468
+    ]
+   },
+   "properties": {
+    "no": 3,
+    "sta": 1908,
+    "tgl": "2024-04-08",
+    "hari": "Senin",
+    "jam": "±04.45",
+    "lokasi": "Area Sei Landas, Desa Mandikapau (H-2 Idulfitri)",
+    "kerusakan": "Kebocoran sambungan pipa GRP DN 1.200 mm; aksesoris sambungan tidak tersedia di pasaran sehingga dibuat duplikat oleh vendor",
+    "langkah": [
+     [
+      "8 Apr",
+      "Identifikasi titik bocor dan lokasi terdampak limpasan (kolam ikan)"
+     ],
+     [
+      "8 Apr dst",
+      "Skenario 1: buka intake PTAM Intan Banjar dari irigasi Riam Kanan"
+     ],
+     [
+      "8 Apr dst",
+      "Skenario 2: 9 truk tangki (BPAM, Satpol PP & Damkar, BPBD, BPPW), ±315 rit = 1.575 m³"
+     ],
+     [
+      "10 Apr",
+      "Skenario 3–4: uji pompa intake dan pompa banjir BWS, dihentikan (tidak layak)"
+     ],
+     [
+      "15–17 Apr",
+      "Skenario 5–6: pompa celup di saluran irigasi, aksesoris pembagi ke WTP 500"
+     ],
+     [
+      "17–18 Apr",
+      "Bongkar titik bocor, pasang aksesoris sambungan buatan vendor"
+     ]
+    ],
+    "selesai": "",
+    "lama": "≥10 hari (laporan 17 Apr 2024 masih proses perbaikan)",
+    "pengganti": "Intake PTAM Intan Banjar ±280 L/dtk, 170 L/dtk untuk BPAM",
+    "dampak": "Produksi air curah 170 L/dtk (Muslimin 120, Guntung Manggis 50) = 47% kebutuhan PTAM Intan Banjar; limpasan merendam kolam ikan warga",
+    "laporan": "Laporan Kegiatan BPAM No. 600.1.16/137/BPAM-BANJARBAKULA, 17 Apr 2024",
+    "verifikasi": "Koordinat di laporan (3°27'23,0\"S 114°56'32,8\"E) jatuh di STA ±2.343 m, ±440 m dari titik ini. Titik ini mengikuti penanda di Google Earth Ade.",
+    "foto": [
+     [
+      "bocor3a",
+      "Limpasan kebocoran ke kolam ikan warga (Apr 2024)"
+     ],
+     [
+      "bocor3b",
+      "Penggalian titik kebocoran (Apr 2024)"
+     ],
+     [
+      "bocor3c",
+      "Titik kebocoran setelah dibuka (Apr 2024)"
+     ]
+    ],
+    "nama": "Kebocoran 3",
+    "pipa": "Transmisi air baku GRP DN 1.200 mm (Intake Karang Intan – Titik Pergantian Pipa)",
+    "sumber": "Laporan Kegiatan BPAM No. 600.1.16/137/BPAM-BANJARBAKULA, 17 Apr 2024; koordinat dari penanda Google Earth Ade (Nov 2026)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     114.938129,
+     -3.449761
+    ]
+   },
+   "properties": {
+    "no": 4,
+    "sta": 3309,
+    "tgl": "2024-09-21",
+    "hari": "Sabtu",
+    "jam": "±13.00",
+    "lokasi": "Area jembatan Sei Landas, Desa Mandikapau",
+    "kerusakan": "Kebocoran sambungan pipa GRP DN 1.200 mm",
+    "langkah": [
+     [
+      "21 Sep",
+      "Identifikasi titik dan penyebab, koordinasi dengan pihak terkait"
+     ],
+     [
+      "21–22 Sep",
+      "Buka valve intake PTAM Intan Banjar di Pinus II (valve macet, >24 jam)"
+     ],
+     [
+      "22–23 Sep",
+      "Gali titik bocor, buat parit buangan sisa air dalam pipa"
+     ],
+     [
+      "22 Sep 22.30 dst",
+      "Truk tangki air bersih untuk wilayah terdampak"
+     ],
+     [
+      "Berikutnya",
+      "Potong pipa, pasang klem, luruskan jalur, uji tekan, beton pengunci, timbun"
+     ]
+    ],
+    "selesai": "",
+    "lama": "Tanggal selesai belum tercatat di laporan 23 Sep 2024",
+    "pengganti": "Intake PTAM Intan Banjar di Pinus 270 L/dtk mulai 22 Sep 2024",
+    "dampak": "Produksi air curah 145 L/dtk (Muslimin 100, Guntung Manggis 45)",
+    "laporan": "Laporan Kegiatan BPAM No. 600.1.16/230/BPAM-BANJARBAKULA, 23 Sep 2024",
+    "foto": [
+     [
+      "bocor4a",
+      "Pengecekan lokasi kebocoran, 22 Sep 2024"
+     ],
+     [
+      "bocor4b",
+      "Penggalian titik kebocoran (Sep 2024)"
+     ]
+    ],
+    "nama": "Kebocoran 4",
+    "pipa": "Transmisi air baku GRP DN 1.200 mm (Intake Karang Intan – Titik Pergantian Pipa)",
+    "sumber": "Laporan Kegiatan BPAM No. 600.1.16/230/BPAM-BANJARBAKULA, 23 Sep 2024; koordinat dari penanda Google Earth Ade (Nov 2026)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     114.940101,
+     -3.453605
+    ]
+   },
+   "properties": {
+    "no": 5,
+    "sta": 2771,
+    "tgl": "2026-10-09",
+    "hari": "Jumat",
+    "jam": "20.20",
+    "lokasi": "Desa Sungai Landas, Kec. Karang Intan, Kab. Banjar",
+    "kerusakan": "Kebocoran sambungan pipa GRP DN 1.200 mm",
+    "langkah": [
+     [
+      "9–10 Okt",
+      "Identifikasi, koordinasi, mobilisasi alat dan material"
+     ],
+     [
+      "9 Okt",
+      "Operasikan intake darurat BPAM 150 L/dtk + intake darurat IPA Pinus 1 PTAM Intan Banjar 127 L/dtk"
+     ],
+     [
+      "10–12 Okt",
+      "Gali, amankan lokasi, keringkan pipa"
+     ],
+     [
+      "12 Okt dst",
+      "Truk tangki air bersih untuk wilayah terdampak"
+     ],
+     [
+      "12–13 Okt",
+      "Potong pipa, pasang klem, luruskan jalur presisi"
+     ],
+     [
+      "13 Okt",
+      "Uji sambungan dengan aliran 300 L/dtk; intake darurat BPAM dihentikan"
+     ],
+     [
+      "14–17 Okt",
+      "Cor beton pengunci sambungan"
+     ],
+     [
+      "19 Okt",
+      "Timbun kembali; intake normal 590 L/dtk"
+     ]
+    ],
+    "selesai": "2026-10-19",
+    "lama": "10 hari",
+    "pengganti": "Intake darurat BPAM 150 L/dtk (irigasi) + intake darurat IPA Pinus 1 PTAM Intan Banjar 127 L/dtk",
+    "dampak": "Pulih 70% (420 L/dtk) pada 13 Okt; normal 590 L/dtk + prased 65 L/dtk pada 19 Okt 2026",
+    "laporan": "Laporan Kegiatan BPAM (penanganan 9–19 Okt 2026)",
+    "foto": [
+     [
+      "bocor5a",
+      "Galian pipa GRP di titik kebocoran, 12 Okt 2026"
+     ],
+     [
+      "bocor5b",
+      "Pemotongan pipa dan pemasangan klem (Okt 2026)"
+     ],
+     [
+      "bocor5c",
+      "Klem sambungan terpasang (Okt 2026)"
+     ]
+    ],
+    "nama": "Kebocoran 5",
+    "pipa": "Transmisi air baku GRP DN 1.200 mm (Intake Karang Intan – Titik Pergantian Pipa)",
+    "sumber": "Laporan Kegiatan BPAM (penanganan 9–19 Okt 2026); koordinat dari penanda Google Earth Ade (Nov 2026)"
+   }
+  }
+ ]
+}
