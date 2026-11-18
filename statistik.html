@@ -35,6 +35,11 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
 .hr div{background:var(--a);border-radius:3px 3px 0 0;opacity:.85}
 .note{color:var(--mu);font-size:12px;margin-top:14px}
 .em{color:var(--mu);text-align:center;padding:30px 0}
+.an{border-color:rgba(34,184,207,.35);background:linear-gradient(160deg,rgba(34,184,207,.10),rgba(112,72,232,.08)),var(--card)}
+.an ul{margin:0;padding-left:18px}.an li{margin:6px 0;line-height:1.5}.an li b{color:#fff}.an .tg{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;margin-right:6px;vertical-align:1px}
+.tg.up{background:rgba(64,192,87,.18);color:#8ce99a}.tg.dn{background:rgba(250,82,82,.18);color:#ffa8a8}.tg.eq{background:rgba(255,255,255,.1);color:var(--mu)}
+.hint{color:var(--mu);font-size:12px;margin:-4px 0 10px;line-height:1.45}
+.rk{margin-top:10px;padding-top:10px;border-top:1px dashed var(--ln);font-size:12.5px;color:var(--mu)}.rk b{color:var(--tx)}
 @media (max-width:720px){.kpi{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.row{grid-template-columns:100px 1fr 40px}}
 </style>
 </head>
@@ -54,15 +59,16 @@ select,a.bk{font:inherit;font-size:13px;color:var(--tx);background:var(--card);b
     <div class="k"><b id="kP">–</b><span>Hari tersibuk</span></div>
     <div class="k"><b id="kB">–</b><span>Disaring (bot, uji otomatis, luar negeri)</span></div>
   </div>
-  <div class="card"><h2>Kunjungan per hari</h2><div class="bars" id="bars"></div><div class="ax"><span id="a0"></span><span id="a1"></span></div></div>
+  <div class="card an"><h2>Ringkasan &amp; analisa</h2><ul id="anl"><li>Memuat…</li></ul><div class="rk" id="rk"></div></div>
+  <div class="card"><h2>Kunjungan per hari</h2><p class="hint">Tinggi batang = jumlah kunjungan nyata per hari. Arahkan kursor ke batang untuk melihat angka dan pengunjung unik. Batang pudar = hari tanpa kunjungan.</p><div class="bars" id="bars"></div><div class="ax"><span id="a0"></span><span id="a1"></span></div></div>
   <div class="g2">
-    <div class="card"><h2>Asal kunjungan</h2><div id="ref"></div></div>
-    <div class="card"><h2>Perangkat</h2><div id="dev"></div></div>
-    <div class="card"><h2>Perkiraan kota</h2><div id="kota"></div></div>
-    <div class="card"><h2>Fitur yang dipakai</h2><div id="ev"></div></div>
-    <div class="card"><h2>Tingkat kinerja perangkat</h2><div id="perf"></div></div>
+    <div class="card"><h2>Asal kunjungan</h2><p class="hint">Dari mana orang membuka WebGIS. "Aplikasi homescreen" = dibuka dari ikon yang sudah dipasang di HP/PC (pengguna tetap); "Link langsung" = mengetik/bookmark; WhatsApp/Telegram = dari link yang dibagikan.</p><div id="ref"></div></div>
+    <div class="card"><h2>Perangkat</h2><p class="hint">HP biasanya dipakai di lapangan atau saat rapat, Laptop/PC dipakai di kantor untuk analisa.</p><div id="dev"></div></div>
+    <div class="card"><h2>Perkiraan kota</h2><p class="hint">Diperkirakan dari jaringan internet. Kota seperti Palembang/Jakarta sering berarti jalur operator seluler, bukan lokasi orangnya.</p><div id="kota"></div></div>
+    <div class="card"><h2>Fitur yang dipakai</h2><p class="hint">Tombol/fitur yang diklik pengunjung. Fitur yang jarang dipakai bisa dipromosikan atau disederhanakan.</p><div id="ev"></div></div>
+    <div class="card"><h2>Tingkat kinerja perangkat</h2><p class="hint">WebGIS otomatis menyesuaikan tampilan: Penuh (perangkat kuat), Ringan, Hemat (perangkat lemah/baterai rendah).</p><div id="perf"></div></div>
   </div>
-  <div class="card"><h2>Jam ramai (WITA)</h2><div class="hr" id="hr"></div><div class="ax"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div></div>
+  <div class="card"><h2>Jam ramai (WITA)</h2><p class="hint">Jumlah kunjungan per jam selama periode terpilih. Membantu menentukan kapan data perlu paling mutakhir dan kapan aman melakukan pembaruan.</p><div class="hr" id="hr"></div><div class="ax"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div></div>
   <p class="note">"Pengunjung harian unik" menghitung satu perangkat sekali per hari. Kota diperkirakan dari jaringan internet dan bisa meleset (misalnya tercatat Jakarta atau Singapura untuk operator seluler). Data mulai tercatat sejak fitur ini dipasang, 9 November 2026. Angka utama hanya pengunjung nyata dari Indonesia; kunjungan bot/perayap, uji otomatis, salinan deploy dan akses luar negeri dihitung terpisah pada kotak "Disaring". Untuk data 9–13 November (sebelum penyaring dipasang) penyaringan dilakukan dari perkiraan kota, sehingga sebaran jam dan perangkat hari-hari itu merupakan perkiraan proporsional.</p>
 </div>
 <script>
@@ -101,6 +107,37 @@ async function load(){
   document.getElementById("a0").textContent = tglf(D[0].tgl); document.getElementById("a1").textContent = tglf(D[D.length-1].tgl);
   list("ref", agg("ref")); list("dev", agg("dev")); list("kota", agg("kota")); list("ev", agg("ev")); list("perf", agg("perf"));
   const H = Array(24).fill(0); D.forEach(d => (d.h||[]).forEach((v,i) => H[i] += v)); const hm = Math.max(1, ...H);
+  // ---------- Ringkasan & analisa otomatis ----------
+  (function(){
+    const pct = (a,b) => b ? Math.round(a/b*100) : 0, A = D.filter(d => d.tgl >= "2026-11-09"), act = A.filter(d => d.v > 0);
+    const V = sum(d => d.v), U = sum(d => d.u), B = sum(d => (d.bot||0) + (d.luar||0)), L = [];
+    if (!V){ document.getElementById("anl").innerHTML = "<li>Belum ada kunjungan pada periode ini.</li>"; return; }
+    L.push(`<b>${nf(V)} kunjungan nyata</b> dari <b>${nf(U)}</b> pengunjung harian unik; rata-rata <b>${(V/Math.max(1,act.length)).toFixed(1).replace(".",",")} kunjungan</b> per hari aktif (${act.length} dari ${A.length} hari ada kunjungan). Satu pengunjung rata-rata membuka ${(V/Math.max(1,U)).toFixed(1).replace(".",",")} kali sehari — tanda dipakai berulang untuk kerja, bukan sekadar dilihat sekali.`);
+    const l7 = D.slice(-7).reduce((a,d) => a+d.v, 0), p7 = D.slice(-14,-7).reduce((a,d) => a+d.v, 0);
+    if (p7) { const ch = Math.round((l7-p7)/p7*100), c = ch > 10 ? "up" : ch < -10 ? "dn" : "eq";
+      L.push(`<span class="tg ${c}">${ch > 0 ? "+" : ""}${ch}%</span>7 hari terakhir ${nf(l7)} kunjungan dibanding ${nf(p7)} pada 7 hari sebelumnya${c === "up" ? " — pemakaian meningkat." : c === "dn" ? " — pemakaian menurun; pertimbangkan membagikan ulang link atau fitur baru." : " — pemakaian stabil."}`); }
+    const H = Array(24).fill(0); D.forEach(d => (d.h||[]).forEach((v,i) => H[i] += v)); const ht = H.reduce((a,b) => a+b, 0);
+    if (ht){ const kerja = H.slice(8,17).reduce((a,b) => a+b, 0), pagi = H.slice(5,8).reduce((a,b) => a+b, 0), mlm = H.slice(17,24).reduce((a,b) => a+b, 0) + H.slice(0,5).reduce((a,b) => a+b, 0);
+      const top = H.map((v,i) => [v,i]).sort((a,b) => b[0]-a[0]).slice(0,2).map(x => String(x[1]).padStart(2,"0") + ".00");
+      L.push(`Jam paling ramai pukul <b>${top.join(" dan ")}</b> WITA. Porsi jam kerja (08–17) <b>${pct(kerja,ht)}%</b>, pagi sebelum kerja (05–08) ${pct(pagi,ht)}%, sore–malam ${pct(mlm,ht)}%${pct(pagi+mlm,ht) >= 40 ? " — cukup banyak dibuka di luar jam kantor, kemungkinan untuk memantau kondisi intake/pasokan dari rumah atau lapangan." : "."}`); }
+    const dv = agg("dev"), hp = dv["HP"]||0, pc = dv["Laptop/PC"]||0;
+    if (hp+pc) L.push(`Perangkat: <b>HP ${pct(hp,hp+pc)}%</b>, Laptop/PC ${pct(pc,hp+pc)}%. ${Math.abs(hp-pc) <= (hp+pc)*0.1 ? "Seimbang antara HP (lapangan, rapat) dan Laptop/PC (analisa di kantor), jadi kedua tampilan sama pentingnya." : hp > pc ? "Mayoritas dibuka dari HP, jadi tampilan HP (popup, tombol, teks) harus tetap jadi prioritas." : "Mayoritas dibuka dari Laptop/PC, sesuai pemakaian analisa di kantor."}`);
+    const rf = agg("ref"), rt = Object.values(rf).reduce((a,b) => a+b, 0), app = rf.aplikasi||0, sh = (rf.wa||0) + (rf.telegram||0);
+    if (rt) L.push(`Asal kunjungan: <b>${pct(app,rt)}%</b> dari ikon aplikasi di homescreen (pengguna tetap), ${pct(rf.langsung||0,rt)}% link langsung/bookmark${sh ? `, ${pct(sh,rt)}% dari link WhatsApp/Telegram` : ", dan belum ada dari link WhatsApp/Telegram — membagikan link per analisa (#kualitas, #hidrologi, #skematik) ke grup kerja bisa menambah pengguna baru"}.`);
+    const kt = agg("kota"), kk = Object.entries(kt).reduce((a,[k,v]) => (/banjar|martapura/i.test(k) ? a+v : a), 0), kT = Object.values(kt).reduce((a,b) => a+b, 0);
+    if (kT) L.push(`Lokasi: <b>${pct(kk,kT)}%</b> terbaca dari wilayah Banjarbakula (Banjarmasin, Banjarbaru, Banjar). Sisanya terbaca di kota lain (mis. Palembang) yang umumnya jalur jaringan operator, bukan pengunjung luar daerah.`);
+    const ev = Object.entries(agg("ev")).filter(([k]) => k !== "turun").sort((a,b) => b[1]-a[1]);
+    L.push(ev.length ? `Fitur paling sering dipakai: ${ev.slice(0,3).map(([k,v]) => `<b>${NM[k]||k}</b> (${v}×)`).join(", ")}. Fitur lain belum banyak diklik.` : `Belum ada fitur khusus yang diklik pada periode ini; pengunjung lebih banyak melihat peta dan popup.`);
+    const pf = agg("perf"), pT = Object.values(pf).reduce((a,b) => a+b, 0);
+    if (pT) L.push(`Kinerja perangkat: ${pct(pf.Penuh||0,pT)}% Penuh, ${pct(pf.Ringan||0,pT)}% Ringan, <b>${pct(pf.Hemat||0,pT)}% Hemat</b>${(pf.Hemat||0)/pT > .3 ? " — cukup banyak perangkat lemah/baterai rendah, jadi mode ringan otomatis memang diperlukan." : "."}`);
+    L.push(`Disaring: <b>${nf(B)}</b> kunjungan bot, uji otomatis dan akses luar negeri (${pct(B,V+B)}% dari semua lalu lintas) tidak dihitung, agar angka di atas mencerminkan pengguna nyata.`);
+    document.getElementById("anl").innerHTML = L.map(x => `<li>${x}</li>`).join("");
+    const R = [];
+    if (!sh) R.push("bagikan link analisa langsung ke grup WhatsApp kerja");
+    R.push("pertahankan tampilan HP tetap ringkas karena hampir separuh pengunjung memakai HP");
+    R.push("pantau tren mingguan setelah ada fitur atau data baru");
+    document.getElementById("rk").innerHTML = `<b>Saran:</b> ${R.join("; ")}. Pengguna WebGIS masih kelompok kecil (staf BPAM dan mitra), jadi naik-turun beberapa kunjungan per hari sudah terlihat besar di grafik.`;
+  })();
   document.getElementById("hr").innerHTML = H.map((v,i) => `<div style="height:${Math.max(2, v/hm*100)}%" title="${String(i).padStart(2,"0")}.00: ${v}"></div>`).join("");
 }
 document.getElementById("rg").onchange = load; load();
