@@ -2381,7 +2381,7 @@ function lerengLayer(){
           ${p.fk.map(r => `<tr><td style="${td}">${esc(r[0])}</td><td style="${td};text-align:center"><b style="color:${fkc(r[1])}">${esc(r[1])}</b></td><td style="${td};text-align:center;color:${fkc(r[2])}">${esc(r[2])}</td></tr>`).join("")}</table>
         <div style="font-size:11.5px;color:var(--muted);margin-top:4px">Batas aman FK ≥ 1,5 (normal) dan ≥ 1,3 (bocor/surut); FK &lt; 1,0 berarti longsor.</div>
         <div style="font-size:12px;margin-top:6px;padding:6px 8px;border-radius:6px;background:rgba(232,89,12,.08)"><b>Uji kepekaan:</b> ${esc(p.uji)}</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:6px;border-top:1px solid var(--line);padding-top:5px">Analisa BPAM Banjarbakula (Nov 2026), metode Bishop. Geometri dari titik tinggi peta situasi dan parameter tanah dari uji lab pada Laporan Reviu Desain BWS Kalimantan III (2025). *Dasar saluran tidak terukur, diasumsikan 1,5 m di bawah muka air; elevasi mengikuti datum konsultan.</div></div>`, {maxWidth:340, minWidth:260});
+        <div style="font-size:10.5px;color:var(--muted);margin-top:6px;border-top:1px solid var(--line);padding-top:5px">Analisa BPAM Banjarbakula (Nov 2026), metode Bishop. Geometri dari titik tinggi peta situasi dan parameter tanah dari uji lab pada Laporan Reviu Desain BWS Kalimantan III (2025). *Dasar saluran tidak terukur, diasumsikan 1,5 m di bawah muka air; elevasi mengikuti datum konsultan.</div></div>`, {maxWidth:340, minWidth:260, maxHeight:Math.max(320, window.innerHeight - (WIDE0 ? 170 : 260)), autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[20, WIDE0 ? 20 : 110]});
     }});
   let loaded = false;
   g.on("add", () => { if (loaded) return; loaded = true;
