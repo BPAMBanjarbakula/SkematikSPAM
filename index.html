@@ -3176,7 +3176,15 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   load(); setInterval(load, 10*60e3);
 })();
 
-if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  // versi baru: cek pembaruan saat dibuka/kembali ke aplikasi, lalu muat ulang otomatis sekali bila service worker baru mengambil alih
+  const hadSW = !!navigator.serviceWorker.controller; let swReload = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadSW || swReload) return; swReload = true; location.reload(); });
+  navigator.serviceWorker.register("sw.js", {updateViaCache:"none"}).then(reg => {
+    reg.update().catch(() => {});
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) reg.update().catch(() => {}); });
+  }).catch(() => {});
+}
 // ---------- mode layar TV / ruang kontrol
 (function(){
   $("#tvLogo").src = document.querySelector(".logo2 img").src;
