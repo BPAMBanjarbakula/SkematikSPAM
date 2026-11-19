@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Ir. Ade Nafis Prawira, S.T. · UPTD BPAM Banjarbakula">
 <title>GeoSPAM Bakula · WebGIS Jaringan Perpipaan SPAM Regional Banjarbakula</title>
 <meta name="description" content="Peta interaktif jaringan air baku dan air curah SPAM Regional Banjarbakula: Intake Karang Intan, IPA Pinus, dan 6 titik serah ke 3 PTAM. UPTD BPAM Banjarbakula.">
 <meta property="og:type" content="website">
@@ -957,6 +958,7 @@ body:not(.dark) .wxd,body:not(.dark) .wxfoot div{background:rgba(11,58,99,.06)}
 .ab26 .lg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 .ab26 .ft{font-size:11.5px;margin-top:6px;line-height:1.45}
 .ab26 .src{font-size:10px;opacity:.55;margin-top:4px}
+.icred{margin:4px 0 0;font-size:12px;color:rgba(255,255,255,.6);line-height:1.5}.icred b{color:rgba(255,255,255,.85);font-weight:600}
 #iNow{display:flex;align-items:flex-start;gap:10px;margin:-16px 0 22px;padding:10px 12px;border-radius:14px;background:rgba(99,230,190,.08);border:1px solid rgba(99,230,190,.28);font-size:13px;color:#d3f9d8;line-height:1.45;animation:fup .8s ease 1s both;max-width:640px}
 #iNow[hidden]{display:none}
 #iNow.warn{background:rgba(250,176,5,.10);border-color:rgba(250,176,5,.35);color:#fff3bf}
@@ -1802,6 +1804,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
     <div class="istats" id="istats"></div>
     <div id="iLive" hidden><span class="ilv"><i></i>LIVE</span><span id="iLiveTx"></span></div>
     <div id="iNow" hidden><span class="inb" id="iNowB">Kondisi hari ini</span><span id="iNowTx"></span></div>
+    <p class="icred">Dirancang &amp; dikembangkan oleh <b>Ir. Ade Nafis Prawira, S.T.</b> · JF Pengelola SDA Ahli Pertama, UPTD BPAM Banjarbakula · sejak 2024</p>
   </div>
 </div>
 <div id="rmap" role="dialog" aria-modal="true" aria-labelledby="rmTitle">
@@ -2119,6 +2122,7 @@ function tileOverlap(){ if (L.GridLayer.prototype._ovl) return; const o = L.Grid
   L.GridLayer.include({_ovl:true, _initTile:function(t){ o.call(this, t); const z = this.getTileSize(); t.style.width = (z.x + 1) + "px"; t.style.height = (z.y + 1) + "px"; }}); }
 if (window.PERF >= 1) tileOverlap();
 const map = L.map("map",{zoomControl:true,preferCanvas:false,attributionControl:true,zoomSnap:0.5,fadeAnimation:window.PERF < 2});
+map.attributionControl.setPrefix("GeoSPAM Bakula · dikembangkan oleh Ir. Ade Nafis Prawira, S.T.");
 window.__map = map;
 window.__perfTiles = () => { tileOverlap(); if (currentBase) currentBase.redraw(); };
 { let mvT; const de = document.documentElement;      // animasi aliran dijeda selama peta digeser/di-zoom (mode hemat)
