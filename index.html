@@ -2361,11 +2361,31 @@ function zonaTanahLayer(){
   g.on("add", () => setTimeout(() => g.bringToBack && g.bringToBack(), 50));
   return g;
 }
+function lerengLayer(){
+  // Analisa umum kerawanan lereng tanggul (kajian internal BPAM 2026) — hanya kelas umum, tanpa angka FK/parameter tanah
+  const g = L.geoJSON(null, {
+    pointToLayer: (f, ll) => L.circleMarker(ll, {radius:9, color:"#fff", weight:2, fillColor:f.properties.warna, fillOpacity:.95}),
+    onEachFeature: (f, l) => { const p = f.properties;
+      l.bindTooltip(p.sta + " · " + p.kelas, {direction:"top"});
+      l.bindPopup(`<div style="min-width:230px"><div style="font-size:11px;color:var(--muted)">Lereng tanggul ${esc(p.sta)} · ${esc(p.zona)} · lokasi bocor ${esc(p.bocor)}</div>
+        <b style="display:inline-block;margin:3px 0 6px;padding:2px 8px;border-radius:6px;color:#fff;background:${p.warna}">${esc(p.kelas)}</b>
+        <div style="font-size:12.5px;margin-bottom:4px"><b>Artinya:</b> ${esc(p.arti)}</div>
+        <div style="font-size:12.5px;margin-bottom:4px"><b>Yang perlu dilakukan:</b> ${esc(p.saran)}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:8px;border-top:1px solid var(--line);padding-top:6px">Pemicu utama: air bocoran pipa membuat tanah tanggul jenuh dan lebih lemah, diperparah tanah lunak yang tebal dan beban kendaraan. Pipa berada di dalam bidang longsor yang dianalisa, sehingga longsor dapat ikut merusak pipa.</div>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:5px">Sumber: analisa stabilitas lereng (metode Bishop) oleh BPAM Banjarbakula, Nov 2026. Ditampilkan sebagai kelas umum; hasil bergantung pada asumsi kedalaman saluran dan perlu dipastikan dengan pengukuran lapangan.</div></div>`, {maxWidth:320});
+    }});
+  let loaded = false;
+  g.on("add", () => { if (loaded) return; loaded = true;
+    fetch("data/kerawanan_lereng.geojson").then(r => r.json()).then(d => g.addData(d))
+      .catch(() => { loaded = false; toast("Data kerawanan lereng belum dapat dimuat."); }); });
+  return g;
+}
 const LAYERS = [
   {id:"transmisi", name:"Pipa transmisi air baku", lyr:lineLayer(DATA.transmisi_air_baku), on:true, sw:'<span class="sw" style="border-color:#1864ab"></span>', n:DATA.transmisi_air_baku.features.length + " ruas"},
   {id:"titik_ab", name:"Aset jalur air baku", lyr:pointLayer(DATA.titik_air_baku), on:true, sw:'<span class="dot" style="background:#f08c00"></span>', n:DATA.titik_air_baku.features.length + " titik"},
   {id:"bocor", name:"Riwayat kebocoran pipa GRP", lyr:bocorLayer(), on:true, sw:'<span class="dot" style="background:#e03131;box-shadow:0 0 0 3px rgba(224,49,49,.25)"></span>', n:BOCOR.length + " kejadian"},
   {id:"zona_tanah", name:"Zona kondisi tanah jalur GRP (ringkasan)", lyr:zonaTanahLayer(), on:false, sw:'<span class="sw" style="border-top:6px solid;border-image:linear-gradient(90deg,#2f9e44,#f59f00,#e8590c,#c92a2a) 1"></span>', n:"10 zona"},
+  {id:"lereng", name:"Kerawanan lereng tanggul (analisa)", lyr:lerengLayer(), on:false, sw:'<span class="dot" style="background:linear-gradient(90deg,#c92a2a 50%,#e8590c 50%)"></span>', n:"5 penampang"},
   {id:"distribusi", name:"Pipa distribusi air curah (JDU)", lyr:lineLayer(DATA.jaringan_distribusi), on:true, sw:'<span class="sw" style="border-color:#7048e8;border-top-width:3px"></span>', n:DATA.jaringan_distribusi.features.length + " ruas"},
   {id:"titik_d", name:"Aset jaringan distribusi", lyr:pointLayer(DATA.titik_distribusi), on:true, sw:'<span class="dot" style="background:#1098ad"></span>', n:DATA.titik_distribusi.features.length + " titik"},
   {id:"relief", name:"Peta elevasi berwarna", lyr:L.imageOverlay(DATA.relief.img, DATA.relief.bounds,{pane:"kontur", opacity:.8, interactive:false}), on:false, sw:'<span class="sw" style="border-top:8px solid;border-image:linear-gradient(90deg,#0f6e5a,#a6d96a,#fee08b,#e7643c,#7f3b08) 1"></span>', n:"DEM"},
@@ -2398,7 +2418,7 @@ LAYERS.forEach(L0 => {
   row.innerHTML = `<input type="checkbox" data-id="${L0.id}" ${on?"checked":""}> ${L0.sw} <span>${esc(L0.name)}</span><span class="cnt">${esc(L0.n)}</span>`;
   const cb = row.querySelector("input");
   cb.onchange = () => { cb.checked ? L0.lyr.addTo(map) : map.removeLayer(L0.lyr); saved[L0.id] = cb.checked; try{ localStorage.setItem("bpam_layers", JSON.stringify(saved)); }catch(e){} };
-  const grpName = {transmisi:"Jaringan pipa", zona_tanah:"Analisa tanah", distribusi:"Jaringan distribusi", relief:"Elevasi", sensor:"Rencana"}[L0.id];
+  const grpName = {transmisi:"Jaringan pipa", zona_tanah:"Analisa tanah &amp; lereng", distribusi:"Jaringan distribusi", relief:"Elevasi", sensor:"Rencana"}[L0.id];
   if (grpName) $("#layers").insertAdjacentHTML("beforeend", `<div class="lgrp">${grpName}</div>`);
   $("#layers").appendChild(row);
   if (on) L0.lyr.addTo(map);
