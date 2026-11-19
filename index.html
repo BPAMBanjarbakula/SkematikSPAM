@@ -2365,17 +2365,17 @@ function lerengLayer(){
   // Stabilitas lereng tanggul di 5 lokasi bocor GRP (Bishop; topografi & parameter tanah konsultan BWS 2025)
   const num = v => parseFloat(String(v).replace(",", "."));
   const g = L.geoJSON(null, {
-    pointToLayer: (f, ll) => L.circleMarker(ll, {radius:9, color:"#fff", weight:2.5, fillColor:"#e03131", fillOpacity:1}),
+    pointToLayer: (f, ll) => L.marker(ll, {icon:L.divIcon({className:"", iconSize:[24,24], iconAnchor:[12,12], popupAnchor:[0,-10], html:`<div style="width:24px;height:24px;border-radius:50%;background:#e03131;border:2.5px solid #fff;box-sizing:border-box;box-shadow:0 1px 4px rgba(0,0,0,.45);color:#fff;font:800 12px/19px system-ui,sans-serif;text-align:center">${f.properties.no}</div>`}), riseOnHover:true}),
     onEachFeature: (f, l) => { const p = f.properties;
-      l.bindTooltip(`${p.sta} · lereng ${p.status.toLowerCase()} · FK min ${p.fk_min}`, {direction:"top", offset:[0,-6]});
+      l.bindTooltip(`Kebocoran ${p.no} · ${p.sta} · lereng ${p.status.toLowerCase()} · FK min ${p.fk_min}`, {direction:"top", offset:[0,-6]});
       const bar = r => { const v = num(r[1]), w = Math.min(100, v / 3.5 * 100), c = v >= 1.5 ? "#2f9e44" : v >= 1.3 ? "#f59f00" : "#e03131";
         return `<div style="display:grid;grid-template-columns:112px minmax(0,1fr) 32px;align-items:center;gap:6px;margin:3px 0"><span style="font-size:12px">${esc(r[0])}</span>
           <span style="position:relative;height:9px;border-radius:5px;background:var(--line)"><span style="position:absolute;left:0;top:0;bottom:0;width:${w}%;border-radius:5px;background:${c}"></span>
           <span style="position:absolute;left:${1.3/3.5*100}%;top:-3px;bottom:-3px;width:2px;background:#e03131"></span></span><b style="font-size:12px;text-align:right">${esc(r[1])}</b></div>`; };
       const h = t => `<div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px">${t}</div>`;
       l.bindPopup(`<div style="box-sizing:border-box;width:100%;padding:12px 16px 14px;font-size:12.5px;line-height:1.45">
-        <div style="font-size:11px;color:var(--muted)">Stabilitas lereng tanggul · ${esc(p.zona)} · titik bocor ${esc(p.bocor)}</div>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:2px 0 4px"><b style="font-size:16px">${esc(p.sta)}</b>
+        <div style="font-size:11px;color:var(--muted)">Kebocoran ke-${p.no} (${esc(p.bocor)}) · stabilitas lereng tanggul · ${esc(p.zona)}</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:2px 0 4px"><span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font-weight:800;font-size:12px;align-items:center;justify-content:center">${p.no}</span><b style="font-size:16px">${esc(p.sta)}</b>
           <span style="padding:2px 9px;border-radius:999px;color:#fff;background:#2f9e44;font-weight:700">${esc(p.status)}</span>
           ${p.peka ? '<span style="padding:2px 9px;border-radius:999px;color:#fff;background:#e8590c;font-weight:700">Perlu dipantau</span>' : ""}</div>
         <div style="margin-bottom:6px">FK terendah <b style="font-size:14px">${esc(p.fk_min)}</b> <span style="color:var(--muted)">(batas aman 1,3)</span></div>
@@ -3635,7 +3635,7 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     <button class="anlx" id="anlX" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
     <div class="anlhd"><span class="anlic"><svg class="i" aria-hidden="true"><use href="#i-drop"/></svg></span><div><h2 id="anlT">Analisa Air Baku</h2><p>Intake Bendung Karang Intan · Sungai Riam Kanan</p></div></div>
     <div class="anlbd">
-      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="s" hidden>Sumber data</button><button role="tab" data-t="l">Analisa lainnya</button></div>
+      <div class="anltabs" role="tablist"><button role="tab" data-t="h" class="on">Hidrologi <span class="lv">LIVE</span></button><button role="tab" data-t="q">Kualitas air baku</button><button role="tab" data-t="k">Ketersediaan air baku</button><button role="tab" data-t="g">Geoteknik &amp; lereng</button><button role="tab" data-t="s" hidden>Sumber data</button><button role="tab" data-t="l">Analisa lainnya</button></div>
       <div class="anlpane" data-p="h">
         <div id="hyW"></div>
         <div class="hysum" id="hyS"><div class="hyst"><span class="hydot"></span><b>Memuat kondisi…</b></div><ul></ul><div class="hyupd" id="hyU">Mengambil data live…</div><p class="srcx" style="margin:6px 0 0"><b>Sumber:</b> AWLR & ARR BWS Kalimantan III, BMKG, model GloFAS/Open-Meteo.</p></div>
@@ -3707,6 +3707,52 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
           <button data-go="rm"><span class="ic" style="--c:#0ca678"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg></span><b>Peta jalan pengembangan</b><span>Tahap 2 &amp; 3: sensor, SCADA, jaringan pintar</span></button>
         </div>
       </div>
+      <div class="anlpane" data-p="g" hidden>
+      <p class="anllead">Mengapa pipa GRP DN 1.200 di tanggul saluran induk Riam Kanan berulang kali bocor, dan apakah tanggulnya berisiko longsor? Analisa ini memakai data penyelidikan tanah, topografi, dan uji lab dari Laporan Reviu Desain BWS Kalimantan III (2025).</p>
+      <div class="anlkpi">
+        <div><b>5 dari 5</b><span>kebocoran terjadi di zona tanah lunak tebal</span></div>
+        <div><b>Aman</b><span>kelima lereng tanggul menurut data tanah konsultan</span></div>
+        <div><b>2,10</b><span>FK terendah (STA 3+115); batas aman 1,3</span></div>
+        <div><b>2 lokasi</b><span>peka bila tanah lebih lemah: STA 3+115 &amp; 1+908</span></div>
+      </div>
+      <h3>1. Kondisi tanah di sepanjang jalur pipa</h3>
+      <p>Jalur pipa ±4,9 km dibagi menjadi 10 zona berdasarkan hasil sondir dan bor. Di <b>zona 1 dan zona 5–9 (STA 1+761 sampai 4+463)</b> lapisan tanah lunak (gambut/lanau) lebih tebal dari kedalaman dasar pipa (±3 m), sehingga pipa bertumpu pada tanah yang mudah turun.</p>
+      <ul>
+        <li><b>Kelima kebocoran 2021–2026 berada di zona 5, 7, dan 8</b>, yaitu zona dengan tanah lunak di bawah dasar pipa. Zona 2–4 yang tanahnya lebih kaku belum pernah bocor.</li>
+        <li>Semua kebocoran terjadi di <b>sambungan pipa</b>. Penurunan tanah yang tidak merata dapat menarik atau membengkokkan sambungan sehingga karet sambungan lepas.</li>
+        <li>Ini indikasi kuat, bukan satu-satunya penyebab; beban kendaraan di jalan inspeksi dan mutu pemasangan sambungan juga berpengaruh.</li>
+      </ul>
+      <h3>2. Stabilitas lereng tanggul di 5 titik bocor</h3>
+      <p>Lereng tanggul sisi saluran dianalisa dengan metode Bishop pada 4 kondisi: normal, pipa bocor (tanah tanggul jenuh), pipa bocor + kendaraan, dan air saluran surut cepat saat pipa bocor. Angka yang dipakai adalah <b>faktor keamanan (FK) terendah</b> dari keempat kondisi itu.</p>
+      <img src="anl_lereng.webp" alt="Grafik faktor keamanan lereng tanggul di 5 titik kebocoran" width="1400" height="720" loading="lazy">
+      <table class="anltb">
+        <tr><th>No</th><th>Lokasi</th><th>FK terendah</th><th>Status</th></tr>
+        <tr class="r0"><td>1</td><td>STA 2+075<br><small>bocor 2021 · lereng 1 : 3,3</small></td><td>2,66<br><small>turun 19% saat bocor</small></td><td>Aman</td></tr>
+        <tr class="r3"><td>2</td><td>STA 3+115<br><small>bocor 2024 · lereng 1 : 1,9 (curam)</small></td><td>2,10<br><small>turun 17% saat bocor</small></td><td>Aman, perlu dipantau</td></tr>
+        <tr class="r3"><td>3</td><td>STA 1+908<br><small>bocor 2024 · lereng 1 : 4,0</small></td><td>2,35<br><small>turun 23% saat bocor</small></td><td>Aman, perlu dipantau</td></tr>
+        <tr class="r0"><td>4</td><td>STA 3+309<br><small>bocor 2024 · lereng 1 : 1,9 (curam)</small></td><td>2,63<br><small>turun 20% saat bocor</small></td><td>Aman</td></tr>
+        <tr class="r0"><td>5</td><td>STA 2+771<br><small>bocor 2026 · lereng 1 : 3,8</small></td><td>2,64<br><small>turun 23% saat bocor</small></td><td>Aman</td></tr>
+      </table>
+      <h3>3. Artinya</h3>
+      <ul>
+        <li><b>Dengan data tanah konsultan, tanggul tidak berisiko longsor</b> di kelima lokasi, termasuk saat pipa bocor dan ada kendaraan lewat. FK terendah 2,10, jauh di atas batas aman 1,3.</li>
+        <li><b>Kebocoran pipa adalah pemicu terbesar.</b> Air bocoran membuat tanah tanggul jenuh dan menurunkan keamanan lereng 17–23%.</li>
+        <li><b>Pipa berada di dalam zona bidang longsor.</b> Bila suatu saat lereng bergerak, pipa ikut tertarik dan rusak, sehingga kebocoran dan longsor bisa saling memicu.</li>
+        <li><b>Uji kepekaan:</b> bila kekuatan tanah di lapangan jauh lebih rendah dari hasil lab, FK di STA 3+115 turun ke 1,02 dan di STA 1+908 ke 1,10, yaitu hampir longsor. Kedua lokasi ini paling peka dan perlu dipantau lebih ketat.</li>
+      </ul>
+      <h3>4. Rekomendasi</h3>
+      <ul>
+        <li><b>Tangani kebocoran secepatnya</b>, sebelum air bocoran sempat menjenuhkan tanggul.</li>
+        <li><b>Batasi kendaraan berat</b> di jalan inspeksi di atas pipa, terutama di zona 5–8.</li>
+        <li><b>Patroli rutin di STA 1+908 dan 3+115</b>: cari retakan memanjang di puncak tanggul, rembesan di lereng, dan amblesan.</li>
+        <li>Untuk desain rehabilitasi: pertimbangkan perbaikan tanah dasar atau sambungan pipa yang lebih lentur di zona tanah lunak, dan <b>ukur penampang dasar saluran</b> agar hasil analisa lebih pasti.</li>
+      </ul>
+      <div class="anlgo" style="margin-top:12px">
+        <button data-lereng="peta"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-warn"/></svg></span><b>Lihat 5 titik di peta</b><span>Gambar penampang, grafik FK, dan data tiap lokasi</span></button>
+        <button data-go="bocor"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span><b>Riwayat kebocoran</b><span>Tanggal, kerusakan, penanganan, dan foto tiap kejadian</span></button>
+      </div>
+      <p class="srcx"><b>Sumber dan keterbatasan:</b> analisa BPAM Banjarbakula (Nov 2026) dari Laporan Akhir Reviu Desain Rehabilitasi Pipa Transmisi, BWS Kalimantan III (2025): sondir, bor, uji lab tanah, dan peta situasi 1:2.000. Dasar saluran tidak terukur dan diasumsikan 1,5 m di bawah muka air; beban kendaraan 10 kPa; zona tanah adalah generalisasi antar titik uji.</p>
+      </div>
       <div class="anlpane" data-p="k" hidden>
       <div class="anlkpi">
         <div><b>117 mm</b><span>Hujan kemarau 2026 (Jul–Okt)</span></div>
@@ -3769,11 +3815,11 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   addEventListener("resize", () => { if (!m.hidden && sm) sm.invalidateSize(); });
   if (location.hash === "#skematik") setTimeout(() => { window.closeIntro && window.closeIntro(true); window.skemOpen(); }, 400);
 })();
-(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|analisa-lain|sumber-data)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
+(function(){ const m = document.getElementById("anl"), close = () => { m.hidden = true; document.body.style.overflow = ""; if (/^#(analisa|hidrologi|kualitas|ketersediaan|geoteknik|analisa-lain|sumber-data)/.test(location.hash)) try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
   window.anlClose = close;
   document.getElementById("anlX").onclick = close; m.addEventListener("click", e => { if (e.target === m) close(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && !m.hidden) close(); });
-  const H2T = {hidrologi:"h", kualitas:"q", ketersediaan:"k", "analisa-lain":"l", "sumber-data":"s", analisa:"h"}, hm = /[#?&](hidrologi|kualitas|ketersediaan|analisa-lain|sumber-data|analisa)\b/.exec(location.href);
+  const H2T = {hidrologi:"h", kualitas:"q", ketersediaan:"k", geoteknik:"g", "analisa-lain":"l", "sumber-data":"s", analisa:"h"}, hm = /[#?&](hidrologi|kualitas|ketersediaan|geoteknik|analisa-lain|sumber-data|analisa)\b/.exec(location.href);
   if (hm) setTimeout(() => window.anlOpen(H2T[hm[1]]), 800); })();
 </script>
 <script>/* BMKG & satelit: peringatan dini cuaca (nowcast), gempa terkini, lapisan awan hujan Himawari-9 */
@@ -4152,17 +4198,20 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   // tab + buka panel
   const tabs = document.querySelectorAll(".anltabs button");
   tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle("on", x === b)); document.querySelectorAll(".anlpane").forEach(p => p.hidden = p.dataset.p !== b.dataset.t); if (b.dataset.t === "h") refresh(); if (b.dataset.t === "q" && window.kqOpen) window.kqOpen(); });
-  const T2H = {h:"hidrologi", q:"kualitas", k:"ketersediaan", s:"sumber-data", l:"analisa-lain"};
+  const T2H = {h:"hidrologi", q:"kualitas", k:"ketersediaan", g:"geoteknik", s:"sumber-data", l:"analisa-lain"};
   tabs.forEach(b => b.addEventListener("click", () => { try{ history.replaceState(null, "", location.pathname + location.search + "#" + T2H[b.dataset.t]); if (b.dataset.t !== "l" && b.dataset.t !== "s") localStorage.setItem("bpam_anl_tab", b.dataset.t); }catch(e){} }));
   document.querySelectorAll(".anlgo [data-go]").forEach(b => b.onclick = () => { const g = b.dataset.go; if (g === "src"){ document.querySelector('.anltabs [data-t="s"]').click(); return; } window.anlClose();
     setTimeout(() => { if (g === "nrc") window.nrcOpen && window.nrcOpen(); else if (g === "tele"){ const t = document.getElementById("tele"); t && t.classList.remove("min"); }
       else if (g === "prof") document.getElementById("btnProf").click(); else if (g === "awan") window.awanShow && window.awanShow(); else if (g === "3d") window.open3D && window.open3D(); else if (g === "rm") document.getElementById("btnRm").click(); else if (g === "bocor") window.bocorRingkas && window.bocorRingkas(); else if (g === "skem") window.skemOpen && window.skemOpen(); }, 250); });
+  document.querySelectorAll("[data-lereng]").forEach(b => b.onclick = () => { window.anlClose(); setTimeout(() => {
+    const cb = document.querySelector('#layers input[data-id="lereng"]'); if (cb && !cb.checked){ cb.checked = true; cb.dispatchEvent(new Event("change")); }
+    window.__map.flyToBounds([[-3.4580,114.9375],[-3.4490,114.9470]], {padding:[40,40], duration:1}); }, 250); });
   const btnA = document.getElementById("btnAnl"); if (btnA) btnA.onclick = () => { let t = "h"; try{ t = localStorage.getItem("bpam_anl_tab") || "h"; }catch(e){} window.anlOpen(t); };
   document.querySelectorAll(".ianl [data-anl]").forEach(b => b.onclick = () => { const t = b.dataset.anl; window.closeIntro && window.closeIntro(true); setTimeout(() => { if (t === "n") window.nrcOpen && window.nrcOpen(); else window.anlOpen(t); }, 450); });
   // status hidrologi live di kartu tampilan awal
   let nI = 0; const iv = setInterval(() => { const a = window.__awlr && window.__awlr.last, e = document.getElementById("ianH"); if (++nI > 40) clearInterval(iv); if (!a || !e || !window.__lvStat) return;
     e.textContent = window.__lvStat(a.v)[1].split(" –")[0] + " · " + a.v.toLocaleString("id-ID",{minimumFractionDigits:2,maximumFractionDigits:2}) + " m"; clearInterval(iv); }, 1500);
-  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = ["k","q","l","s"].includes(t) ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
+  const o = window.anlOpen; window.anlOpen = function(t){ o(); const want = ["k","q","g","l","s"].includes(t) ? t : "h"; const b = document.querySelector(`.anltabs button[data-t="${want}"]`); b && b.click(); };
 })();
 </script>
 <script>/* Panel Kualitas air: rekap Lab BPAM (harian), offtaker (mingguan), lab eksternal BBLKM & Sucofindo — dibaca dari Google Sheet */
