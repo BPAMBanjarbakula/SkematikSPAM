@@ -2367,27 +2367,30 @@ function lerengLayer(){
   const g = L.geoJSON(null, {
     pointToLayer: (f, ll) => L.marker(ll, {icon:L.divIcon({className:"", iconSize:[24,24], iconAnchor:[12,12], popupAnchor:[0,-10], html:`<div style="width:24px;height:24px;border-radius:50%;background:#e03131;border:2.5px solid #fff;box-sizing:border-box;box-shadow:0 1px 4px rgba(0,0,0,.45);color:#fff;font:800 12px/19px system-ui,sans-serif;text-align:center">${f.properties.no}</div>`}), riseOnHover:true}),
     onEachFeature: (f, l) => { const p = f.properties;
-      l.bindTooltip(`Kebocoran ${p.no} · ${p.sta} · lereng ${p.status.toLowerCase()} · FK min ${p.fk_min}`, {direction:"top", offset:[0,-6]});
+      l.bindTooltip(`Kebocoran ${p.no} · ${p.sta} · sambungan ${p.status_pipa.toLowerCase()}`, {direction:"top", offset:[0,-6]});
       const bar = r => { const v = num(r[1]), w = Math.min(100, v / 3.5 * 100), c = v >= 1.5 ? "#2f9e44" : v >= 1.3 ? "#f59f00" : "#e03131";
         return `<div style="display:grid;grid-template-columns:112px minmax(0,1fr) 32px;align-items:center;gap:6px;margin:3px 0"><span style="font-size:12px">${esc(r[0])}</span>
           <span style="position:relative;height:9px;border-radius:5px;background:var(--line)"><span style="position:absolute;left:0;top:0;bottom:0;width:${w}%;border-radius:5px;background:${c}"></span>
           <span style="position:absolute;left:${1.3/3.5*100}%;top:-3px;bottom:-3px;width:2px;background:#e03131"></span></span><b style="font-size:12px;text-align:right">${esc(r[1])}</b></div>`; };
       const h = t => `<div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px">${t}</div>`;
+      const chip = (t, c) => `<span style="padding:2px 9px;border-radius:999px;color:#fff;background:${c};font-weight:700;font-size:11.5px;white-space:nowrap">${t}</span>`;
       l.bindPopup(`<div style="box-sizing:border-box;width:100%;padding:12px 16px 14px;font-size:12.5px;line-height:1.45">
-        <div style="font-size:11px;color:var(--muted)">Kebocoran ke-${p.no} (${esc(p.bocor)}) · stabilitas lereng tanggul · ${esc(p.zona)}</div>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:2px 0 4px"><span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font-weight:800;font-size:12px;align-items:center;justify-content:center">${p.no}</span><b style="font-size:16px">${esc(p.sta)}</b>
-          <span style="padding:2px 9px;border-radius:999px;color:#fff;background:#2f9e44;font-weight:700">${esc(p.status)}</span>
-          ${p.peka ? '<span style="padding:2px 9px;border-radius:999px;color:#fff;background:#e8590c;font-weight:700">Perlu dipantau</span>' : ""}</div>
-        <div style="margin-bottom:6px">FK terendah <b style="font-size:14px">${esc(p.fk_min)}</b> <span style="color:var(--muted)">(batas aman 1,3)</span></div>
+        <div style="font-size:11px;color:var(--muted)">Kebocoran ke-${p.no} · ${esc(p.bocor)} · ${esc(p.zona)}</div>
+        <div style="display:flex;align-items:center;gap:7px;margin:2px 0 5px"><span style="display:inline-flex;width:22px;height:22px;border-radius:50%;background:#e03131;color:#fff;font-weight:800;font-size:12px;align-items:center;justify-content:center">${p.no}</span><b style="font-size:16px">${esc(p.sta)}</b></div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px">${chip("Lereng: " + p.status.toLowerCase(), "#2f9e44")}${chip("Sambungan pipa: " + p.status_pipa.toLowerCase(), p.status_pipa === "Sangat rawan" ? "#c92a2a" : "#e8590c")}</div>
+        <div style="color:var(--muted);margin-bottom:2px">Kerusakan: <b style="color:var(--ink)">${esc(p.kerusakan)}</b></div>
+        ${h("Kenapa bocor di titik ini")}
+        <ul style="margin:0;padding-left:17px">${p.penyebab.map(t => `<li style="margin-bottom:3px">${esc(t)}</li>`).join("")}</ul>
+        ${h("Penampang tanggul saat pipa bocor")}
         <a href="${p.img}" target="_blank" rel="noopener" title="Perbesar gambar"><img src="${p.img}" alt="Penampang lereng ${esc(p.sta)}" loading="lazy" style="display:block;width:100%;border-radius:6px;background:#fff"></a>
-        ${h("Faktor keamanan per kondisi")}
+        ${h("Keamanan lereng terhadap longsor (FK)")}
         ${p.fk.map(bar).join("")}
-        <div style="font-size:11px;color:var(--muted);margin-top:2px"><span style="display:inline-block;width:2px;height:9px;background:#e03131;vertical-align:middle"></span> batas aman 1,3 · makin panjang makin aman</div>
-        ${h("Yang perlu diketahui")}
-        <ul style="margin:0;padding-left:17px">${p.poin.map(t => `<li style="margin-bottom:3px">${esc(t)}</li>`).join("")}</ul>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px"><span style="display:inline-block;width:2px;height:9px;background:#e03131;vertical-align:middle"></span> batas aman 1,3 · FK terendah ${esc(p.fk_min)}</div>
+        <div style="margin-top:7px;padding:6px 8px;border-radius:6px;border-left:3px solid #1c7ed6;background:rgba(28,126,214,.08)"><b>Lereng stabil ≠ pipa aman.</b> FK hanya menunjukkan tanggul tidak akan longsor besar. Penurunan tanah beberapa sentimeter saja sudah cukup untuk menggeser sambungan pipa.</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px">${p.data.map(r => `<div style="box-sizing:border-box;min-width:0;padding:4px 7px;border:1px solid var(--line);border-radius:6px"><div style="font-size:10.5px;color:var(--muted)">${esc(r[0])}</div><b>${esc(r[1])}</b></div>`).join("")}</div>
         <div style="box-sizing:border-box;margin-top:8px;padding:6px 8px;border-radius:6px;border-left:3px solid ${p.peka ? "#e8590c" : "var(--muted)"};background:${p.peka ? "rgba(232,89,12,.1)" : "rgba(127,127,127,.08)"}">${esc(p.uji)}</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:8px">Analisa BPAM Banjarbakula, Nov 2026 (metode Bishop), dari data topografi & tanah konsultan BWS Kal. III 2025. Dasar saluran diasumsikan 1,5 m di bawah muka air.</div></div>`,
+        <button type="button" onclick="window.anlOpen&&window.anlOpen('g')" style="all:unset;box-sizing:border-box;display:block;width:100%;margin-top:9px;padding:8px 10px;border-radius:8px;background:#0b7285;color:#fff;font-weight:700;text-align:center;cursor:pointer">Penyebab &amp; solusi lengkap →</button>
+        <div style="font-size:10.5px;color:var(--muted);margin-top:8px">Analisa BPAM Banjarbakula, Nov 2026 (metode Bishop), dari data topografi &amp; tanah konsultan BWS Kal. III 2025 dan laporan kejadian kebocoran BPAM.</div></div>`,
         {maxWidth:330, minWidth:Math.min(290, innerWidth - 90), maxHeight:Math.max(320, window.innerHeight - (WIDE0 ? 170 : 260)), autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[20, WIDE0 ? 20 : 110]});
     }});
   let loaded = false;
@@ -3708,70 +3711,83 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
         </div>
       </div>
       <div class="anlpane" data-p="g" hidden>
-      <p class="anllead">Pipa transmisi GRP DN 1.200 di tanggul saluran induk Riam Kanan (Sei Landas, Karang Intan) sudah 5 kali bocor sejak 2021. Kajian ini menjawab dua pertanyaan: <b>mengapa pipa sering bocor di ruas ini</b>, dan <b>apakah tanggulnya berisiko longsor</b>.</p>
-      <div style="margin:10px 0 12px;padding:10px 13px;border-radius:10px;background:rgba(47,158,68,.10);border-left:4px solid #2f9e44;font-size:13.5px;line-height:1.55"><b>Ringkasnya:</b> kelima titik bocor berada di ruas yang tanahnya lunak dan tebal, sehingga tanah di bawah pipa mudah turun dan menggeser sambungan pipa. Tanggulnya sendiri <b>masih aman dari longsor</b> menurut data tanah konsultan. Namun air dari pipa yang bocor melemahkan tanggul, jadi <b>kebocoran harus cepat ditangani</b>, terutama di titik 2 (STA 3+115) dan titik 3 (STA 1+908).</div>
+      <p class="anllead">Pipa transmisi GRP DN 1.200 di tanggul saluran induk Riam Kanan (Sei Landas, Karang Intan) sudah 5 kali bocor sejak 2021, semuanya di sambungan. Kajian ini menjawab: <b>mengapa bocor</b>, <b>apakah tanggulnya bisa longsor</b>, dan <b>apa solusinya</b>.</p>
+      <div style="margin:10px 0 12px;padding:10px 13px;border-radius:10px;background:rgba(224,49,49,.09);border-left:4px solid #e03131;font-size:13.5px;line-height:1.55"><b>Ringkasnya:</b> masalah utama di ruas ini <b>bukan longsor tanggul</b>, melainkan <b>tanah lunak di bawah pipa yang terus turun sedikit demi sedikit dan tidak merata</b>. Penurunan itu menarik atau menekuk sambungan pipa sampai bergeser dan bocor. Lereng tanggul sendiri masih stabil, tetapi setiap kebocoran melemahkan tanggul dan menggerus tumpuan pipa. Karena itu, <b>sambungan pipa di kelima titik berstatus rawan</b> dan penanganannya perlu dilakukan bertahap: jangka pendek, menengah, dan panjang.</div>
       <div class="anlkpi">
-        <div><b>5 dari 5</b><span>titik bocor ada di ruas tanah lunak tebal</span></div>
-        <div><b>Aman</b><span>kelima lereng tanggul tidak berisiko longsor</span></div>
-        <div><b>2,10</b><span>angka keamanan terendah (titik 2); batas aman 1,3</span></div>
-        <div><b>2 titik</b><span>perlu dipantau lebih ketat: titik 2 &amp; 3</span></div>
+        <div><b>5 dari 5</b><span>kebocoran di sambungan, di ruas tanah lunak</span></div>
+        <div><b>Stabil</b><span>lereng tanggul: tidak berisiko longsor besar</span></div>
+        <div><b>Rawan</b><span>sambungan pipa di kelima titik</span></div>
+        <div><b>Titik 2 &amp; 4</b><span>sangat rawan: persilangan jalan &amp; tanah paling lunak</span></div>
       </div>
-      <div style="margin:10px 0 12px;padding:10px 13px;border-radius:10px;background:rgba(28,126,214,.08);border-left:4px solid #1c7ed6;font-size:13.5px;line-height:1.55"><b>Cara membaca angka keamanan (FK).</b> FK membandingkan kekuatan tanah menahan lereng dengan beban yang mendorongnya longsor. <b>FK = 1</b> berarti keduanya seimbang, lereng di ambang longsor. <b>FK = 2</b> berarti tanah dua kali lebih kuat dari yang dibutuhkan. Lereng dianggap aman bila FK ≥ 1,5 dalam kondisi normal, dan ≥ 1,3 dalam kondisi sementara seperti saat pipa bocor.</div>
-      <h3>1. Mengapa pipa sering bocor di ruas ini?</h3>
-      <p>Hasil sondir dan bor BWS 2025 membagi jalur pipa sepanjang ±4,9 km menjadi 10 zona. Di <b>zona 5–9 (STA 1+761 sampai 4+463)</b>, lapisan tanah lunak (gambut/lanau) lebih dalam dari dasar pipa (±3 m). Pipa di zona ini bertumpu pada tanah yang mudah turun.</p>
-      <ul>
-        <li><b>Kelima kebocoran berada di zona 5, 7, dan 8.</b> Zona 2–4 yang tanahnya lebih kaku belum pernah bocor. Zona 1 dan 6 juga bertanah lunak tetapi belum pernah bocor, sehingga tanah lunak bukan satu-satunya faktor.</li>
-        <li><b>Semua kebocoran terjadi di sambungan pipa</b>, dua di antaranya karena sambungan bergeser. Ini sesuai dengan pola tanah yang turun tidak merata: tanah di satu sisi sambungan turun lebih banyak, sehingga sambungan tertarik atau tertekuk.</li>
-        <li><b>Faktor lain ikut berperan:</b> beban kendaraan di persilangan jalan (titik 2) dan aksesoris sambungan pengganti buatan vendor karena aslinya tidak tersedia di pasaran (titik 3).</li>
-      </ul>
-      <p style="font-size:12.5px;color:var(--muted)">Kaitan tanah lunak dan kebocoran ini kuat, tetapi baru berdasarkan 5 kejadian. Kaitan itu menunjukkan dugaan penyebab, belum membuktikannya.</p>
-      <h3>2. Apakah tanggul berisiko longsor?</h3>
-      <p>Di setiap titik bocor, lereng tanggul di sisi saluran dihitung pada 4 kondisi:</p>
-      <ul>
-        <li><b>Normal</b>: tanpa kebocoran.</li>
-        <li><b>Pipa bocor</b>: air bocoran membuat tanah tanggul jenuh dan lebih lemah.</li>
-        <li><b>Pipa bocor + kendaraan</b> lewat di jalan inspeksi di atas tanggul.</li>
-        <li><b>Pipa bocor + air saluran surut cepat</b>: tekanan air yang menahan lereng dari sisi saluran hilang mendadak.</li>
-      </ul>
-      <p>Grafik dan tabel menampilkan <b>FK terendah</b> dari keempat kondisi itu. <b>Batang biru</b> adalah hasil utama dengan data tanah konsultan. <b>Batang oranye</b> adalah uji kepekaan: hitungan yang sama, tetapi kekuatan tanah sengaja dibuat jauh lebih lemah, untuk melihat seberapa peka tiap lokasi bila kondisi lapangan lebih buruk dari hasil lab.</p>
+      <h3>1. Bagaimana pipa bisa bocor?</h3>
+      <ol style="margin:6px 0;padding-left:22px">
+        <li style="margin-bottom:4px"><b>Tanah lunak di bawah pipa.</b> Di zona 5–9 (STA 1+761 sampai 4+463), lapisan gambut/lanau lebih dalam dari dasar pipa (±3 m).</li>
+        <li style="margin-bottom:4px"><b>Tanah turun pelan-pelan dan tidak merata.</b> Tanah lunak memadat bertahun-tahun, lebih banyak di satu tempat dibanding tempat lain, ditambah beban tanggul, jalan, dan kendaraan.</li>
+        <li style="margin-bottom:4px"><b>Sambungan menjadi titik terlemah.</b> Pipa GRP kaku, sehingga gerakan beberapa sentimeter saja menarik atau menekuk sambungan sampai bergeser atau tidak rapat lagi.</li>
+        <li style="margin-bottom:4px"><b>Bocoran memperparah dirinya sendiri.</b> Air bocoran menggerus tanah di bawah pipa dan membuat tanggul jenuh. Tumpuan pipa makin hilang dan sambungan di sebelahnya ikut terbebani.</li>
+      </ol>
+      <p style="font-size:12.5px;color:var(--muted)">Zona 1 dan 6 juga bertanah lunak tetapi belum pernah bocor. Artinya tanah lunak adalah penyebab dasar, dan faktor setempat di bawah ini menentukan titik mana yang bocor lebih dulu. Dugaan ini perlu dibuktikan dengan pengukuran penurunan (lihat solusi jangka pendek).</p>
+      <h3>2. Kenapa di lima titik ini?</h3>
+      <table class="anltb">
+        <tr><th>No</th><th>Lokasi</th><th>Dugaan penyebab</th><th>Status</th></tr>
+        <tr class="r2"><td>1</td><td style="white-space:normal;min-width:96px">STA 2+075<br><small style="font-weight:400">2021 · sambungan bergeser</small></td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tanah lunak (zona 5); area jembatan: penurunan tidak merata; tanggul sempit</td><td style="white-space:normal;font-size:12.5px;min-width:96px"><b style="color:#2f9e44">Lereng:</b> Stabil · FK 2,66<br><b style="color:#e03131">Sambungan:</b> Rawan</td></tr>
+        <tr class="r1"><td>2</td><td style="white-space:normal;min-width:96px">STA 3+115<br><small style="font-weight:400">2024 · sambungan bergeser</small></td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tanah lunak (zona 7); persilangan jalan: beban kendaraan berulang; lereng paling curam (1 : 1,9)</td><td style="white-space:normal;font-size:12.5px;min-width:96px"><b style="color:#2f9e44">Lereng:</b> Stabil · FK 2,10 (paling peka)<br><b style="color:#e03131">Sambungan:</b> Sangat rawan</td></tr>
+        <tr class="r2"><td>3</td><td style="white-space:normal;min-width:96px">STA 1+908<br><small style="font-weight:400">2024 · sambungan bocor</small></td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tanah lunak (zona 5); aksesoris sambungan pengganti buatan vendor</td><td style="white-space:normal;font-size:12.5px;min-width:96px"><b style="color:#2f9e44">Lereng:</b> Stabil · FK 2,35 (peka)<br><b style="color:#e03131">Sambungan:</b> Rawan</td></tr>
+        <tr class="r1"><td>4</td><td style="white-space:normal;min-width:96px">STA 3+309<br><small style="font-weight:400">2024 · sambungan bocor</small></td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tanah lunak paling tebal (zona 8); lereng curam (1 : 1,9); area jembatan</td><td style="white-space:normal;font-size:12.5px;min-width:96px"><b style="color:#2f9e44">Lereng:</b> Stabil · FK 2,63<br><b style="color:#e03131">Sambungan:</b> Sangat rawan</td></tr>
+        <tr class="r2"><td>5</td><td style="white-space:normal;min-width:96px">STA 2+771<br><small style="font-weight:400">2026 · sambungan bocor</small></td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tanah lunak (zona 7); parit ±2,5 m di belakang pipa; penurunan masih berlangsung</td><td style="white-space:normal;font-size:12.5px;min-width:96px"><b style="color:#2f9e44">Lereng:</b> Stabil · FK 2,64<br><b style="color:#e03131">Sambungan:</b> Rawan</td></tr>
+      </table>
+      <h3>3. Apakah tanggul bisa longsor?</h3>
+      <div style="margin:10px 0 12px;padding:10px 13px;border-radius:10px;background:rgba(28,126,214,.08);border-left:4px solid #1c7ed6;font-size:13.5px;line-height:1.55"><b>Cara membaca angka keamanan (FK).</b> FK membandingkan kekuatan tanah menahan lereng dengan beban yang mendorongnya longsor. <b>FK = 1</b> berarti lereng di ambang longsor; <b>FK = 2</b> berarti tanah dua kali lebih kuat dari yang dibutuhkan. Aman bila FK ≥ 1,5 dalam kondisi normal dan ≥ 1,3 saat kondisi sementara seperti pipa bocor.</div>
+      <p>Lereng dihitung pada 4 kondisi: normal, pipa bocor (tanggul jenuh), pipa bocor + kendaraan, dan pipa bocor saat air saluran surut cepat. <b>Batang biru</b> adalah hasil dengan data tanah konsultan. <b>Batang oranye</b> adalah uji kepekaan, yaitu bila tanah di lapangan jauh lebih lemah dari hasil lab.</p>
       <img class="keep" src="anl_lereng.webp?v=2" alt="Grafik angka keamanan lereng tanggul di 5 titik kebocoran" width="1400" height="720" loading="lazy">
-      <table class="anltb">
-        <tr><th>No</th><th>Lokasi</th><th>FK terendah</th><th>Status</th></tr>
-        <tr class="r0"><td>1</td><td style="white-space:normal;min-width:120px">STA 2+075<br><small style="font-weight:400">bocor 2021: sambungan bergeser<br>lereng 1 : 3,3 (landai)</small></td><td><b>2,66</b><br><small>turun 19% saat bocor<br>uji kepekaan: 1,28</small></td><td>Aman</td></tr>
-        <tr class="r3"><td>2</td><td style="white-space:normal;min-width:120px">STA 3+115<br><small style="font-weight:400">bocor 2024: sambungan bergeser, di persilangan jalan<br>lereng 1 : 1,9 (curam)</small></td><td><b>2,10</b><br><small>turun 17% saat bocor<br>uji kepekaan: 1,02</small></td><td>Aman, paling peka</td></tr>
-        <tr class="r3"><td>3</td><td style="white-space:normal;min-width:120px">STA 1+908<br><small style="font-weight:400">bocor 2024: sambungan bocor, aksesoris pengganti buatan vendor<br>lereng 1 : 4,0 (landai)</small></td><td><b>2,35</b><br><small>turun 23% saat bocor<br>uji kepekaan: 1,10</small></td><td>Aman, peka</td></tr>
-        <tr class="r0"><td>4</td><td style="white-space:normal;min-width:120px">STA 3+309<br><small style="font-weight:400">bocor 2024: sambungan bocor<br>lereng 1 : 1,9 (curam)</small></td><td><b>2,63</b><br><small>turun 20% saat bocor<br>uji kepekaan: 1,26</small></td><td>Aman</td></tr>
-        <tr class="r0"><td>5</td><td style="white-space:normal;min-width:120px">STA 2+771<br><small style="font-weight:400">bocor 2026: sambungan bocor<br>lereng 1 : 3,8 (landai)</small></td><td><b>2,64</b><br><small>turun 23% saat bocor<br>uji kepekaan: 1,22</small></td><td>Aman</td></tr>
-      </table>
-      <h3>3. Kesimpulan</h3>
       <ul>
-        <li><b>Tanggul aman dari longsor</b> di kelima lokasi, termasuk saat pipa bocor dan ada kendaraan lewat. FK terendah 2,10, jauh di atas batas 1,3.</li>
-        <li><b>Kebocoran adalah pemicu terbesar.</b> Air bocoran menurunkan keamanan lereng 17–23%.</li>
-        <li><b>Pipa berada di dalam bidang longsor.</b> Kalau lereng sampai bergerak, pipa ikut rusak. Sebaliknya, kebocoran yang dibiarkan melemahkan lereng. Keduanya bisa saling memperparah.</li>
-        <li><b>Titik 2 (STA 3+115) dan titik 3 (STA 1+908) paling peka.</b> Bila tanah di lapangan jauh lebih lemah dari hasil lab, FK di sana turun ke 1,02 dan 1,10, yaitu hampir longsor. Titik 2 juga punya lereng paling curam (1 : 1,9).</li>
+        <li><b>Tanggul stabil di kelima titik</b>: FK terendah 2,10, jauh di atas batas 1,3. Kebocoran menurunkan FK 17–23%.</li>
+        <li><b>Titik 2 dan 3 paling peka.</b> Bila tanah lebih lemah, FK di sana turun ke 1,02 dan 1,10, hampir longsor.</li>
+        <li><b>Stabil bukan berarti pipa aman.</b> FK hanya menjawab apakah tanggul akan longsor besar. Penurunan tanah beberapa sentimeter, yang tidak tercakup FK, sudah cukup untuk menggeser sambungan.</li>
       </ul>
-      <h3>4. Rekomendasi</h3>
+      <h3>4. Solusi</h3>
+      <p><b style="color:#e03131">Jangka pendek (0–6 bulan) · operasi &amp; pemeliharaan rutin</b></p>
       <table class="anltb">
-        <tr><th>Prioritas</th><th>Tindakan</th></tr>
-        <tr class="r1"><td>Segera</td><td style="white-space:normal;font-weight:400">Tangani setiap kebocoran secepatnya, sebelum air bocoran menjenuhkan tanggul.</td></tr>
-        <tr class="r2"><td>Rutin</td><td style="white-space:normal;font-weight:400">Patroli di titik 2 dan 3: cari retak memanjang di puncak tanggul, rembesan di lereng, dan amblesan di atas pipa.</td></tr>
-        <tr class="r2"><td>Rutin</td><td style="white-space:normal;font-weight:400">Batasi kendaraan berat di jalan inspeksi di atas pipa, terutama di zona 5–8.</td></tr>
-        <tr class="r3"><td>Desain</td><td style="white-space:normal;font-weight:400">Untuk rehabilitasi: perbaiki tanah dasar pipa atau pakai sambungan yang lebih lentur di zona tanah lunak, sediakan stok aksesoris sambungan asli, dan ukur penampang dasar saluran agar analisa lebih pasti.</td></tr>
+        <tr><th>Tindakan</th><th>Tujuan</th></tr>
+        <tr><td style="white-space:normal;font-weight:600">Stok sambungan asli dan klem perbaikan (repair clamp) DN 1.200 di gudang, plus SOP perbaikan cepat</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Waktu henti suplai dan lama tanggul terendam bocoran makin singkat</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Patroli mingguan di titik 1–5 dan ruas zona 5–8</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Menemukan rembesan, amblesan, atau retak sebelum jadi kebocoran besar</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Pasang patok ukur penurunan di atas pipa (tiap ±25–50 m di zona 5–8 dan di kiri-kanan titik bocor), ukur elevasinya tiap bulan</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Membuktikan dugaan penurunan tanah dan menemukan sambungan berikutnya yang paling berisiko</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Rambu dan pembatasan kendaraan berat di jalan inspeksi; pelat beban sementara di persilangan jalan (titik 2)</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Mengurangi beban berulang di atas pipa</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Saat perbaikan, urug kembali galian dengan pasir atau sirtu yang dipadatkan, bukan tanah lunak bekas galian</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Tumpuan pipa tidak langsung turun lagi</td></tr>
       </table>
+      <p><b style="color:#e8590c">Jangka menengah (6 bulan–2 tahun) · perbaikan terencana</b></p>
+      <table class="anltb">
+        <tr><th>Tindakan</th><th>Tujuan</th></tr>
+        <tr><td style="white-space:normal;font-weight:600">Ganti sambungan di sekitar titik bocor dengan sambungan fleksibel yang mampu menerima tekukan dan gerak memanjang lebih besar</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Sambungan tidak lepas walau tanah masih turun sedikit</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Perbaiki alas pipa di ruas tanah lunak: pasir atau sirtu dipadatkan, dilapis geotekstil</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Penurunan lebih merata dan tumpuan tidak tergerus</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Pelat atau box beton pelindung pipa di persilangan jalan (titik 2)</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Beban kendaraan tidak langsung menekan pipa</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Ukur penampang dasar saluran dan tambah uji tanah di titik 2 dan 4; inspeksi bagian dalam pipa saat suplai dihentikan</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Data yang lebih pasti untuk desain rehabilitasi</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Deteksi bocor dini dari telemetri: alarm bila debit atau tekanan turun mendadak</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Kebocoran cepat diketahui dan ditangani</td></tr>
+      </table>
+      <p><b style="color:#0b7285">Jangka panjang (&gt; 2 tahun) · rehabilitasi melalui DED</b></p>
+      <table class="anltb">
+        <tr><th>Tindakan</th><th>Tujuan</th></tr>
+        <tr><td style="white-space:normal;font-weight:600">Fondasi pipa di ruas tanah lunak tebal (zona 7–9): cerucuk galam atau tiang mini dengan sadel/balok penumpu</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Pipa tidak lagi bergantung pada tanah lunak yang terus turun</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Pada ruas paling rawan, ganti dengan pipa bersambungan menyatu (baja las atau HDPE las) yang tahan penurunan; bandingkan biayanya dalam DED</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Menghilangkan titik lemah di sambungan</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Kaji pemindahan jalur pipa keluar dari badan tanggul pada ruas tanah lunak</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Pipa terlepas dari gerakan tanggul dan beban jalan</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Jalur paralel atau bypass pada ruas rawan</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Suplai tetap jalan saat perbaikan; tidak ada henti total</td></tr>
+        <tr><td style="white-space:normal;font-weight:600">Masukkan semua ini ke DED rehabilitasi bersama BWS Kalimantan III</td><td style="white-space:normal;font-size:12.5px;font-weight:400">Satu desain terpadu tanggul dan pipa</td></tr>
+      </table>
+      <p style="font-size:12.5px;color:var(--muted)">Pilihan teknis di atas adalah arahan awal. Jenis sambungan, fondasi, dan material pipa perlu dihitung dan dipilih dalam perencanaan teknis (DED).</p>
       <div class="anlgo" style="margin-top:12px">
-        <button data-lereng="peta"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-warn"/></svg></span><b>Lihat 5 titik di peta</b><span>Gambar penampang dan angka keamanan tiap lokasi</span></button>
+        <button data-lereng="peta"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-warn"/></svg></span><b>Lihat 5 titik di peta</b><span>Penyebab, penampang, dan angka keamanan tiap titik</span></button>
         <button data-go="bocor"><span class="ic" style="--c:#e03131"><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg></span><b>Riwayat kebocoran</b><span>Tanggal, kerusakan, penanganan, dan foto tiap kejadian</span></button>
       </div>
       <details style="margin:12px 0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:12.5px;line-height:1.55">
         <summary style="cursor:pointer;font-weight:700">Catatan teknis (metode &amp; asumsi)</summary>
         <ul style="margin:8px 0 2px">
-          <li><b>Metode:</b> kesetimbangan batas, Bishop disederhanakan, bidang longsor lingkaran dengan pencarian grid pusat/jari-jari. Lereng sisi saluran di 5 penampang; lereng sisi darat juga dicek bila ada beda tinggi ≥ 1,5 m.</li>
-          <li><b>Geometri:</b> titik tinggi peta situasi konsultan skala 1:2.000, datum elevasi konsultan. Elevasi DEMNAS rata-rata ±6,4 m lebih tinggi pada datum yang berbeda, jadi tidak dipakai untuk analisa ini.</li>
-          <li><b>Tanah:</b> 2 lapis, yaitu tubuh tanggul/tanah atas dan tanah lunak di bawah muka air saluran. Hasil utama memakai rata-rata uji geser langsung lab (lampiran laporan BWS 2025). Uji kepekaan menurunkan kohesi sekitar dua pertiga dan sudut geser dalam sampai ±17°.</li>
-          <li><b>Air:</b> saat bocor, muka air dalam tanggul dianggap naik sampai ±0,5 m di bawah permukaan di atas pipa, lalu turun ke muka air saluran. Pada kondisi surut cepat, air saluran turun 1,5 m tanpa sempat mengalir keluar dari tanggul.</li>
-          <li><b>Beban:</b> kendaraan 10 kPa di jalan inspeksi.</li>
-          <li><b>Kriteria:</b> FK ≥ 1,5 untuk kondisi normal dan ≥ 1,3 untuk kondisi sementara (bocor/surut cepat), mengacu pada SNI 8460:2017.</li>
-          <li><b>Keterbatasan:</b> dasar saluran tidak terukur dan diasumsikan 1,5 m di bawah muka air; hasil cukup peka terhadap asumsi ini. Zona tanah adalah generalisasi antar titik uji.</li>
+          <li><b>Stabilitas lereng:</b> kesetimbangan batas metode Bishop disederhanakan, bidang longsor lingkaran dengan pencarian grid. Lereng sisi saluran dicek di 5 penampang; lereng sisi darat juga dicek bila ada beda tinggi ≥ 1,5 m.</li>
+          <li><b>Geometri:</b> titik tinggi peta situasi konsultan 1:2.000 pada datum konsultan. DEMNAS memakai datum lain (selisih rata-rata ±6,4 m), jadi tidak dipakai.</li>
+          <li><b>Tanah:</b> 2 lapis, yaitu tubuh tanggul dan tanah lunak di bawah muka air. Hasil utama memakai rata-rata uji geser langsung lab (lampiran laporan BWS 2025). Uji kepekaan menurunkan kohesi sekitar dua pertiga dan sudut geser dalam sampai ±17°.</li>
+          <li><b>Air dan beban:</b> saat bocor, muka air dalam tanggul naik sampai ±0,5 m di bawah permukaan di atas pipa. Surut cepat berarti air saluran turun 1,5 m. Beban kendaraan 10 kPa.</li>
+          <li><b>Kriteria:</b> FK ≥ 1,5 untuk kondisi tetap dan ≥ 1,3 untuk kondisi sementara, mengacu pada SNI 8460:2017.</li>
+          <li><b>Penyebab kebocoran:</b> disimpulkan dari korelasi lokasi bocor dengan zona tanah (sondir/bor BWS 2025), geometri setempat, dan laporan kejadian BPAM. Penurunan tanah belum diukur langsung.</li>
+          <li><b>Keterbatasan:</b> dasar saluran tidak terukur dan diasumsikan 1,5 m di bawah muka air. Zona tanah adalah generalisasi antar titik uji.</li>
         </ul>
       </details>
       <p class="srcx"><b>Sumber:</b> kajian BPAM Banjarbakula (19 Nov 2026), berdasarkan Laporan Akhir Reviu Desain Rehabilitasi Pipa Transmisi Air Baku, BWS Kalimantan III (2025), dan laporan kejadian kebocoran BPAM 2021–2026.</p>
