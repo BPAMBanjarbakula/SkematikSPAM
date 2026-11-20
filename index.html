@@ -1375,6 +1375,16 @@ h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--lin
 .icred:hover{background:rgba(255,255,255,.05)}
 .icred .icgo{margin-left:auto;flex:none;font-size:12px;font-weight:700;color:#fab005;white-space:nowrap}
 .leaflet-control-attribution .atn{cursor:pointer;text-decoration:underline dotted}
+.abpub{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.abpub li{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:9px 0 9px;border-top:1px solid rgba(255,255,255,.07)}
+.abpub li:first-child{border-top:0;padding-top:2px}
+.abc .abpub li{padding-left:0}.abc .abpub li:before{display:none}
+.abpub .st{grid-row:1/3;margin-top:2px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:6px;padding:3px 7px;white-space:nowrap;text-align:center;min-width:112px}
+.abpub .st.ok{background:rgba(64,192,87,.18);color:#8ce99a}.abpub .st.sm{background:rgba(102,199,232,.16);color:#8fd3ee}.abpub .st.pr{background:rgba(250,176,5,.15);color:#ffd43b}
+.abpub .pt{font-size:13px;line-height:1.4;color:#eef5fc;font-weight:600}
+.abpub .pv{font-size:12px;line-height:1.45;color:rgba(220,232,245,.66)}
+.abpub .pv a{color:#8fd3ee}
+@media (max-width:620px){.abpub li{grid-template-columns:1fr}.abpub .st{grid-row:auto;justify-self:start;min-width:0}}
 @media (max-width:620px){.abbox{padding:22px 16px 16px}.abhd{flex-direction:column;text-align:center;gap:10px;padding:0 6px}.abhd img{width:84px;height:84px}.abhd h3{font-size:20px}.abrole{font-size:12.5px}.abgrid{grid-template-columns:1fr}.abcomp{width:100%}}
 #share{position:fixed;inset:0;z-index:5200;display:grid;place-items:center;padding:16px;background:rgba(4,14,28,.7);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s}
 #share.on{opacity:1;visibility:visible}
@@ -1911,7 +1921,13 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
       <div class="abc full"><h4>Pengalaman lapangan &amp; karya</h4><ul>
         <li>Survei topografi, GPS geodetik, hidrometri dan batimetri; tracking jaringan pipa transmisi &amp; distribusi SPAM Regional Banjarbakula</li>
         <li>Analisa hidrologi, hidraulika perpipaan, geoteknik &amp; stabilitas lereng tanggul pipa transmisi</li>
-        <li>Karya Tulis Ilmiah PPI: <i>Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis SIG dan Pengembangannya Menjadi WebGIS</i> (2026)</li>
+      </ul></div>
+      <div class="abc full"><h4>Publikasi &amp; naskah ilmiah</h4><ul class="abpub">
+        <li><span class="st ok">Terbit</span><span class="pt">Planning to Repair the Approach Slabs Bridge Muara Tabirai, Rantau–Kandangan</span><span class="pv">Prawira, A. N. (2021). <i>CERUCUK</i> 5(1): 41–68, Prodi Teknik Sipil ULM · <a href="https://doi.org/10.20527/crc.v5i1.4296" target="_blank" rel="noopener">doi:10.20527/crc.v5i1.4296</a></span></li>
+        <li><span class="st ok">Diseminarkan</span><span class="pt">Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis Sistem Informasi Geografis dan Pengembangannya Menjadi WebGIS</span><span class="pv">Prawira, A. N. &amp; Kartadipura, R. H. (2026). Seminar Pendidikan Profesi Insinyur, PPI Universitas Lambung Mangkurat, 6 Nov 2026 · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener">baca KTI</a></span></li>
+        <li><span class="st pr">Akan diajukan</span><span class="pt">Pengembangan WebGIS GeoSPAM Bakula: dari Peta Aset Statis menjadi Dasbor Pemantauan SPAM Regional Banjarbakula</span><span class="pv">Prawira, A. N. · rencana: <b>Jurnal Komposit</b>, Universitas Ibn Khaldun Bogor (SINTA 3)</span></li>
+        <li><span class="st pr">Akan diajukan</span><span class="pt">Pola Mingguan Kekeruhan Air Baku Intake Karang Intan: Pengaruh Aktivitas Penambangan dan Muka Air Bendung</span><span class="pv">Prawira, A. N., Rahman, A. &amp; Sutrisno · rencana: <b>JTRESDA</b> – Jurnal Teknologi dan Rekayasa Sumber Daya Air, Universitas Brawijaya</span></li>
+        <li><span class="st pr">Akan diajukan</span><span class="pt">Analisis Spasial Kebocoran Berulang Sambungan Pipa GRP DN 1.200 mm pada Tanah Lunak: Studi Kasus Transmisi Air Baku SPAM Regional Banjarbakula</span><span class="pv">Prawira, A. N. · rencana: <b>Jurnal Aplikasi Teknik Sipil (JATS)</b>, Institut Teknologi Sepuluh Nopember (SINTA 3)</span></li>
       </ul></div>
     </div>
     <p class="abft">Garis putus-putus = kompetensi pendukung. Pemetaan kompetensi disusun dari pengalaman kerja, bukan hasil asesmen sertifikasi keahlian.</p>
