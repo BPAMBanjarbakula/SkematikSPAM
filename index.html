@@ -3871,9 +3871,9 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
 (function(){ const m = document.getElementById("skem"); if (!m) return; let sm = null, ov = null, cur = "A";
   const SK = {A:{W:4160, H:2720, img:"img/skematik_sr.webp?v=20261120a", pdf:"img/Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.pdf?v=20261120a", dl:"Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.webp",
       sub:"Alur air dari Intake Karang Intan sampai titik serah · debit PKS vs eksisting · perkiraan SR · Nov 2026", ft:null},
-    B:{W:3840, H:2160, img:"img/skematik_batola.webp?v=20261120a", pdf:"img/Skematik_IPA_Mekarsari_Batola_2025.pdf?v=20261120a", dl:"Skematik_IPA_Mekarsari_Batola_2025.webp",
-      sub:"Intake Sei Pinang – IPA Alalak – IPA Mekarsari (20 L/dtk) – offtaker Tamban & Tabunganen PDAM Batola · 30 Apr 2025",
-      ft:"Cubit/scroll untuk memperbesar, geser untuk berpindah. <b>IPA Mekarsari</b> 20 L/dtk (DAK & APBD TA 2024) menerima air baku lewat <b>tapping sementara</b> dari pipa transmisi Ø500 aset BWS (18,6 km); pipa baru 23,79 km (transmisi 12,09 km + distribusi 11,70 km), estimasi +500 SR.<span class=\"sks\"> Sumber: Skematik IPA Mekarsari SPAM Regional Banjarbakula, BPAM Banjarbakula, 30 April 2025.</span>"}};
+    B:{W:4160, H:2720, img:"img/skematik_batola.webp?v=20261120b", pdf:"img/Skematik_IPA_Mekarsari_Batola_2026.pdf?v=20261120b", dl:"Skematik_IPA_Mekarsari_Batola_2026.webp",
+      sub:"Intake Sei Pinang – IPA Alalak – IPA Mekarsari (20 L/dtk) – offtaker Tamban & Tabunganen PDAM Batola · Nov 2026",
+      ft:"Cubit/scroll untuk memperbesar, geser untuk berpindah. <b>IPA Mekarsari</b> 20 L/dtk (DAK & APBD TA 2024) menerima air baku lewat <b>tapping sementara</b> dari pipa transmisi Ø500 aset BWS (18,6 km); pipa baru 23,79 km (transmisi 12,09 km + distribusi 11,70 km), estimasi +500 SR.<span class=\"sks\"> Digambar ulang dari Skematik IPA Mekarsari SPAM Regional Banjarbakula (BPAM, 30 April 2025) · <a href=\"img/Skematik_IPA_Mekarsari_Batola_2025.pdf\" target=\"_blank\" rel=\"noopener\" style=\"color:#ffd23f\">lihat versi asli</a>.</span>"}};
   const ftA = document.getElementById("skFt").innerHTML;
   const bnd = k => [[0,0],[SK[k].H, SK[k].W]];
   let W = SK.A.W, H = SK.A.H, B = bnd("A");
