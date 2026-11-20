@@ -3642,8 +3642,8 @@ document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
 </script>
 
 <div id="skem" class="skem" hidden role="dialog" aria-modal="true" aria-labelledby="skemT">
-  <div class="skhd"><div><h2 id="skemT">Skematik Sistem SPAM <span class="skl">Regional </span>Banjarbakula</h2><p>Alur air dari Intake Karang Intan sampai titik serah · dengan perkiraan SR · Nov 2026</p></div>
-    <div class="skbt"><button id="skFit" title="Tampilkan utuh">Utuh</button><a href="img/Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.pdf?v=20261118b" download>PDF</a><a href="img/skematik_sr.webp?v=20261118b" download="Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.webp">Gambar</a><button id="skX" class="skx" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button></div></div>
+  <div class="skhd"><div><h2 id="skemT">Skematik Sistem SPAM <span class="skl">Regional </span>Banjarbakula</h2><p>Alur air dari Intake Karang Intan sampai titik serah · debit PKS vs eksisting · perkiraan SR · Nov 2026</p></div>
+    <div class="skbt"><button id="skFit" title="Tampilkan utuh">Utuh</button><a href="img/Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.pdf?v=20261120a" download>PDF</a><a href="img/skematik_sr.webp?v=20261120a" download="Skematik_SPAM_Regional_Banjarbakula_2026_dengan_SR.webp">Gambar</a><button id="skX" class="skx" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button></div></div>
   <div id="skMap"></div>
   <div class="skft">Cubit/scroll untuk memperbesar, geser untuk berpindah. <b>SR</b> per offtake adalah perkiraan (±80 SR per L/dtk, dasar NK SPAM Regional 2025); data resmi: 60.353 SR terlayani (SPM Kemendagri TW II 2026).<span class="sks"> Sumber: RPAM 2024, Sekilas BPAM, Audit Teknis IPA II (2025), SIPA, NK 2025, PKS offtaker, data operasional BPAM.</span></div>
 </div>
@@ -3861,7 +3861,7 @@ window.anlOpen = function(){ const m = document.getElementById("anl"); m.hidden 
   const fit = () => { if (!sm) return; if (innerWidth > 820) return sm.fitBounds(B, {animate:false}); const z = Math.log2(sm.getSize().y / H) + 0.1; sm.setView([H/2, sm.getSize().x / 2 / Math.pow(2, z)], z, {animate:false}); };
   window.skemOpen = () => { m.hidden = false; document.body.style.overflow = "hidden"; try{ if (location.hash !== "#skematik") history.replaceState(null, "", "#skematik"); }catch(e){}
     if (!sm){ sm = L.map("skMap", {crs:L.CRS.Simple, minZoom:-4, maxZoom:2, zoomSnap:.25, zoomDelta:.5, attributionControl:false, maxBounds:L.latLngBounds(B).pad(.15), maxBoundsViscosity:.8});
-      L.imageOverlay("img/skematik_sr.webp?v=20261118b", B).addTo(sm); }
+      L.imageOverlay("img/skematik_sr.webp?v=20261120a", B).addTo(sm); }
     setTimeout(() => { sm.invalidateSize(); fit(); }, 60); };
   const close = () => { m.hidden = true; document.body.style.overflow = ""; if (location.hash === "#skematik") try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} };
   document.getElementById("skX").onclick = close; document.getElementById("skFit").onclick = fit;
