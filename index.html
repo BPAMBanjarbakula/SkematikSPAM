@@ -1353,7 +1353,7 @@ h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--lin
 .abhd h3{margin:3px 0 2px;font-size:23px;font-weight:800;color:#fff;letter-spacing:-.01em}
 .abtag{font-size:14px;color:#8fd3ee;font-weight:600}
 .abrole{font-size:13px;color:rgba(232,241,251,.7);margin-top:3px;line-height:1.45}
-.abcomp{display:block;width:min(440px,100%);margin:14px auto 2px}
+.abcomp{display:block;width:min(400px,100%);margin:8px auto 0}
 .abcomp .cl{stroke:#4f8fb3;stroke-width:2;stroke-dasharray:6 6}
 .abcomp .nd rect{fill:#18324f;stroke:#4f8fb3;stroke-width:2}
 .abcomp .nd text{fill:#eaf4fc;font-size:18px;font-weight:600;text-anchor:middle;font-family:inherit}
@@ -1375,16 +1375,21 @@ h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--lin
 .icred:hover{background:rgba(255,255,255,.05)}
 .icred .icgo{margin-left:auto;flex:none;font-size:12px;font-weight:700;color:#fab005;white-space:nowrap}
 .leaflet-control-attribution .atn{cursor:pointer;text-decoration:underline dotted}
-.abpub{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
-.abpub li{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:9px 0 9px;border-top:1px solid rgba(255,255,255,.07)}
-.abpub li:first-child{border-top:0;padding-top:2px}
-.abc .abpub li{padding-left:0}.abc .abpub li:before{display:none}
-.abpub .st{grid-row:1/3;margin-top:2px;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;border-radius:6px;padding:3px 7px;white-space:nowrap;text-align:center;width:128px;box-sizing:border-box}
-.abpub .st.ok{background:rgba(64,192,87,.18);color:#8ce99a}.abpub .st.sm{background:rgba(102,199,232,.16);color:#8fd3ee}.abpub .st.pr{background:rgba(250,176,5,.15);color:#ffd43b}
-.abpub .pt{font-size:13px;line-height:1.4;color:#eef5fc;font-weight:600}
-.abpub .pv{font-size:12px;line-height:1.45;color:rgba(220,232,245,.66)}
+.abpst{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}
+.abpst span{font-size:11.5px;color:rgba(220,232,245,.75);background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px}
+.abpst b{color:#fff;font-size:13px;margin-right:3px}
+.abpg+.abpg{margin-top:10px}
+.abpg h5{margin:0 0 4px;font-size:11px;font-weight:700;color:#8fd3ee;letter-spacing:.6px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.abpg h5:after{content:"";flex:1;height:1px;background:rgba(143,211,238,.2)}
+.abpub{margin:0;padding:0;list-style:none}
+.abc .abpub li{padding:7px 0 7px 12px;border-left:2px solid rgba(255,255,255,.1);margin:0 0 4px}
+.abc .abpub li:before{display:none}
+.abpub .pt{display:block;font-size:13px;line-height:1.4;color:#eef5fc;font-weight:600}
+.abpub .pv{display:block;margin-top:2px;font-size:12px;line-height:1.45;color:rgba(220,232,245,.66)}
 .abpub .pv a{color:#8fd3ee}
-@media (max-width:620px){.abpub li{grid-template-columns:1fr}.abpub .st{grid-row:auto;justify-self:start;width:auto}}
+.abpub .st{display:inline-block;margin-right:6px;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;border-radius:5px;padding:1px 6px;vertical-align:1px}
+.abpub .st.ok{background:rgba(64,192,87,.18);color:#8ce99a}.abpub .st.sm{background:rgba(102,199,232,.16);color:#8fd3ee}.abpub .st.pr{background:rgba(250,176,5,.15);color:#ffd43b}
+.abpub .yr{color:#fff;font-weight:700}
 @media (max-width:620px){.abbox{padding:22px 16px 16px}.abhd{flex-direction:column;text-align:center;gap:10px;padding:0 6px}.abhd img{width:84px;height:84px}.abhd h3{font-size:20px}.abrole{font-size:12.5px}.abgrid{grid-template-columns:1fr}.abcomp{width:100%}}
 #share{position:fixed;inset:0;z-index:5200;display:grid;place-items:center;padding:16px;background:rgba(4,14,28,.7);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s}
 #share.on{opacity:1;visibility:visible}
@@ -1911,6 +1916,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
         <li>Pengelola SDA Ahli Pertama, BPAM Banjarbakula<small>sejak Maret 2024</small></li>
         <li>Pejabat Pengadaan<small>sejak TA 2025</small></li>
         <li>Perancang &amp; pengembang WebGIS GeoSPAM Bakula</li>
+        <li>Pemakalah Pertemuan Ilmiah Tahunan HATHI<small>PIT ke-40 (2023) dan ke-41 (2024)</small></li>
       </ul></div>
       <div class="abc"><h4>Pendidikan &amp; keanggotaan</h4><ul>
         <li>S1 Teknik Sipil, Universitas Lambung Mangkurat<small>2016–2020</small></li>
@@ -1922,17 +1928,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
         <li>Survei topografi, GPS geodetik, hidrometri dan batimetri; tracking jaringan pipa transmisi &amp; distribusi SPAM Regional Banjarbakula</li>
         <li>Analisa hidrologi, hidraulika perpipaan, geoteknik &amp; stabilitas lereng tanggul pipa transmisi</li>
       </ul></div>
-      <div class="abc full"><h4>Publikasi &amp; naskah ilmiah</h4><ul class="abpub">
-        <li><span class="st pr">Akan diajukan</span><span class="pt">Pengembangan WebGIS GeoSPAM Bakula: dari Peta Aset Statis menjadi Dasbor Pemantauan SPAM Regional Banjarbakula</span><span class="pv">Prawira, A. N. · rencana: <b>Jurnal Komposit</b>, Universitas Ibn Khaldun Bogor (SINTA 3)</span></li>
-        <li><span class="st pr">Akan diajukan</span><span class="pt">Pola Mingguan Kekeruhan Air Baku Intake Karang Intan: Pengaruh Aktivitas Penambangan dan Muka Air Bendung</span><span class="pv">Prawira, A. N., Rahman, A. &amp; Sutrisno · rencana: <b>JTRESDA</b> – Jurnal Teknologi dan Rekayasa Sumber Daya Air, Universitas Brawijaya</span></li>
-        <li><span class="st pr">Akan diajukan</span><span class="pt">Analisis Spasial Kebocoran Berulang Sambungan Pipa GRP DN 1.200 mm pada Tanah Lunak: Studi Kasus Transmisi Air Baku SPAM Regional Banjarbakula</span><span class="pv">Prawira, A. N. · rencana: <b>Jurnal Aplikasi Teknik Sipil (JATS)</b>, Institut Teknologi Sepuluh Nopember (SINTA 3)</span></li>
-        <li><span class="st ok">Diseminarkan</span><span class="pt">Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis Sistem Informasi Geografis dan Pengembangannya Menjadi WebGIS</span><span class="pv">Prawira, A. N. &amp; Kartadipura, R. H. (2026). Seminar Pendidikan Profesi Insinyur, PPI Universitas Lambung Mangkurat, 6 Nov 2026 · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener">baca KTI</a></span></li>
-        <li><span class="st sm">Dipresentasikan</span><span class="pt">Integrasi Teknologi LiDAR, GPS Geodetik, dan DEMNAS untuk Permodelan Banjir dalam Mitigasi Bencana</span><span class="pv">Prawira, A. N. (penulis utama), Dhiaksa, A., Fahlefi, R., dkk. (2024). <b>PIT ke-41 HATHI</b>, Sorong, 27–30 Sep 2024</span></li>
-        <li><span class="st ok">Prosiding</span><span class="pt">Pengembangan Alat Reporter BTR (Remote dan Portable Water Level Recorder Balai Teknik Rawa) untuk Mendukung Pengelolaan Sumber Daya Air</span><span class="pv">Tim penulis Balai Teknik Rawa, termasuk Prawira, A. N. (2024). <b>Prosiding PIT ke-41 HATHI</b>, Sorong, makalah no. 156, hlm. 228</span></li>
-        <li><span class="st sm">Dipresentasikan</span><span class="pt">Perancangan Sistem Automatic Water Level Recorder (AWLR) dengan Gelombang Ultrasonik Berbasis Arduino IDE</span><span class="pv">Prawira, A. N. (pemakalah) (2023). <b>PIT ke-40 &amp; Kongres ke-14 HATHI</b>, Bandar Lampung, 25–26 Agu 2023</span></li>
-        <li><span class="st ok">Prosiding</span><span class="pt">Studi Identifikasi Kenaikan Muka Air Laut di Muara Sungai Barito terhadap Kota Banjarmasin</span><span class="pv">Ramadhani, E. L., Setiawan, I., Fitriansyah, M., dkk., termasuk Prawira, A. N. (2023). <b>Prosiding PIT ke-40 HATHI</b>, Bandar Lampung</span></li>
-        <li><span class="st ok">Terbit</span><span class="pt">Planning to Repair the Approach Slabs Bridge Muara Tabirai, Rantau–Kandangan</span><span class="pv">Prawira, A. N. (2021). <i>CERUCUK</i> 5(1): 41–68, Prodi Teknik Sipil ULM · <a href="https://doi.org/10.20527/crc.v5i1.4296" target="_blank" rel="noopener">doi:10.20527/crc.v5i1.4296</a></span></li>
-      </ul></div>
+      <div class="abc full"><h4>Publikasi &amp; naskah ilmiah</h4><div class="abpst"><span><b>9</b>karya ilmiah</span><span><b>1</b>jurnal</span><span><b>4</b>makalah PIT HATHI</span><span><b>1</b>KTI</span><span><b>3</b>naskah jurnal</span></div><div class="abpg"><h5>Jurnal</h5><ul class="abpub"><li><span class="pt">Planning to Repair the Approach Slabs Bridge Muara Tabirai, Rantau–Kandangan</span><span class="pv"><span class="st ok">Terbit</span><span class="yr">2021</span> · Prawira, A. N. · <i>CERUCUK</i> 5(1): 41–68, Teknik Sipil ULM · <a href="https://doi.org/10.20527/crc.v5i1.4296" target="_blank" rel="noopener">DOI</a></span></li></ul></div><div class="abpg"><h5>Seminar &amp; prosiding</h5><ul class="abpub"><li><span class="pt">Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis SIG dan Pengembangannya Menjadi WebGIS</span><span class="pv"><span class="st ok">Diseminarkan</span><span class="yr">2026</span> · Prawira, A. N. &amp; Kartadipura, R. H. · Seminar KTI Program Profesi Insinyur ULM · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener">baca KTI</a></span></li><li><span class="pt">Integrasi Teknologi LiDAR, GPS Geodetik, dan DEMNAS untuk Permodelan Banjir dalam Mitigasi Bencana</span><span class="pv"><span class="st sm">Dipresentasikan</span><span class="yr">2024</span> · Prawira, A. N. (penulis utama), Dhiaksa, A., Fahlefi, R., dkk. · PIT ke-41 HATHI, Sorong</span></li><li><span class="pt">Pengembangan Alat Reporter BTR (Remote dan Portable Water Level Recorder Balai Teknik Rawa) untuk Mendukung Pengelolaan SDA</span><span class="pv"><span class="st ok">Prosiding</span><span class="yr">2024</span> · Tim Balai Teknik Rawa, termasuk Prawira, A. N. · Prosiding PIT ke-41 HATHI, hlm. 228</span></li><li><span class="pt">Perancangan Sistem Automatic Water Level Recorder (AWLR) dengan Gelombang Ultrasonik Berbasis Arduino IDE</span><span class="pv"><span class="st sm">Dipresentasikan</span><span class="yr">2023</span> · Prawira, A. N. (pemakalah) · PIT ke-40 &amp; Kongres ke-14 HATHI, Bandar Lampung</span></li><li><span class="pt">Studi Identifikasi Kenaikan Muka Air Laut di Muara Sungai Barito terhadap Kota Banjarmasin</span><span class="pv"><span class="st ok">Prosiding</span><span class="yr">2023</span> · Ramadhani, E. L., dkk., termasuk Prawira, A. N. · Prosiding PIT ke-40 HATHI</span></li></ul></div><div class="abpg"><h5>Naskah jurnal · dalam persiapan</h5><ul class="abpub"><li><span class="pt">Pengembangan WebGIS GeoSPAM Bakula: dari Peta Aset Statis menjadi Dasbor Pemantauan SPAM Regional Banjarbakula</span><span class="pv"><span class="st pr">Akan diajukan</span>Prawira, A. N. · <b>Jurnal Komposit</b>, Univ. Ibn Khaldun Bogor (SINTA 3)</span></li><li><span class="pt">Pola Mingguan Kekeruhan Air Baku Intake Karang Intan: Pengaruh Aktivitas Penambangan dan Muka Air Bendung</span><span class="pv"><span class="st pr">Akan diajukan</span>Prawira, A. N., Rahman, A. &amp; Sutrisno · <b>JTRESDA</b>, Universitas Brawijaya</span></li><li><span class="pt">Analisis Spasial Kebocoran Berulang Sambungan Pipa GRP DN 1.200 mm pada Tanah Lunak</span><span class="pv"><span class="st pr">Akan diajukan</span>Prawira, A. N. · <b>Jurnal Aplikasi Teknik Sipil (JATS)</b>, ITS (SINTA 3)</span></li></ul></div></div>
     </div>
     <p class="abft">Garis putus-putus = kompetensi pendukung. Pemetaan kompetensi disusun dari pengalaman kerja, bukan hasil asesmen sertifikasi keahlian.</p>
   </div>
