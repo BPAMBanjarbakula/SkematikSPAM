@@ -1342,63 +1342,42 @@ h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--lin
 .leaflet-control-attribution{background:rgba(7,26,46,.55)!important;color:#cfe2f3!important;border-radius:999px 0 0 0;padding:2px 10px!important;font-size:10.5px!important;backdrop-filter:blur(6px)}
 .leaflet-control-attribution a{color:#99e9f2!important}
 /* share sheet */
-#about{position:fixed;inset:0;z-index:5300;display:grid;place-items:center;padding:20px;background:rgba(4,14,28,.8);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s;overflow-y:auto;overscroll-behavior:contain}
+#about{position:fixed;inset:0;z-index:5300;display:grid;place-items:center;padding:20px;background:rgba(4,12,24,.78);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s;overflow-y:auto;overscroll-behavior:contain}
 #about.on{opacity:1;visibility:visible}
-.abbox{position:relative;width:min(1040px,100%);margin:auto;display:grid;grid-template-columns:300px 1fr;background:#0d1d31;color:#e8f1fb;border:1px solid rgba(102,199,232,.22);border-radius:22px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.55);transform:translateY(14px);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.abbox{position:relative;width:min(720px,100%);margin:auto;background:#0f1a29;color:#dfe8f2;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:30px 34px 22px;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(12px);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 #about.on .abbox{transform:none}
-.abbox .rmx{position:absolute;right:14px;top:14px;float:none;z-index:2;background:rgba(255,255,255,.08);border-color:transparent;color:#fff}
-.abside{background:linear-gradient(180deg,#14304f,#10253e);padding:28px 22px 22px;border-right:1px solid rgba(255,255,255,.06)}
-.abside img{display:block;width:120px;height:120px;margin:0 auto 14px;border-radius:50%;object-fit:cover;object-position:60% 30%;border:3px solid #fab005;box-shadow:0 0 0 6px rgba(250,176,5,.12)}
-.abside .abk,.abside h3,.abside .abtag,.abside .abrole{text-align:center}
-.abk{font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#63e6be;font-weight:800}
-.abside h3{margin:4px 0 2px;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.01em}
-.abtag{font-size:13.5px;color:#8fd3ee;font-weight:600}
-.abrole{font-size:12px;color:rgba(232,241,251,.66);margin-top:6px;line-height:1.5}
-.abnum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:16px 0 4px}
-.abnum span{background:rgba(255,255,255,.06);border-radius:12px;padding:8px 4px;text-align:center;font-size:10.5px;color:rgba(232,241,251,.66);line-height:1.25}
-.abnum b{display:block;font-size:18px;color:#fff;font-weight:800}
-.absec{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
-.abside h4,.abblk h4{margin:0 0 8px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#fab005;font-weight:800}
-.absec dl{margin:0}
-.absec dt{font-size:13px;font-weight:600;color:#eef5fc;line-height:1.35}
-.absec dd{margin:1px 0 8px;font-size:11.5px;color:rgba(220,232,245,.6)}
-.absec dd:last-child{margin-bottom:0}
-.abmain{padding:26px 26px 18px;min-width:0}
-.abblk+.abblk{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
-.abkomp{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:18px;align-items:center}
-.abcomp{display:block;width:100%;height:auto}
-.abcomp .cl{stroke:#4f8fb3;stroke-width:2;stroke-dasharray:6 6}
-.abcomp .nd rect{fill:#18324f;stroke:#4f8fb3;stroke-width:2}
-.abcomp .nd text{fill:#eaf4fc;font-size:18px;font-weight:600;text-anchor:middle;font-family:inherit}
-.abcomp .nd.wk rect{fill:transparent;stroke-dasharray:5 4}
-.abcomp .nd.wk text{fill:#a9c4dc}
-.abcomp .c1{fill:#66c7e8;font-size:17px;font-weight:800;letter-spacing:1.6px;text-anchor:middle;font-family:inherit}
-.abcomp .c2{fill:#fff;font-size:38px;font-weight:800;letter-spacing:1px;text-anchor:middle;font-family:inherit}
-.abcomp .c3{fill:#8fb2cf;font-size:15px;text-anchor:middle;font-family:inherit}
-.abexp{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
-.abexp li{font-size:12.5px;line-height:1.5;color:rgba(220,232,245,.8);padding-left:12px;border-left:2px solid #4f8fb3}
-.abexp li b{display:block;font-size:13px;color:#fff;font-weight:700}
-.abexp li.mut{border-left-style:dashed;color:rgba(220,232,245,.6)}
-.abpg+.abpg{margin-top:12px}
-.abpg h5{margin:0 0 4px;font-size:11px;font-weight:700;color:#8fd3ee;letter-spacing:.6px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.abpg h5 em{font-style:normal;background:rgba(143,211,238,.15);color:#8fd3ee;border-radius:10px;padding:0 7px;font-size:10.5px}
-.abpg h5:after{content:"";flex:1;height:1px;background:rgba(143,211,238,.18)}
-.abpub{margin:0;padding:0;list-style:none}
-.abpub li{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.abpub li:last-child{border-bottom:0}
-.abpub .py{font-size:13px;font-weight:800;color:#fff;padding-top:1px}
-.abpub .pt{display:block;font-size:13px;line-height:1.4;color:#eef5fc;font-weight:600}
-.abpub .pv{display:block;margin-top:2px;font-size:12px;line-height:1.45;color:rgba(220,232,245,.62)}
-.abpub .pv a{color:#8fd3ee}
-.abpub .st{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;border-radius:5px;padding:1px 7px}
-.abpub .st.ok{background:rgba(64,192,87,.18);color:#8ce99a}.abpub .st.sm{background:rgba(102,199,232,.16);color:#8fd3ee}.abpub .st.pr{background:rgba(250,176,5,.15);color:#ffd43b}
-.abft{margin:14px 0 0;font-size:11px;color:rgba(220,232,245,.45)}
+.abbox .rmx{position:absolute;right:16px;top:16px;float:none;background:transparent;border-color:rgba(255,255,255,.12);color:#c9d6e3}
+.abHead{background:none;border:0;padding:0;display:flex;gap:18px;align-items:center;padding-right:40px}
+.abHead img{flex:none;width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:60% 30%}
+.abHead h3{margin:0 0 4px;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.abHead p{margin:0;font-size:13px;line-height:1.55;color:rgba(223,232,242,.62)}
+.absc{margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.07)}
+.absc h4{margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:rgba(223,232,242,.45)}
+.abcomp{display:block;width:min(340px,100%);height:auto;margin:0 auto}
+.abcomp .cl{stroke:rgba(223,232,242,.25);stroke-width:2;stroke-dasharray:4 6}
+.abcomp .nd rect{fill:none;stroke:rgba(223,232,242,.35);stroke-width:2}
+.abcomp .nd text{fill:#dfe8f2;font-size:18px;font-weight:500;text-anchor:middle;font-family:inherit}
+.abcomp .nd.wk rect{stroke-dasharray:5 4;stroke:rgba(223,232,242,.25)}
+.abcomp .nd.wk text{fill:rgba(223,232,242,.55)}
+.abcomp circle{fill:none!important;stroke:rgba(102,199,232,.7)!important}
+.abcomp .c1{fill:rgba(223,232,242,.5);font-size:15px;font-weight:600;letter-spacing:2px;text-anchor:middle;font-family:inherit}
+.abcomp .c2{fill:#fff;font-size:36px;font-weight:700;letter-spacing:.5px;text-anchor:middle;font-family:inherit}
+.abcomp .c3{fill:rgba(223,232,242,.45);font-size:14px;text-anchor:middle;font-family:inherit}
+.abcomp line[x1="262"]{stroke:rgba(223,232,242,.15)}
+.abnote{margin:10px 0 0;text-align:center;font-size:12px;color:rgba(223,232,242,.5)}
+.ablist{margin:0;padding:0;list-style:none}
+.ablist li{display:grid;grid-template-columns:56px 1fr;gap:14px;padding:7px 0}
+.ablist .abY{font-size:12.5px;color:rgba(223,232,242,.45);font-variant-numeric:tabular-nums;padding-top:1px}
+.ablist .abTt{display:block;font-size:14px;line-height:1.4;color:#f2f6fa;font-weight:500}
+.ablist .abM{display:block;margin-top:2px;font-size:12.5px;line-height:1.45;color:rgba(223,232,242,.55)}
+.ablist .abM a{color:#8fd3ee;text-decoration:none;border-bottom:1px solid rgba(143,211,238,.35)}
+.ablist .abS{color:rgba(223,232,242,.4)}
+.abft{margin:22px 0 0;font-size:11px;color:rgba(223,232,242,.35)}
 .icred{cursor:pointer;border-radius:12px;transition:background .2s}
 .icred:hover{background:rgba(255,255,255,.05)}
 .icred .icgo{margin-left:auto;flex:none;font-size:12px;font-weight:700;color:#fab005;white-space:nowrap}
 .leaflet-control-attribution .atn{cursor:pointer;text-decoration:underline dotted}
-@media (max-width:860px){.abbox{grid-template-columns:1fr}.abside{border-right:0;border-bottom:1px solid rgba(255,255,255,.06)}.abkomp{grid-template-columns:1fr}.abcomp{max-width:340px;margin:0 auto}}
-@media (max-width:620px){#about{padding:10px}.abside{padding:24px 16px 18px}.abmain{padding:20px 16px 14px}.abpub li{grid-template-columns:36px 1fr;gap:8px}}
+@media (max-width:620px){#about{padding:10px}.abbox{padding:24px 18px 18px}.abHead{gap:14px;align-items:flex-start}.abHead img{width:60px;height:60px}.abHead h3{font-size:19px}.ablist li{grid-template-columns:44px 1fr;gap:10px}}
 #share{position:fixed;inset:0;z-index:5200;display:grid;place-items:center;padding:16px;background:rgba(4,14,28,.7);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s}
 #share.on{opacity:1;visibility:visible}
 .shbox{position:relative;width:min(420px,100%);background:#fff;color:var(--ink);border-radius:20px;padding:20px 22px 22px;box-shadow:0 24px 60px rgba(0,0,0,.45);transform:translateY(14px);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
@@ -1902,30 +1881,13 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
 <div id="about" role="dialog" aria-modal="true" aria-labelledby="abT">
   <div class="abbox">
     <button class="rmx" id="abClose" aria-label="Tutup"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
-    <aside class="abside">
-      <img id="abPh" alt="Ir. Ade Nafis Prawira, S.T. saat pengukuran GPS geodetik" width="120" height="120">
-      <div class="abk">Profil pengembang GeoSPAM</div>
-      <h3 id="abT">Ir. Ade Nafis Prawira, S.T.</h3>
-      <div class="abtag">Multidisciplinary Water Engineer</div>
-      <div class="abrole">Pengelola Sumber Daya Air Ahli Pertama<br>UPTD Balai Pengelolaan Air Minum Banjarbakula<br>Dinas PUPR Provinsi Kalimantan Selatan</div>
-      <div class="abnum"><span><b>9</b>karya ilmiah</span><span><b>4</b>makalah HATHI</span><span><b>2024</b>GeoSPAM</span></div>
-      <div class="absec"><h4>Peran</h4><dl>
-        <dt>Pengelola SDA Ahli Pertama</dt><dd>Seksi Distribusi · sejak Mar 2024</dd>
-        <dt>Pejabat Pengadaan</dt><dd>sejak TA 2025</dd>
-        <dt>Pengembang WebGIS GeoSPAM Bakula</dt><dd>perancang &amp; pengelola · sejak 2024</dd>
-      </dl></div>
-      <div class="absec"><h4>Pendidikan</h4><dl>
-        <dt>Program Profesi Insinyur</dt><dd>Universitas Lambung Mangkurat · 2026</dd>
-        <dt>S1 Teknik Sipil</dt><dd>Universitas Lambung Mangkurat · 2016–2020</dd>
-      </dl></div>
-      <div class="absec"><h4>Keanggotaan</h4><dl>
-        <dt>Persatuan Insinyur Indonesia (PII)</dt><dd>Anggota</dd>
-        <dt>Himpunan Ahli Teknik Hidraulik Indonesia (HATHI)</dt><dd>Cabang Kalimantan Selatan · sejak 2023</dd>
-      </dl></div>
-    </aside>
-    <div class="abmain">
-      <section class="abblk"><h4>Kompetensi</h4>
-        <div class="abkomp"><svg class="abcomp" viewBox="0 0 640 640" role="img" aria-label="Peta kompetensi: hidrologi, hidrometri, hidraulika, batimetri, kualitas air, geoteknik, topografi, GIS dan pemodelan">
+    <div class="abHead">
+      <img id="abPh" alt="Ir. Ade Nafis Prawira, S.T. saat pengukuran GPS geodetik" width="72" height="72">
+      <div><h3 id="abT">Ir. Ade Nafis Prawira, S.T.</h3>
+      <p>Multidisciplinary Water Engineer · Pengelola Sumber Daya Air Ahli Pertama<br>UPTD Balai Pengelolaan Air Minum Banjarbakula, Dinas PUPR Prov. Kalimantan Selatan</p></div>
+    </div>
+    <section class="absc"><h4>Kompetensi</h4>
+      <svg class="abcomp" viewBox="0 44 640 552" role="img" aria-label="Peta kompetensi: hidrologi, hidrometri, hidraulika, batimetri, kualitas air, geoteknik, topografi, GIS dan pemodelan">
 <defs><radialGradient id="abg" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#16365c"/><stop offset="1" stop-color="#0b1d33"/></radialGradient></defs>
 <line x1="320.0" y1="160.0" x2="320.0" y2="118.0" class="cl"/><g class="nd"><rect x="240.0" y="64.0" width="160" height="48" rx="12"/><text x="320.0" y="94.0">Hidrologi</text></g><line x1="433.1" y1="206.9" x2="454.0" y2="186.0" class="cl"/><g class="nd"><rect x="404.0" y="132.0" width="160" height="48" rx="12"/><text x="484.0" y="162.0">Hidrometri</text></g><line x1="480.0" y1="320.0" x2="471.0" y2="320.0" class="cl"/><g class="nd"><rect x="472.0" y="296.0" width="160" height="48" rx="12"/><text x="552.0" y="326.0">Hidraulika</text></g><line x1="433.1" y1="433.1" x2="454.0" y2="454.0" class="cl"/><g class="nd"><rect x="404.0" y="460.0" width="160" height="48" rx="12"/><text x="484.0" y="490.0">Batimetri</text></g><line x1="320.0" y1="480.0" x2="320.0" y2="522.0" class="cl"/><g class="nd wk"><rect x="240.0" y="528.0" width="160" height="48" rx="12"/><text x="320.0" y="558.0">Kualitas Air</text></g><line x1="206.9" y1="433.1" x2="186.0" y2="454.0" class="cl"/><g class="nd"><rect x="76.0" y="460.0" width="160" height="48" rx="12"/><text x="156.0" y="490.0">Geoteknik</text></g><line x1="160.0" y1="320.0" x2="169.0" y2="320.0" class="cl"/><g class="nd"><rect x="8.0" y="296.0" width="160" height="48" rx="12"/><text x="88.0" y="326.0">Topografi</text></g><line x1="206.9" y1="206.9" x2="186.0" y2="186.0" class="cl"/><g class="nd"><rect x="76.0" y="132.0" width="160" height="48" rx="12"/><text x="156.0" y="162.0">GIS &amp; Modeling</text></g>
 <circle cx="320" cy="320" r="150" fill="url(#abg)" stroke="#66c7e8" stroke-width="3"/>
@@ -1936,19 +1898,18 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
 <line x1="262" y1="376" x2="378" y2="376" stroke="#2c5a80" stroke-width="1.5"/>
 <text x="320" y="400" class="c3">Field · Analysis · Modeling</text>
 </svg>
-          <ul class="abexp">
-            <li><b>Lapangan</b>Survei topografi, GPS geodetik, hidrometri dan batimetri; tracking jaringan pipa transmisi &amp; distribusi.</li>
-            <li><b>Analisa</b>Hidrologi, hidraulika perpipaan, geoteknik dan stabilitas lereng.</li>
-            <li><b>Pemodelan &amp; SIG</b>QGIS, DEMNAS, LiDAR dan WebGIS untuk aset SPAM.</li>
-            <li class="mut"><b>Pendukung</b>Kualitas air (garis putus-putus).</li>
-          </ul>
-        </div>
-      </section>
-      <section class="abblk"><h4>Publikasi &amp; naskah ilmiah</h4>
-        <div class="abpg"><h5>Jurnal<em>1</em></h5><ul class="abpub"><li><span class="py">2021</span><div><span class="pt">Planning to Repair the Approach Slabs Bridge Muara Tabirai, Rantau–Kandangan</span><span class="pv">Prawira, A. N. · <i>CERUCUK</i> 5(1): 41–68, Teknik Sipil ULM · <a href="https://doi.org/10.20527/crc.v5i1.4296" target="_blank" rel="noopener">DOI</a></span><span class="st ok">Terbit</span></div></li></ul></div><div class="abpg"><h5>Seminar &amp; prosiding<em>5</em></h5><ul class="abpub"><li><span class="py">2026</span><div><span class="pt">Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis SIG dan Pengembangannya Menjadi WebGIS</span><span class="pv">Prawira, A. N. &amp; Kartadipura, R. H. · Seminar KTI Program Profesi Insinyur ULM · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener">baca KTI</a></span><span class="st ok">Diseminarkan</span></div></li><li><span class="py">2024</span><div><span class="pt">Integrasi Teknologi LiDAR, GPS Geodetik, dan DEMNAS untuk Permodelan Banjir dalam Mitigasi Bencana</span><span class="pv">Prawira, A. N. (penulis utama), Dhiaksa, A., Fahlefi, R., dkk. · PIT ke-41 HATHI, Sorong</span><span class="st sm">Dipresentasikan</span></div></li><li><span class="py">2024</span><div><span class="pt">Pengembangan Alat Reporter BTR (Remote dan Portable Water Level Recorder Balai Teknik Rawa) untuk Mendukung Pengelolaan SDA</span><span class="pv">Tim Balai Teknik Rawa, termasuk Prawira, A. N. · Prosiding PIT ke-41 HATHI, hlm. 228</span><span class="st ok">Prosiding</span></div></li><li><span class="py">2023</span><div><span class="pt">Perancangan Sistem Automatic Water Level Recorder (AWLR) dengan Gelombang Ultrasonik Berbasis Arduino IDE</span><span class="pv">Prawira, A. N. (pemakalah) · PIT ke-40 &amp; Kongres ke-14 HATHI, Bandar Lampung</span><span class="st sm">Dipresentasikan</span></div></li><li><span class="py">2023</span><div><span class="pt">Studi Identifikasi Kenaikan Muka Air Laut di Muara Sungai Barito terhadap Kota Banjarmasin</span><span class="pv">Ramadhani, E. L., dkk., termasuk Prawira, A. N. · Prosiding PIT ke-40 HATHI</span><span class="st ok">Prosiding</span></div></li></ul></div><div class="abpg"><h5>Naskah jurnal dalam persiapan<em>3</em></h5><ul class="abpub"><li><span class="py"></span><div><span class="pt">Pengembangan WebGIS GeoSPAM Bakula: dari Peta Aset Statis menjadi Dasbor Pemantauan SPAM Regional Banjarbakula</span><span class="pv">Prawira, A. N. · rencana <b>Jurnal Komposit</b>, Univ. Ibn Khaldun Bogor (SINTA 3)</span><span class="st pr">Akan diajukan</span></div></li><li><span class="py"></span><div><span class="pt">Pola Mingguan Kekeruhan Air Baku Intake Karang Intan: Pengaruh Aktivitas Penambangan dan Muka Air Bendung</span><span class="pv">Prawira, A. N., Rahman, A. &amp; Sutrisno · rencana <b>JTRESDA</b>, Universitas Brawijaya</span><span class="st pr">Akan diajukan</span></div></li><li><span class="py"></span><div><span class="pt">Analisis Spasial Kebocoran Berulang Sambungan Pipa GRP DN 1.200 mm pada Tanah Lunak</span><span class="pv">Prawira, A. N. · rencana <b>Jurnal Aplikasi Teknik Sipil (JATS)</b>, ITS (SINTA 3)</span><span class="st pr">Akan diajukan</span></div></li></ul></div>
-      </section>
-      <p class="abft">Pemetaan kompetensi disusun dari pengalaman kerja, bukan hasil asesmen sertifikasi keahlian.</p>
-    </div>
+      <p class="abnote">Lapangan · Analisa · Pemodelan &amp; SIG — kualitas air sebagai kompetensi pendukung (garis putus-putus)</p>
+    </section>
+    <section class="absc"><h4>Riwayat</h4><ul class="ablist">
+      <li><span class="abY">2025–</span><div><span class="abTt">Pejabat Pengadaan</span><span class="abM">UPTD BPAM Banjarbakula</span></div></li>
+      <li><span class="abY">2024–</span><div><span class="abTt">Pengelola Sumber Daya Air Ahli Pertama</span><span class="abM">Seksi Distribusi, UPTD BPAM Banjarbakula · pengembang WebGIS GeoSPAM Bakula</span></div></li>
+      <li><span class="abY">2026</span><div><span class="abTt">Program Profesi Insinyur</span><span class="abM">Universitas Lambung Mangkurat</span></div></li>
+      <li><span class="abY">2020</span><div><span class="abTt">S1 Teknik Sipil</span><span class="abM">Universitas Lambung Mangkurat</span></div></li>
+      <li><span class="abY"></span><div><span class="abTt">Keanggotaan</span><span class="abM">Persatuan Insinyur Indonesia (PII) · Himpunan Ahli Teknik Hidraulik Indonesia (HATHI) Cabang Kalimantan Selatan</span></div></li>
+    </ul></section>
+    <section class="absc"><h4>Publikasi</h4><ul class="ablist"><li><span class="abY">2026</span><div><span class="abTt">Pemetaan Jaringan Perpipaan SPAM Regional Banjarbakula Berbasis SIG dan Pengembangannya Menjadi WebGIS</span><span class="abM">Prawira &amp; Kartadipura · Seminar KTI PPI Universitas Lambung Mangkurat · <a href="KTI_Ade_Nafis_Prawira_geoSPAM.pdf" target="_blank" rel="noopener">KTI</a> <span class="abS">· diseminarkan</span></span></div></li><li><span class="abY">2024</span><div><span class="abTt">Integrasi Teknologi LiDAR, GPS Geodetik, dan DEMNAS untuk Permodelan Banjir dalam Mitigasi Bencana</span><span class="abM">Prawira dkk. · PIT ke-41 HATHI, Sorong <span class="abS">· dipresentasikan</span></span></div></li><li><span class="abY">2024</span><div><span class="abTt">Pengembangan Alat Reporter BTR untuk Mendukung Pengelolaan Sumber Daya Air</span><span class="abM">Tim Balai Teknik Rawa (termasuk Prawira) · Prosiding PIT ke-41 HATHI, hlm. 228 <span class="abS">· prosiding</span></span></div></li><li><span class="abY">2023</span><div><span class="abTt">Perancangan Sistem AWLR dengan Gelombang Ultrasonik Berbasis Arduino IDE</span><span class="abM">Prawira · PIT ke-40 HATHI, Bandar Lampung <span class="abS">· dipresentasikan</span></span></div></li><li><span class="abY">2023</span><div><span class="abTt">Studi Identifikasi Kenaikan Muka Air Laut di Muara Sungai Barito terhadap Kota Banjarmasin</span><span class="abM">Ramadhani dkk. (termasuk Prawira) · Prosiding PIT ke-40 HATHI <span class="abS">· prosiding</span></span></div></li><li><span class="abY">2021</span><div><span class="abTt">Planning to Repair the Approach Slabs Bridge Muara Tabirai, Rantau–Kandangan</span><span class="abM">Prawira · <i>CERUCUK</i> 5(1): 41–68 · <a href="https://doi.org/10.20527/crc.v5i1.4296" target="_blank" rel="noopener">DOI</a> <span class="abS">· jurnal</span></span></div></li></ul></section>
+    <section class="absc"><h4>Naskah dalam persiapan</h4><ul class="ablist"><li><span class="abY">—</span><div><span class="abTt">Pengembangan WebGIS GeoSPAM Bakula: dari Peta Aset Statis menjadi Dasbor Pemantauan</span><span class="abM">rencana Jurnal Komposit (SINTA 3)</span></div></li><li><span class="abY">—</span><div><span class="abTt">Pola Mingguan Kekeruhan Air Baku Intake Karang Intan</span><span class="abM">Prawira, Rahman &amp; Sutrisno · rencana JTRESDA, Universitas Brawijaya</span></div></li><li><span class="abY">—</span><div><span class="abTt">Analisis Spasial Kebocoran Berulang Sambungan Pipa GRP DN 1.200 mm pada Tanah Lunak</span><span class="abM">rencana Jurnal Aplikasi Teknik Sipil (JATS), ITS</span></div></li></ul></section>
+    <p class="abft">Pemetaan kompetensi disusun dari pengalaman kerja, bukan hasil asesmen sertifikasi keahlian.</p>
   </div>
 </div>
 <div id="share" role="dialog" aria-modal="true">
