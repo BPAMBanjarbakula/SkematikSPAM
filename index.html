@@ -1394,6 +1394,18 @@ h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--lin
 .abproj p{margin:0;font-size:12.5px;line-height:1.55;color:rgba(223,232,242,.62)}
 .abby{margin-top:auto;padding-top:4px;font-size:11.5px;color:rgba(223,232,242,.42)}
 @media (max-width:620px){.abstat{grid-template-columns:1fr 1fr}.abstat b{font-size:19px}.abproj{grid-template-columns:1fr}}
+.abintro{margin:0 0 10px;font-size:12.5px;line-height:1.5;color:rgba(223,232,242,.5)}
+.abdt{border-top:1px solid rgba(255,255,255,.07)}
+.abdt:last-child{border-bottom:1px solid rgba(255,255,255,.07)}
+.abdt summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:10px 0;font-size:14px;font-weight:500;color:#f2f6fa}
+.abdt summary::-webkit-details-marker{display:none}
+.abdt summary:before{content:"";width:7px;height:7px;border-right:1.5px solid rgba(223,232,242,.5);border-bottom:1.5px solid rgba(223,232,242,.5);transform:rotate(-45deg);transition:transform .2s;margin-right:4px}
+.abdt[open] summary:before{transform:rotate(45deg)}
+.abdt summary em{font-style:normal;font-size:11px;color:rgba(223,232,242,.5);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:0 7px}
+.abbl{margin:0 0 12px;padding:0 0 0 19px;list-style:none}
+.abbl li{position:relative;font-size:12.5px;line-height:1.55;color:rgba(223,232,242,.68);padding:3px 0 3px 14px}
+.abbl li:before{content:"";position:absolute;left:0;top:11px;width:5px;height:1px;background:rgba(223,232,242,.4)}
+.abbl b{color:#f2f6fa;font-weight:500}
 #share{position:fixed;inset:0;z-index:5200;display:grid;place-items:center;padding:16px;background:rgba(4,14,28,.7);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .3s}
 #share.on{opacity:1;visibility:visible}
 .shbox{position:relative;width:min(420px,100%);background:#fff;color:var(--ink);border-radius:20px;padding:20px 22px 22px;box-shadow:0 24px 60px rgba(0,0,0,.45);transform:translateY(14px);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
@@ -1901,7 +1913,7 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
       <div><h3 id="abT">Ir. Ade Nafis Prawira, S.T.</h3>
       <p>Multidisciplinary Water Engineer · Pengelola Sumber Daya Air Ahli Pertama<br>UPTD Balai Pengelolaan Air Minum Banjarbakula, Dinas PUPR Prov. Kalimantan Selatan</p></div>
     </div>
-    <div class="abstat"><div><b>37,4 km</b><span>pipa transmisi dipetakan</span></div><div><b>2</b><span>kawasan rawa nasional disurvei</span></div><div><b>±Rp14,8 M</b><span>pengadaan teknis 2025–2026</span></div><div><b>9</b><span>karya ilmiah</span></div></div>
+    <div class="abstat"><div><b>37,4 km</b><span>pipa transmisi dipetakan</span></div><div><b>29</b><span>kegiatan teknis Balai Teknik Rawa 2023</span></div><div><b>±Rp14,8 M</b><span>pengadaan teknis 2025–2026</span></div><div><b>9</b><span>karya ilmiah</span></div></div>
     <section class="absc"><h4>Proyek teknis unggulan</h4><div class="abproj">
       <article><div class="abpk"><span class="abtag psn">Proyek Strategis Nasional</span><span>2023 · Kab. Kapuas, Kalteng</span></div>
         <h5>Food Estate Dadahup — Daerah Irigasi Rawa</h5>
@@ -1920,6 +1932,13 @@ if(P<2){var l=document.createElement("link");l.rel="stylesheet";l.href="https://
         <p>Kaji ulang spesifikasi dan pemilihan penyedia untuk pompa transmisi, flowmeter, kubikel BGT, genset, bahan kimia pengolahan, IPAL WTP dan lini produksi AMDK melalui SPSE dan katalog elektronik.</p>
         <span class="abby">Pejabat Pengadaan · 16 paket pengadaan langsung + e-purchasing</span></article>
     </div></section>
+    <section class="absc"><h4>Kegiatan Balai Teknik Rawa 2023</h4>
+      <p class="abintro">Kegiatan tim Balai Teknik Rawa, Ditjen SDA Kementerian PU yang diikuti sepanjang 2023, sesuai Kompilasi Hasil Kegiatan KSDA Balai Teknik Rawa 2023.</p>
+      <details class="abdt" open><summary>Pendampingan PSN Food Estate — DIR Dadahup <em>7</em></summary><ul class="abbl"><li>Survei kualitas air pintu V, Q dan tersier 2–4</li><li>Reposisi BM 01 BTR menjadi BM 001 Dadahup; verifikasi titik kontrol BM Dadahup dengan BM Pelindo</li><li>Pemasangan benchmark dan peilschaal pintu air; pengukuran muka air pintu sekunder, tersier dan lahan</li><li>Pembuatan dan pemasangan rambu operasi sistem tata air Blok A5</li><li>Pemantauan kondisi tabat penutup saluran</li><li>Penyelidikan geoteknik tanah bermasalah pada tanggul rawa dan pemasangan <i>settlement plate</i> SP1–SP3</li><li>Pemasangan dan pembacaan pipa pantau; verifikasi elevasi BM, CP, sumur pantau dan peilschaal</li></ul></details>
+      <details class="abdt"><summary>Advis teknis ke balai dan daerah <em>9</em></summary><ul class="abbl"><li><b>BWS Kalimantan III</b> — rapid assessment banjir DIR Jejangkit: 6 BM/CP, long &amp; cross section Ray 6, Ray 14, saluran primer Jejangkit dan sudetan Tajau Landung, AWLR 3 titik, pengukuran debit ADCP 28 jam saat neap dan spring, pemodelan HEC-RAS</li><li><b>BWS Kalimantan III</b> — survei geolistrik untuk sumur bor penanggulangan karhutla sekitar Bandara Syamsudin Noor</li><li><b>BWS Kalimantan V Tanjung Selor</b> — uji debit saluran irigasi GFRP di Laboratorium Hidraulika UNHAS; survei dan analisis banjir DIR Tanjung Buka SP 10 (BM BTR N3.2501, topografi per 250 m, pemodelan numerik)</li><li><b>BWS Kalimantan II Palangkaraya</b> — pengecekan elevasi BM PDA terikat ke BM 001 Dadahup</li><li><b>BBWS Sumatera VIII</b> — uji tanah galian dan kualitas air revitalisasi Danau Teloko, OKI</li><li><b>BBWS Serayu Opak</b> — desain embung pada tanah lunak/gambut kawasan Dieng</li><li><b>Bapekom PUPR Wil. VII</b> — patok BM untuk monitoring penurunan dan kemiringan gedung</li><li><b>Dinas PUPR Kalsel</b> — studi lanjutan DIR Lasung Batu, Balangan</li><li><b>Dinas PUPR Banjarbaru</b> dan <b>Pemkab Hulu Sungai Utara</b> — pintu klep; pengendalian gulma susupan gunung</li></ul></details>
+      <details class="abdt"><summary>Pengembangan dan penerapan <em>3</em></summary><ul class="abbl"><li>Rekayasa OP dan sistem tata air DIR Dadahup, kawasan Food Estate eks-PLG: petunjuk operasi pintu dan pompa untuk tanam 188 ha (kemarau) dan 444 ha (hujan) di Blok A5</li><li>Pemutakhiran <i>One Map Policy</i> Daerah Irigasi Rawa Pulau Kalimantan dan Sumatera (Perpres 23/2021)</li><li>Pengelolaan basis data rawa</li></ul></details>
+      <details class="abdt"><summary>Dukungan teknis dan diseminasi <em>10</em></summary><ul class="abbl"><li>Perancangan sistem AWLR ultrasonik berbasis Arduino</li><li>Partisipasi PIT ke-40 HATHI, Bandar Lampung</li><li><i>Technical Assistance Study of Lowland Development and Peat Restoration</i></li><li>Pembahasan G20 Water Dialogue 2023</li><li>Workshop survei topografi dan pembuatan benchmark berstandar BIG</li><li>BTR Goes to Campus, Universitas Muhammadiyah Banjarmasin</li><li>Pendampingan KKL Geografi ULM di DIR Jejangkit</li><li>Fasilitasi kunjungan Perkades Banua Lawas dan Dinas PUPR Balangan</li><li>UNESCO Global Geopark Youth Marine Camp</li><li>FGD kurikulum pelatihan <i>Integrated Coastal Lowland Development</i></li></ul></details>
+    </section>
     <section class="absc"><h4>Kompetensi</h4>
       <svg class="abcomp" viewBox="0 44 640 552" role="img" aria-label="Peta kompetensi: hidrologi, hidrometri, hidraulika, batimetri, kualitas air, geoteknik, topografi, GIS dan pemodelan">
 <defs><radialGradient id="abg" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#16365c"/><stop offset="1" stop-color="#0b1d33"/></radialGradient></defs>
