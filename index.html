@@ -2872,6 +2872,35 @@ map.on("zoomend", () => document.getElementById("map").classList.toggle("zlow", 
 document.getElementById("map").classList.toggle("zlow", true);
 function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); if (b) b.innerHTML = val + (sub ? `<em>${sub}</em>` : ""); }
 Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
+// ---------- peilschaal bak intake BPAM (pengamatan manual) dikorelasikan dengan muka air bendung
+(function(){
+  const LL = [-3.456700, 114.962020];
+  // bacaan manual: t = waktu WITA, cm = bacaan papan bak intake, lvl = muka air bendung saat itu (skala sensor AWLR, m), src = sumber
+  const OBS = [
+    {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"Foto petugas intake (Dadang), dibaca dari foto ±5 cm; muka air bendung = rata-rata harian AWLR", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
+  ];
+  const BASAH = 575;   // garis bekas basah di dinding bak (cm) = muka air bak saat operasi normal (indikatif)
+  const fmt = t => new Date(t).toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
+  const last = OBS[OBS.length-1];
+  const dlt = o => Math.round(o.lvl*100 - o.cm);   // indeks beda tinggi bendung–bak (cm, datum berbeda; dibaca sebagai tren)
+  const mk = L.marker(LL, {icon: liveIcon("bak", "#fab005", "Bak intake (papan)", "l"), pane:"live", zIndexOffset:880}).addTo(map);
+  setLive("bak", last.cm + " cm", "manual");
+  function popup(){
+    const A = window.__awlr, M = window.__MERCU || 10, hb = (last.lvl - M)*100, turun = BASAH - last.cm;
+    const rows = [["Bacaan terakhir", `<b>${last.cm} cm</b> · ${fmt(last.t)}`], ["Muka air bendung saat itu", nf(last.lvl,2) + " m (papan ukur bendung ±" + nf(hb,0) + " cm di atas mercu)"],
+      ["Garis bekas basah bak", "±" + BASAH + " cm (muka air bak saat normal, indikatif)"], ["Selisih dari kondisi normal", (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm"],
+      ["Indeks beda tinggi bendung–bak", dlt(last) + " cm <small>(muka air bendung×100 − bacaan bak)</small>"], ["Sumber bacaan", last.src]];
+    if (A && A.last) rows.splice(2, 0, ["Muka air bendung sekarang (live)", nf(A.last.v,2) + " m · " + (A.st || "")]);
+    const warn = turun >= 30 && hb > 0;
+    return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake BPAM</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
+      <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? "air di bendung tinggi (melimpas mercu) tetapi muka air bak justru di bawah garis normal. Kemungkinan aliran ke bak tertahan sumbatan di jaring/saringan intake (eceng gondok); periksa dan bersihkan, lalu baca ulang papan." : "muka air bak sejalan dengan muka air bendung."}</div>
+      <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
+      <div class="note info">Cara memakai: catat bacaan papan bak setiap jam (atau saat ada foto) bersama jamnya. Bila bendung naik tetapi bak tetap/turun, atau indeks beda tinggi membesar dibanding bacaan saat saringan bersih, berarti saringan mulai tersumbat. Hubungan pasti bak–bendung dikalibrasi setelah ±10 pasang bacaan saat saringan bersih.</div>
+      <div class="src">${last.note}</div></div></div>`;
+  }
+  mk.bindPopup(popup, {maxWidth:330, minWidth:300});
+  window.__bakObs = OBS;
+})();
 // ---------- telemetri muka air Bendung Karang Intan (AWLR BWS Kalimantan III, HGT1486)
 (function(){
   const DEV = "HGT1486", LL = [-3.456094, 114.961683];
@@ -2894,6 +2923,10 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     return ["Normal","s0"];
   }
   window.__KERING = KERING;
+  // papan ukur (peilschaal PU) bendung: nol papan = mercu = +10,00 m (skala sensor). Lengkung debit limpas Q = 286,5·h^1,5
+  // dikalibrasi dari 1.075 catatan juru bendung DI Riam Kanan 2022–2024 (557 bacaan cm & 518 bacaan elevasi, keduanya cocok dengan mercu +10,00 m)
+  const MERCU = 10.00, qLimpas = v => v > MERCU ? 286.5*Math.pow(v - MERCU, 1.5) : 0;
+  Object.assign(window, {__MERCU: MERCU, __qLimpas: qLimpas});
   function spark(){
     const svg = $("#tlSpark"); if (series.length < 2){ svg.innerHTML = ""; return; }
     const xs = series.map(p => p.t), ys = series.map(p => p.v);
@@ -2918,9 +2951,9 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   function popup(){
     if (!last) return `<div class="pp"><div class="pbd">Data telemetri belum tersedia.</div></div>`;
     const [st] = status(last.v);
-    const rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
+    const hm = last.v - MERCU, rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Papan ukur bendung (estimasi)", hm > 0 ? "±" + nf(hm*100,0) + " cm di atas mercu" : nf(-hm*100,0) + " cm di bawah mercu"], ["Debit limpas mercu (estimasi)", hm > 0 ? "±" + nf(qLimpas(last.v),0) + " m³/dtk" : "0 (tidak melimpas)"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
     const HY = window.__hyd || {}; if (HY.la7 != null) rows.splice(3, 0, ["Hujan 7 hari (pos BWS Liang Anggang)", nf(HY.la7,1) + " mm" + (HY.lamiss ? ` · ${HY.lamiss} hari tanpa data` : "")]); if (HY.f7 != null) rows.splice(4, 0, ["Prakiraan hujan 7 hari", "±" + nf(HY.f7,0) + " mm (model) · " + (HY.f7 >= 50 ? "muka air berpotensi naik" : HY.f7 >= 15 ? "stabil–naik pelan" : "stabil")]);
-    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
+    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl. Papan ukur &amp; debit limpas adalah estimasi BPAM: nol papan = mercu (+10,00 m skala sensor), Q = 286,5·h<sup>1,5</sup> dari catatan juru bendung 2022–2024.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
