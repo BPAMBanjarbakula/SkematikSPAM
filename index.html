@@ -2887,7 +2887,6 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const OBS = [
     {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake BPAM, dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
   ];
-  const TIPIKAL = 10.50; // muka air operasi tipikal bendung 2022–2024 (±50 cm di atas mercu, catatan juru bendung)
   const PMAX = 580;    // muka air bak tertinggi historis (cm, info petugas)
   const BMAX = 10.88;  // muka air bendung tertinggi pada catatan juru bendung 2022–2024 (m, 18 Nov 2022) — dipasangkan dengan bak maks. historis
   const BASAH = 575;   // garis bekas basah di dinding bak (cm) = muka air bak saat operasi normal (indikatif)
@@ -2900,31 +2899,22 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const mk = L.marker(LL, {icon: liveIcon("bak", "#fab005", "Bak intake · estimasi AWLR", "l", true), pane:"live", zIndexOffset:880}).addTo(map);
   function upd(){ const A = window.__awlr; if (A && A.last && !A.stale) setLive("bak", "≈ " + Math.min(est(A.last.v), PMAX) + " cm", "estimasi"); else setLive("bak", last.cm + " cm", "manual"); }
   upd(); setInterval(upd, 30000);
-  function popup(){
-    const A = window.__awlr, M = window.__MERCU || 10, hb = (last.lvl - M)*100, turun = BASAH - last.cm, warn = turun >= 30 && hb > 0;
-    const ev = A && A.last ? est(A.last.v) : null;
-    const rows = [];
-    if (ev != null) rows.push(["Estimasi bak sekarang", `<b>≈ ${Math.min(ev, PMAX)} cm</b> <small>(AWLR ${nf(A.last.v,2)} m · ${A.st || "–"})</small>`]);
-    rows.push(["Bacaan manual terakhir", `${last.cm} cm`], ["Waktu bacaan", fmt(last.t)], ["Garis normal (bekas basah)", "±" + BASAH + " cm (maks. historis " + PMAX + ") · selisih <b>" + (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm</b>"],
-      ["Bendung saat itu", nf(last.lvl,2) + " m · papan +" + nf(hb,0) + " cm di atas mercu"]);
-    rows.push(["Indeks beda tinggi", dlt(last) + " cm"]);
-    // tabel korelasi bendung (AWLR) -> papan bendung -> bak (kondisi sekarang vs bila saringan bersih)
-    const D1 = dlt(last), D0 = Math.round(BMAX*100 - PMAX), now = A && A.last ? +A.last.v.toFixed(2) : null;
-    const lv = [[9.00,"Siaga kering"],[M,"Mercu"],[TIPIKAL,"Tipikal"],[last.lvl,"Saat foto"],[11.20,"Siaga 1 banjir"]];
-    if (now != null) lv.push([now,"Sekarang"]);
+  // bagian bak intake di dalam popup AWLR Bendung Karang Intan (tanpa popup tersendiri)
+  window.__bakHTML = function(v){
+    const M = window.__MERCU || 10, D1 = dlt(last), D0 = Math.round(BMAX*100 - PMAX), ev = v != null ? Math.min(est(v), PMAX) : null;
+    const lv = [[9.00,"Siaga kering"],[M,"Mercu"],[last.lvl,"Saat foto"],[11.20,"Siaga 1 banjir"]];
+    if (v != null) lv.push([+v.toFixed(2),"Sekarang"]);
     lv.sort((a,b) => a[0]-b[0]);
-    const pb = v => { const h = Math.round((v - M)*100); return (h > 0 ? "+" : "") + h; };
-    const kor = `<table class="bkkor"><tr><th>Bendung<br>AWLR</th><th>Papan<br>bendung</th><th>Bak<br>sekarang</th><th>Bak bila<br>bersih</th></tr>` +
-      lv.map(([v,n]) => `<tr${n==="Sekarang" ? ' class="now"' : n==="Saat foto" ? ' class="obs"' : ""}><td>${nf(v,2)} m<small>${n}</small></td><td>${pb(v)}</td><td>${n==="Saat foto" ? "<b>"+last.cm+"</b>" : bk(est(v))}</td><td>${bk(Math.round(v*100 - D0))}</td></tr>`).join("") + `</table>`;
-    return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
-      <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? `bendung melimpas, tetapi air di bak di bawah garis normal. Kemungkinan saringan intake tersumbat eceng gondok; kehilangan tinggi ±${D1-D0} cm. Bersihkan lalu baca ulang papan.` : "muka air bak sejalan dengan muka air bendung."}</div>
-      <div class="chips"><span class="chip">ESTIMASI DARI AWLR</span><span class="chip">MANUAL ±5 cm</span></div>
-      <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
-      <div class="bkh">Korelasi muka air bendung ↔ bak (cm)</div>${kor}
-      <div class="note info">Korelasi: bak = bendung − ${D1} cm (kondisi sekarang, dari bacaan ${fmt(last.t).replace(/, .*/,"")}); bila saringan bersih ≈ bendung − ${D0} cm (bak maks. historis ${PMAX} cm dipasangkan dengan bendung tertinggi tercatat ${nf(BMAX,2)} m). Selisih ±${D1-D0} cm = kehilangan tinggi akibat saringan tersumbat, sejalan dengan bak yang ${turun} cm di bawah bekas basah. Angka bertanda ↑ melebihi maks. historis ${PMAX} cm sehingga tidak mungkin tercapai; bak kemungkinan dibatasi pelimpah/pintu intake. Estimasi bak = bacaan manual terakhir + perubahan muka air bendung AWLR sejak saat itu (anggapan bak naik-turun sama dengan bendung bila saringan bersih). Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
-      <div class="src">Sumber: ${last.src}</div></div></div>`;
-  }
-  mk.bindPopup(popup, {maxWidth:330, minWidth:300});
+    const pb = x => { const h = Math.round((x - M)*100); return (h > 0 ? "+" : "") + h; };
+    const kor = `<table class="bkkor"><tr><th>Bendung</th><th>Papan<br>bendung</th><th>Bak<br>sekarang</th><th>Bak bila<br>bersih</th></tr>` +
+      lv.map(([x,n]) => `<tr${n==="Sekarang" ? ' class="now"' : n==="Saat foto" ? ' class="obs"' : ""}><td>${nf(x,2)} m<small>${n}</small></td><td>${pb(x)}</td><td>${n==="Saat foto" ? "<b>"+last.cm+"</b>" : bk(est(x))}</td><td>${bk(Math.round(x*100 - D0))}</td></tr>`).join("") + `</table>`;
+    const rows = [];
+    if (ev != null) rows.push(["Bak intake sekarang (estimasi)", `<b>≈ ${ev} cm</b>`]);
+    rows.push(["Bacaan manual terakhir", `${last.cm} cm · ${fmt(last.t)}`], ["Bekas basah / maks. historis", `±${BASAH} / ${PMAX} cm`], ["Kehilangan tinggi saringan", `<b>±${D1-D0} cm</b> <small>(tersumbat eceng gondok)</small>`]);
+    return `<div class="bkh">Bak intake BPAM · peilschaal</div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${kor}
+      <div class="note info">Bak = bendung − ${D1} cm (kondisi sekarang, bacaan manual ±5 cm); bila saringan bersih ≈ bendung − ${D0} cm (maks. historis ${PMAX} cm pada bendung tertinggi tercatat ${nf(BMAX,2)} m). Tanda ↑ = melebihi maks. historis, tidak tercapai. Estimasi, bukan data resmi.</div>`;
+  };
+  mk.on("click", () => { if (window.__awlrMk) window.__awlrMk.openPopup(); });
   window.__bakObs = OBS;
 })();
 // ---------- telemetri muka air Bendung Karang Intan (AWLR BWS Kalimantan III, HGT1486)
@@ -2979,8 +2969,9 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     const [st] = status(last.v);
     const hm = last.v - MERCU, rows = [["Tinggi muka air (sensor)", nf(last.v,2) + " m"], ["Papan ukur bendung (estimasi)", hm > 0 ? "±" + nf(hm*100,0) + " cm di atas mercu" : nf(-hm*100,0) + " cm di bawah mercu"], ["Debit limpas mercu (estimasi)", hm > 0 ? "±" + nf(qLimpas(last.v),0) + " m³/dtk" : "0 (tidak melimpas)"], ["Status", st], ["Rata-rata 6 jam", avg6() != null ? nf(avg6(),2) + " m" : "–"], ["Ambang banjir (BWS)", siaga ? `S3 ${nf(siaga.siaga3,2)} · S2 ${nf(siaga.siaga2,2)} · S1 ${nf(siaga.siaga1,2)} m` : "–"], ["Ambang kering (BPAM)", `Waspada &lt; ${nf(KERING.waspada,2)} · Siaga &lt; ${nf(KERING.siaga,2)} · Awas &lt; ${nf(KERING.awas,2)} m`], ["Pembacaan terakhir", fmtT(last.t)], ["Interval", "5 menit · seluler, panel surya"], ["Alat", "Higertech " + DEV], ["Pengelola", "BWS Kalimantan III"]];
     const HY = window.__hyd || {}; if (HY.la7 != null) rows.splice(3, 0, ["Hujan 7 hari (pos BWS Liang Anggang)", nf(HY.la7,1) + " mm" + (HY.lamiss ? ` · ${HY.lamiss} hari tanpa data` : "")]); if (HY.f7 != null) rows.splice(4, 0, ["Prakiraan hujan 7 hari", "±" + nf(HY.f7,0) + " mm (model) · " + (HY.f7 >= 50 ? "muka air berpotensi naik" : HY.f7 >= 15 ? "stabil–naik pelan" : "stabil")]);
-    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table><div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl. Papan ukur &amp; debit limpas adalah estimasi BPAM: nol papan = mercu (+10,00 m skala sensor), Q = 286,5·h<sup>1,5</sup> dari catatan juru bendung 2022–2024.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
+    return `<div class="pp"><div class="phd" style="--c:#15aabf"><span class="pic" style="background:#15aabf">AW</span><div><h3>AWLR Bendung Karang Intan</h3><div class="sub">Telemetri muka air · real time</div></div></div><div class="pbd">${(() => { const st = window.__lvStat ? window.__lvStat(last.v) : ["",""]; const t = last.v >= 9 && last.v < 10.4 ? "tinggi air normal, intake dapat mengambil air baku seperti biasa." : last.v < 9 ? "air bendung rendah; intake masih bekerja, tetapi perlu dipantau harian." : "air bendung tinggi; waspadai air baku keruh dan sampah di intake."; return `<div class="pplain ${st[0]}"><b>Artinya:</b> ${t}</div>`; })()}<div class="chips"><span class="chip">LIVE</span><span class="chip">Hulu Intake Karang Intan</span></div><div class="awc"><div class="awtab"><button data-r="1">24 jam</button><button data-r="7" class="on">7 hari</button><button data-r="30">30 hari</button></div><div class="awtr" id="awTr">Memuat tren…</div><svg id="awSvg" viewBox="0 0 300 132" preserveAspectRatio="none"></svg></div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${window.__bakHTML ? window.__bakHTML(last.v) : ""}<div class="note info">Data milik BWS Kalimantan III, ditampilkan untuk pemantauan ketersediaan air baku intake. Nilai adalah bacaan sensor, bukan elevasi mdpl. Papan ukur &amp; debit limpas adalah estimasi BPAM: nol papan = mercu (+10,00 m skala sensor), Q = 286,5·h<sup>1,5</sup> dari catatan juru bendung 2022–2024.</div><div class="pbtns"><button class="gbtn" style="background:#0b7285;color:#fff;border:0;cursor:pointer" onclick="window.anlOpen()">${I("trend")} Analisa hidrologi</button><a class="gbtn" href="${SRC}" target="_blank" rel="noopener">Buka sumber ↗</a></div><div class="src">Sumber: opsdabwskal3.higertech.com, diperbarui otomatis tiap 5 menit</div></div></div>`;
   }
+  window.__awlrMk = mk;
   mk.bindPopup(popup, {maxWidth:330, minWidth:300, autoPanPaddingTopLeft:[20,90], autoPanPaddingBottomRight:[WIDE0 ? 330 : 20, WIDE0 ? 40 : 110]});
   // ---- grafik tren muka air di popup (24 jam / 7 hari / 30 hari)
   const HIST = {}; let rng = 7;
