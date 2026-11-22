@@ -2882,7 +2882,6 @@ function setLive(id, val, sub){ const b = document.getElementById("lv_" + id); i
 Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
 // ---------- peilschaal bak intake BPAM (pengamatan manual) dikorelasikan dengan muka air bendung
 (function(){
-  const LL = [-3.456700, 114.962020];
   // bacaan manual: t = waktu WITA, cm = bacaan papan bak intake, lvl = muka air bendung saat itu (skala sensor AWLR, m), src = sumber
   const OBS = [
     {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake BPAM, dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
@@ -2896,9 +2895,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   // estimasi live: bak mengikuti perubahan muka air bendung (kemiringan 1:1), offset dari bacaan manual terakhir
   const est = v => Math.round(last.cm + (v - last.lvl)*100);
   const bk = c => c > PMAX ? `<span title="di atas maks. historis">${c}↑</span>` : String(c);   // tanda ↑ = melebihi maks. historis
-  const mk = L.marker(LL, {icon: liveIcon("bak", "#fab005", "Bak intake · estimasi AWLR", "l", true), pane:"live", zIndexOffset:880}).addTo(map);
-  function upd(){ const A = window.__awlr; if (A && A.last && !A.stale) setLive("bak", "≈ " + Math.min(est(A.last.v), PMAX) + " cm", "estimasi"); else setLive("bak", last.cm + " cm", "manual"); }
-  upd(); setInterval(upd, 30000);
+  // tanpa label/penanda tersendiri di peta: info bak hanya tampil di popup AWLR Bendung Karang Intan
   // bagian bak intake di dalam popup AWLR Bendung Karang Intan (tanpa popup tersendiri)
   window.__bakHTML = function(v){
     const M = window.__MERCU || 10, D1 = dlt(last), D0 = Math.round(BMAX*100 - PMAX), ev = v != null ? Math.min(est(v), PMAX) : null;
@@ -2914,7 +2911,6 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     return `<div class="bkh">Bak intake BPAM · peilschaal</div><table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>${kor}
       <div class="note info">Bak = bendung − ${D1} cm (kondisi sekarang, bacaan manual ±5 cm); bila saringan bersih ≈ bendung − ${D0} cm (maks. historis ${PMAX} cm pada bendung tertinggi tercatat ${nf(BMAX,2)} m). Tanda ↑ = melebihi maks. historis, tidak tercapai. Estimasi, bukan data resmi.</div>`;
   };
-  mk.on("click", () => { if (window.__awlrMk) window.__awlrMk.openPopup(); });
   window.__bakObs = OBS;
 })();
 // ---------- telemetri muka air Bendung Karang Intan (AWLR BWS Kalimantan III, HGT1486)
