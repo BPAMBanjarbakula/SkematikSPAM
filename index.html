@@ -2885,24 +2885,26 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const LL = [-3.456700, 114.962020];
   // bacaan manual: t = waktu WITA, cm = bacaan papan bak intake, lvl = muka air bendung saat itu (skala sensor AWLR, m), src = sumber
   const OBS = [
-    {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake (Dadang), dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
+    {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake BPAM, dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
   ];
   const TIPIKAL = 10.50; // muka air operasi tipikal bendung 2022–2024 (±50 cm di atas mercu, catatan juru bendung)
+  const PMAX = 580;    // angka tertinggi pada papan peilschaal bak (cm); di atasnya tidak terbaca
   const BASAH = 575;   // garis bekas basah di dinding bak (cm) = muka air bak saat operasi normal (indikatif)
   const fmt = t => new Date(t).toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
   const last = OBS[OBS.length-1];
   const dlt = o => Math.round(o.lvl*100 - o.cm);   // indeks beda tinggi bendung–bak (cm, datum berbeda; dibaca sebagai tren)
   // estimasi live: bak mengikuti perubahan muka air bendung (kemiringan 1:1), offset dari bacaan manual terakhir
   const est = v => Math.round(last.cm + (v - last.lvl)*100);
+  const bk = c => c > PMAX ? "&gt; " + PMAX : String(c);   // tampilkan "> 580" bila melewati papan
   const mk = L.marker(LL, {icon: liveIcon("bak", "#fab005", "Bak intake · estimasi AWLR", "l", true), pane:"live", zIndexOffset:880}).addTo(map);
-  function upd(){ const A = window.__awlr; if (A && A.last && !A.stale) setLive("bak", "≈ " + est(A.last.v) + " cm", "estimasi"); else setLive("bak", last.cm + " cm", "manual"); }
+  function upd(){ const A = window.__awlr; if (A && A.last && !A.stale) setLive("bak", (est(A.last.v) > PMAX ? "> " + PMAX : "≈ " + est(A.last.v)) + " cm", "estimasi"); else setLive("bak", last.cm + " cm", "manual"); }
   upd(); setInterval(upd, 30000);
   function popup(){
     const A = window.__awlr, M = window.__MERCU || 10, hb = (last.lvl - M)*100, turun = BASAH - last.cm, warn = turun >= 30 && hb > 0;
     const ev = A && A.last ? est(A.last.v) : null;
     const rows = [];
-    if (ev != null) rows.push(["Estimasi bak sekarang", `<b>≈ ${ev} cm</b> <small>(AWLR ${nf(A.last.v,2)} m · ${A.st || "–"})</small>`]);
-    rows.push(["Bacaan manual terakhir", `${last.cm} cm`], ["Waktu bacaan", fmt(last.t)], ["Garis normal (bekas basah)", "±" + BASAH + " cm · selisih <b>" + (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm</b>"],
+    if (ev != null) rows.push(["Estimasi bak sekarang", `<b>${ev > PMAX ? "&gt; " + PMAX : "≈ " + ev} cm</b> <small>(AWLR ${nf(A.last.v,2)} m · ${A.st || "–"})</small>`]);
+    rows.push(["Bacaan manual terakhir", `${last.cm} cm`], ["Waktu bacaan", fmt(last.t)], ["Garis normal (bekas basah)", "±" + BASAH + " cm (papan maks. " + PMAX + ") · selisih <b>" + (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm</b>"],
       ["Bendung saat itu", nf(last.lvl,2) + " m · papan +" + nf(hb,0) + " cm di atas mercu"]);
     rows.push(["Indeks beda tinggi", dlt(last) + " cm"]);
     // tabel korelasi bendung (AWLR) -> papan bendung -> bak (kondisi sekarang vs bila saringan bersih)
@@ -2912,13 +2914,13 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     lv.sort((a,b) => a[0]-b[0]);
     const pb = v => { const h = Math.round((v - M)*100); return (h > 0 ? "+" : "") + h; };
     const kor = `<table class="bkkor"><tr><th>Bendung<br>AWLR</th><th>Papan<br>bendung</th><th>Bak<br>sekarang</th><th>Bak bila<br>bersih</th></tr>` +
-      lv.map(([v,n]) => `<tr${n==="Sekarang" ? ' class="now"' : n==="Saat foto" ? ' class="obs"' : ""}><td>${nf(v,2)} m<small>${n}</small></td><td>${pb(v)}</td><td>${n==="Saat foto" ? "<b>"+last.cm+"</b>" : est(v)}</td><td>${Math.round(v*100 - D0)}</td></tr>`).join("") + `</table>`;
+      lv.map(([v,n]) => `<tr${n==="Sekarang" ? ' class="now"' : n==="Saat foto" ? ' class="obs"' : ""}><td>${nf(v,2)} m<small>${n}</small></td><td>${pb(v)}</td><td>${n==="Saat foto" ? "<b>"+last.cm+"</b>" : bk(est(v))}</td><td>${bk(Math.round(v*100 - D0))}</td></tr>`).join("") + `</table>`;
     return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
       <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? "bendung melimpas, tetapi air di bak di bawah garis normal. Kemungkinan saringan intake tersumbat eceng gondok; bersihkan lalu baca ulang papan." : "muka air bak sejalan dengan muka air bendung."}</div>
       <div class="chips"><span class="chip">ESTIMASI DARI AWLR</span><span class="chip">MANUAL ±5 cm</span></div>
       <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
       <div class="bkh">Korelasi muka air bendung ↔ bak (cm)</div>${kor}
-      <div class="note info">Korelasi: bak = bendung − ${D1} cm (kondisi sekarang, dari bacaan ${fmt(last.t).replace(/, .*/,"")}); bila saringan bersih ≈ bendung − ${D0} cm (garis basah ${BASAH} cm pada muka air tipikal ${nf(TIPIKAL,2)} m). Selisih ±${D1-D0} cm = perkiraan kehilangan tinggi akibat saringan tersumbat. Estimasi bak = bacaan manual terakhir + perubahan muka air bendung AWLR sejak saat itu (anggapan bak naik-turun sama dengan bendung bila saringan bersih). Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
+      <div class="note info">Korelasi: bak = bendung − ${D1} cm (kondisi sekarang, dari bacaan ${fmt(last.t).replace(/, .*/,"")}); bila saringan bersih ≈ bendung − ${D0} cm (garis basah ${BASAH} cm pada muka air tipikal ${nf(TIPIKAL,2)} m). Selisih ±${D1-D0} cm = perkiraan kehilangan tinggi akibat saringan tersumbat. Papan bak hanya sampai ${PMAX} cm, jadi nilai di atasnya ditulis &gt; ${PMAX}. Estimasi bak = bacaan manual terakhir + perubahan muka air bendung AWLR sejak saat itu (anggapan bak naik-turun sama dengan bendung bila saringan bersih). Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
       <div class="src">Sumber: ${last.src}</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300});
