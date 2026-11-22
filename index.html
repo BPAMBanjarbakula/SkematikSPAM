@@ -2877,7 +2877,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const LL = [-3.456700, 114.962020];
   // bacaan manual: t = waktu WITA, cm = bacaan papan bak intake, lvl = muka air bendung saat itu (skala sensor AWLR, m), src = sumber
   const OBS = [
-    {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"Foto petugas intake (Dadang), dibaca dari foto ±5 cm; muka air bendung = rata-rata harian AWLR", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
+    {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake (Dadang), dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
   ];
   const BASAH = 575;   // garis bekas basah di dinding bak (cm) = muka air bak saat operasi normal (indikatif)
   const fmt = t => new Date(t).toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
@@ -2886,17 +2886,17 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const mk = L.marker(LL, {icon: liveIcon("bak", "#fab005", "Bak intake (papan)", "l"), pane:"live", zIndexOffset:880}).addTo(map);
   setLive("bak", last.cm + " cm", "manual");
   function popup(){
-    const A = window.__awlr, M = window.__MERCU || 10, hb = (last.lvl - M)*100, turun = BASAH - last.cm;
-    const rows = [["Bacaan terakhir", `<b>${last.cm} cm</b> · ${fmt(last.t)}`], ["Muka air bendung saat itu", nf(last.lvl,2) + " m (papan ukur bendung ±" + nf(hb,0) + " cm di atas mercu)"],
-      ["Garis bekas basah bak", "±" + BASAH + " cm (muka air bak saat normal, indikatif)"], ["Selisih dari kondisi normal", (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm"],
-      ["Indeks beda tinggi bendung–bak", dlt(last) + " cm <small>(muka air bendung×100 − bacaan bak)</small>"], ["Sumber bacaan", last.src]];
-    if (A && A.last) rows.splice(2, 0, ["Muka air bendung sekarang (live)", nf(A.last.v,2) + " m · " + (A.st || "")]);
-    const warn = turun >= 30 && hb > 0;
-    return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake BPAM</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
-      <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? "air di bendung tinggi (melimpas mercu) tetapi muka air bak justru di bawah garis normal. Kemungkinan aliran ke bak tertahan sumbatan di jaring/saringan intake (eceng gondok); periksa dan bersihkan, lalu baca ulang papan." : "muka air bak sejalan dengan muka air bendung."}</div>
+    const A = window.__awlr, M = window.__MERCU || 10, hb = (last.lvl - M)*100, turun = BASAH - last.cm, warn = turun >= 30 && hb > 0;
+    const rows = [["Bacaan papan bak", `<b>${last.cm} cm</b>`], ["Waktu bacaan", fmt(last.t)], ["Garis normal (bekas basah)", "±" + BASAH + " cm · selisih <b>" + (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm</b>"],
+      ["Bendung saat itu", nf(last.lvl,2) + " m · papan +" + nf(hb,0) + " cm di atas mercu"]];
+    if (A && A.last) rows.push(["Bendung sekarang", nf(A.last.v,2) + " m · " + (A.st || "–")]);
+    rows.push(["Indeks beda tinggi", dlt(last) + " cm"]);
+    return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
+      <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? "bendung melimpas, tetapi air di bak di bawah garis normal. Kemungkinan saringan intake tersumbat eceng gondok; bersihkan lalu baca ulang papan." : "muka air bak sejalan dengan muka air bendung."}</div>
+      <div class="chips"><span class="chip">MANUAL</span><span class="chip">±5 cm</span></div>
       <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
-      <div class="note info">Cara memakai: catat bacaan papan bak setiap jam (atau saat ada foto) bersama jamnya. Bila bendung naik tetapi bak tetap/turun, atau indeks beda tinggi membesar dibanding bacaan saat saringan bersih, berarti saringan mulai tersumbat. Hubungan pasti bak–bendung dikalibrasi setelah ±10 pasang bacaan saat saringan bersih.</div>
-      <div class="src">${last.note}</div></div></div>`;
+      <div class="note info">Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
+      <div class="src">Sumber: ${last.src}</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300});
   window.__bakObs = OBS;
