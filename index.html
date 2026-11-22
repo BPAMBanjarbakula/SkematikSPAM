@@ -981,6 +981,14 @@ body:not(.dark) .wxd,body:not(.dark) .wxfoot div{background:rgba(11,58,99,.06)}
 .introw .cnt{font-size:11px}.intdel{margin-left:auto;background:transparent!important;color:#c92a2a!important;padding:2px 6px!important;font-size:11px!important}
 .ipop table{border-collapse:collapse;font-size:12px}.ipop td{padding:1px 8px 1px 0;vertical-align:top}.ipop td:first-child{color:var(--muted);white-space:nowrap}
 .ipop .src{font-size:10.5px;color:var(--muted);margin-top:5px}.ipop .tag{display:inline-block;font-size:10px;font-weight:700;color:#7a4b00;background:#fff3bf;border-radius:4px;padding:1px 5px;margin-bottom:3px}
+.pp .bkh{margin:10px 0 4px;font-size:10.5px;font-weight:700;line-height:1.3;letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+.pp table.bkkor{width:100%;border-collapse:collapse;font-size:11.5px}
+.pp table.bkkor th{font-weight:600;font-size:10.5px;opacity:.7;text-align:right;padding:3px 4px;border-bottom:1px solid rgba(255,255,255,.12)}
+.pp table.bkkor th:first-child,.pp table.bkkor td:first-child{text-align:left}
+.pp table.bkkor td{text-align:right;padding:3px 4px;border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap}
+.pp table.bkkor td small{display:block;font-size:9.5px;opacity:.6}
+.pp table.bkkor tr.now td{background:rgba(250,176,5,.14);font-weight:600}
+.pp table.bkkor tr.obs td{background:rgba(77,171,247,.12)}
 </style>
 <style>
 :root{
@@ -2879,6 +2887,7 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
   const OBS = [
     {t:"2026-11-22T12:01:00+08:00", cm:512, lvl:10.815, src:"foto petugas intake (Dadang), dibaca dari foto; muka air bendung = rata-rata harian AWLR HGT1486", note:"Bekas basah dinding bak ±575 cm; eceng gondok rapat di jaring/saringan"}
   ];
+  const TIPIKAL = 10.50; // muka air operasi tipikal bendung 2022–2024 (±50 cm di atas mercu, catatan juru bendung)
   const BASAH = 575;   // garis bekas basah di dinding bak (cm) = muka air bak saat operasi normal (indikatif)
   const fmt = t => new Date(t).toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Makassar"}) + " WITA";
   const last = OBS[OBS.length-1];
@@ -2896,11 +2905,20 @@ Object.assign(window, {liveIcon, setLive, nf, I, esc, WIDE0});
     rows.push(["Bacaan manual terakhir", `${last.cm} cm`], ["Waktu bacaan", fmt(last.t)], ["Garis normal (bekas basah)", "±" + BASAH + " cm · selisih <b>" + (turun > 0 ? "−" : "+") + Math.abs(turun) + " cm</b>"],
       ["Bendung saat itu", nf(last.lvl,2) + " m · papan +" + nf(hb,0) + " cm di atas mercu"]);
     rows.push(["Indeks beda tinggi", dlt(last) + " cm"]);
+    // tabel korelasi bendung (AWLR) -> papan bendung -> bak (kondisi sekarang vs bila saringan bersih)
+    const D1 = dlt(last), D0 = Math.round(TIPIKAL*100 - BASAH), now = A && A.last ? +A.last.v.toFixed(2) : null;
+    const lv = [[9.00,"Siaga kering"],[M,"Mercu"],[TIPIKAL,"Tipikal"],[last.lvl,"Saat foto"],[11.20,"Siaga 1 banjir"]];
+    if (now != null) lv.push([now,"Sekarang"]);
+    lv.sort((a,b) => a[0]-b[0]);
+    const pb = v => { const h = Math.round((v - M)*100); return (h > 0 ? "+" : "") + h; };
+    const kor = `<table class="bkkor"><tr><th>Bendung<br>AWLR</th><th>Papan<br>bendung</th><th>Bak<br>sekarang</th><th>Bak bila<br>bersih</th></tr>` +
+      lv.map(([v,n]) => `<tr${n==="Sekarang" ? ' class="now"' : n==="Saat foto" ? ' class="obs"' : ""}><td>${nf(v,2)} m<small>${n}</small></td><td>${pb(v)}</td><td>${n==="Saat foto" ? "<b>"+last.cm+"</b>" : est(v)}</td><td>${Math.round(v*100 - D0)}</td></tr>`).join("") + `</table>`;
     return `<div class="pp"><div class="phd" style="--c:#f08c00"><span class="pic" style="background:#f08c00">PS</span><div><h3>Peilschaal Bak Intake</h3><div class="sub">Pengamatan manual · Intake Karang Intan</div></div></div><div class="pbd">
       <div class="pplain ${warn ? "s2" : "s0"}"><b>Artinya:</b> ${warn ? "bendung melimpas, tetapi air di bak di bawah garis normal. Kemungkinan saringan intake tersumbat eceng gondok; bersihkan lalu baca ulang papan." : "muka air bak sejalan dengan muka air bendung."}</div>
       <div class="chips"><span class="chip">ESTIMASI DARI AWLR</span><span class="chip">MANUAL ±5 cm</span></div>
       <table>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
-      <div class="note info">Estimasi bak = bacaan manual terakhir + perubahan muka air bendung AWLR sejak saat itu (anggapan bak naik-turun sama dengan bendung bila saringan bersih). Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
+      <div class="bkh">Korelasi muka air bendung ↔ bak (cm)</div>${kor}
+      <div class="note info">Korelasi: bak = bendung − ${D1} cm (kondisi sekarang, dari bacaan ${fmt(last.t).replace(/, .*/,"")}); bila saringan bersih ≈ bendung − ${D0} cm (garis basah ${BASAH} cm pada muka air tipikal ${nf(TIPIKAL,2)} m). Selisih ±${D1-D0} cm = perkiraan kehilangan tinggi akibat saringan tersumbat. Estimasi bak = bacaan manual terakhir + perubahan muka air bendung AWLR sejak saat itu (anggapan bak naik-turun sama dengan bendung bila saringan bersih). Indeks beda tinggi = muka air bendung × 100 − bacaan bak. Indeks membesar berarti saringan mulai tersumbat. Kalibrasi pasti setelah ±10 pasang bacaan saat saringan bersih.</div>
       <div class="src">Sumber: ${last.src}</div></div></div>`;
   }
   mk.bindPopup(popup, {maxWidth:330, minWidth:300});
