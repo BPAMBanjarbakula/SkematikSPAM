@@ -1,0 +1,17 @@
+{
+ "name": "OPS Bakula – Logsheet Operator SPAM",
+ "short_name": "OPS Bakula",
+ "description": "Pencatatan operasional Intake, BGT dan komponen SPAM Regional Banjarbakula",
+ "start_url": "/operator/",
+ "scope": "/operator/",
+ "id": "/operator/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#0b3a63",
+ "theme_color": "#0b3a63",
+ "lang": "id",
+ "icons": [
+  { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+  { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+ ]
+}
